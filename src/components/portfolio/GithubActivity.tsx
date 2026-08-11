@@ -5,7 +5,7 @@ export function GithubActivity() {
   return (
     <section id="github" className="relative py-24 md:py-32 px-6 md:px-12 border-t border-border">
       <div className="max-w-[1400px] mx-auto">
-        <SectionLabel num="003" title="GitHub" />
+        <SectionLabel num="005" title="GitHub" />
         <motion.h2
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
