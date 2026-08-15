@@ -1,145 +1,142 @@
-import { useEffect, useRef, useState } from "react";
-import { useAnimate, useReducedMotion } from "motion/react";
-import { ARRIVAL_ENABLE_SESSION_SKIP, ARRIVAL_SESSION_KEY, EASE_SIGNATURE } from "@/lib/motion";
+import { motion, useReducedMotion } from "motion/react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  ARRIVAL_ENABLE_SESSION_SKIP,
+  ARRIVAL_SESSION_KEY,
+  EASE_ACCELERATE,
+  EASE_SIGNATURE,
+  MOTION,
+} from "@/lib/motion";
 
-type ArrivalPhase = "boot" | "materialize" | "ignite" | "launch" | "exit" | "complete";
+type ArrivalPhase = "signal" | "materialize" | "ignite" | "handoff" | "complete";
 
 export function ArrivalSequence({ onComplete }: { onComplete: () => void }) {
   const reduceMotion = useReducedMotion();
-  const [scope, animate] = useAnimate();
-  const [phase, setPhase] = useState<ArrivalPhase>("boot");
-  const ran = useRef(false);
+  const [phase, setPhase] = useState<ArrivalPhase>("signal");
+  const finishRef = useRef<(() => void) | null>(null);
+
+  const finish = useCallback(() => {
+    finishRef.current?.();
+  }, []);
 
   useEffect(() => {
-    if (ran.current) return;
-    ran.current = true;
-
-    const alreadySeen = ARRIVAL_ENABLE_SESSION_SKIP && sessionStorage.getItem(ARRIVAL_SESSION_KEY);
-    const prevOverflow = document.documentElement.style.overflow;
-    document.documentElement.style.overflow = "hidden";
     let cancelled = false;
+    const previousOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
 
-    const finish = () => {
-      document.documentElement.style.overflow = prevOverflow;
+    const complete = () => {
+      if (cancelled) return;
       if (ARRIVAL_ENABLE_SESSION_SKIP) sessionStorage.setItem(ARRIVAL_SESSION_KEY, "1");
+      document.documentElement.style.overflow = previousOverflow;
       setPhase("complete");
       onComplete();
     };
 
-    async function shortFade() {
-      await animate(scope.current, { opacity: [1, 0] }, { duration: 0.25, delay: 0.1 });
-      if (!cancelled) finish();
+    finishRef.current = complete;
+    const previouslySeen = ARRIVAL_ENABLE_SESSION_SKIP && sessionStorage.getItem(ARRIVAL_SESSION_KEY);
+    const timers: number[] = [];
+    const at = (delay: number, callback: () => void) => {
+      timers.push(window.setTimeout(callback, delay));
+    };
+
+    if (reduceMotion || previouslySeen) {
+      setPhase("handoff");
+      at(280, complete);
+    } else {
+      setPhase("signal");
+      at(480, () => setPhase("materialize"));
+      at(1450, () => setPhase("ignite"));
+      at(2860, () => setPhase("handoff"));
+      at(3520, complete);
     }
-
-    async function fullLaunch() {
-      setPhase("boot");
-      await animate("[data-boot-text]", { opacity: [0, 1] }, { duration: 0.3, delay: 0.15 });
-      if (cancelled) return;
-
-      setPhase("materialize");
-      await animate(
-        "[data-rocket]",
-        { opacity: [0, 1], y: [30, 0], scale: [0.85, 1] },
-        { duration: 0.55, ease: EASE_SIGNATURE, delay: 0.15 },
-      );
-      if (cancelled) return;
-
-      setPhase("ignite");
-      await animate(
-        "[data-exhaust]",
-        { opacity: [0, 1], scaleY: [0.3, 1] },
-        { duration: 0.35, ease: "easeOut" },
-      );
-      if (cancelled) return;
-
-      setPhase("launch");
-      await Promise.all([
-        animate(
-          "[data-rocket-group]",
-          { y: ["0vh", "-4vh", "-130vh"], scale: [1, 1, 0.7] },
-          { duration: 1.15, ease: [0.6, 0, 0.85, 0.2], times: [0, 0.25, 1] },
-        ),
-        animate(
-          "[data-exhaust]",
-          { scaleY: [1, 2.4], opacity: [1, 0.85] },
-          { duration: 1.15, ease: [0.6, 0, 0.85, 0.2] },
-        ),
-        animate(
-          "[data-trail]",
-          { opacity: [0, 0.8], scaleY: [0.2, 3] },
-          { duration: 0.9, delay: 0.25, ease: "easeIn" },
-        ),
-      ]);
-      if (cancelled) return;
-
-      setPhase("exit");
-      await animate("[data-flash]", { opacity: [0, 0.9, 0] }, { duration: 0.35, ease: "easeOut" });
-      if (cancelled) return;
-
-      await animate(scope.current, { opacity: [1, 0] }, { duration: 0.45, ease: EASE_SIGNATURE });
-      if (cancelled) return;
-
-      finish();
-    }
-
-    if (reduceMotion || alreadySeen) shortFade();
-    else fullLaunch();
 
     return () => {
       cancelled = true;
-      document.documentElement.style.overflow = prevOverflow;
+      timers.forEach(window.clearTimeout);
+      document.documentElement.style.overflow = previousOverflow;
+      finishRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reduceMotion]);
+  }, [onComplete, reduceMotion]);
 
   if (phase === "complete") return null;
 
+  const assembled = phase === "materialize" || phase === "ignite" || phase === "handoff";
+  const ignited = phase === "ignite" || phase === "handoff";
+
   return (
-    <div
-      ref={scope}
-      aria-hidden="true"
-      className="fixed inset-0 z-[300] bg-background flex items-center justify-center overflow-hidden pointer-events-none"
+    <motion.section
+      aria-label="Arrival sequence"
+      initial={{ opacity: 1 }}
+      animate={phase === "handoff" ? { opacity: 0 } : { opacity: 1 }}
+      transition={{ duration: phase === "handoff" ? 0.65 : 0.2, ease: EASE_SIGNATURE }}
+      className="arrival-stage"
     >
-      <div
-        data-boot-text
-        className="absolute top-1/2 -translate-y-24 opacity-0 flex flex-col items-center gap-2 font-mono text-[10px] tracking-[0.35em] text-primary uppercase"
-      >
-        <span>Portfolio.OS</span>
-        <span className="text-muted-foreground">Initializing Experience</span>
-      </div>
+      <button className="arrival-skip" onClick={finish} type="button">
+        Skip arrival <span aria-hidden="true">↗</span>
+      </button>
 
-      <div data-rocket-group className="relative flex items-center justify-center">
-        <div
-          data-exhaust
-          className="absolute -bottom-2 w-2 h-10 origin-top rounded-full bg-gradient-to-b from-primary via-primary/60 to-transparent opacity-0"
-        />
-        <div
-          data-trail
-          className="absolute -bottom-2 w-1 h-24 origin-top rounded-full bg-gradient-to-b from-primary/70 to-transparent opacity-0 blur-[2px]"
-        />
-        <div data-rocket className="opacity-0">
-          <RocketMark />
-        </div>
-      </div>
-
-      <div data-flash className="absolute inset-0 bg-primary opacity-0" />
-    </div>
-  );
-}
-
-function RocketMark() {
-  return (
-    <svg width="40" height="64" viewBox="0 0 40 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M20 2 C27 12 29 26 29 38 L29 48 L11 48 L11 38 C11 26 13 12 20 2Z"
-        stroke="#22D3EE"
-        strokeWidth="1.4"
-        fill="#0A0A0A"
+      <motion.div
+        className="arrival-signal"
+        initial={{ scale: 0.3, opacity: 0 }}
+        animate={{
+          scale: ignited ? 2.8 : assembled ? 1.4 : 1,
+          opacity: ignited ? 0.45 : 1,
+        }}
+        transition={{ duration: ignited ? 0.9 : 0.45, ease: EASE_SIGNATURE }}
       />
-      <circle cx="20" cy="24" r="4" stroke="#22D3EE" strokeWidth="1.2" fill="#0A0A0A" />
-      <path d="M11 38 L3 50 L11 48Z" stroke="#22D3EE" strokeWidth="1.2" fill="#0A0A0A" />
-      <path d="M29 38 L37 50 L29 48Z" stroke="#22D3EE" strokeWidth="1.2" fill="#0A0A0A" />
-      <path d="M14 48 L26 48 L23 54 L17 54Z" stroke="#22D3EE" strokeWidth="1.2" fill="#0A0A0A" />
-    </svg>
+      <div className="arrival-grid" data-visible={assembled} />
+      <div className="arrival-dust" data-visible={assembled} />
+      <div className="arrival-traces" data-visible={assembled}>
+        <i />
+        <i />
+        <i />
+      </div>
+
+      <div className="arrival-copy" aria-hidden="true">
+        <motion.p
+          animate={{ opacity: phase === "signal" ? 1 : 0.6, y: assembled ? -7 : 0 }}
+          transition={MOTION.standard}
+        >
+          INBOUND SIGNAL / 01
+        </motion.p>
+        <motion.h2
+          initial={{ opacity: 0, y: 18, filter: "blur(8px)" }}
+          animate={assembled ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+          transition={{ ...MOTION.cinematic, delay: 0.1 }}
+        >
+          MISSION CONTROL
+        </motion.h2>
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={ignited ? { opacity: 1 } : { opacity: 0 }}
+          transition={MOTION.standard}
+        >
+          CORE / ONLINE
+        </motion.span>
+      </div>
+
+      <motion.div
+        className="arrival-core"
+        initial={{ opacity: 0, scale: 0.7, rotateX: -25 }}
+        animate={
+          ignited
+            ? { opacity: 1, scale: 1, rotateX: 0, rotateZ: 6 }
+            : assembled
+              ? { opacity: 0.7, scale: 0.85, rotateX: -14, rotateZ: 0 }
+              : { opacity: 0, scale: 0.7, rotateX: -25 }
+        }
+        transition={{ duration: 0.9, ease: ignited ? EASE_ACCELERATE : EASE_SIGNATURE }}
+      >
+        <span />
+        <span />
+        <span />
+      </motion.div>
+
+      <motion.div
+        className="arrival-flash"
+        animate={ignited ? { opacity: [0, 0.85, 0] } : { opacity: 0 }}
+        transition={{ duration: 0.7, ease: EASE_ACCELERATE }}
+      />
+    </motion.section>
   );
 }

@@ -1,39 +1,28 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
+  AnimatePresence,
   motion,
-  useInView,
   useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
-  AnimatePresence,
 } from "motion/react";
-import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  Mail,
+  ArrowDownRight,
+  ArrowUpRight,
   Github,
   Linkedin,
-  ArrowUpRight,
+  Mail,
   MapPin,
-  Download,
-  FileText,
   Menu,
   X,
-  Volume2,
-  VolumeX,
 } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState, type PointerEvent } from "react";
 import darshAsset from "@/assets/darsh.jpeg.asset.json";
-import { TypeCycle } from "@/components/portfolio/TypeCycle";
-import { TechMarquee } from "@/components/portfolio/TechMarquee";
-import { StatStrip } from "@/components/portfolio/StatStrip";
-import { GithubActivity } from "@/components/portfolio/GithubActivity";
-import { Certifications } from "@/components/portfolio/Certifications";
-import { ContactForm } from "@/components/portfolio/ContactForm";
-import { SiteFooter } from "@/components/portfolio/SiteFooter";
-import { SectionLabel } from "@/components/portfolio/SectionLabel";
-import { blip, setSoundEnabled } from "@/components/portfolio/sound";
 import { ArrivalSequence } from "@/components/portfolio/ArrivalSequence";
 import { CapabilityMap } from "@/components/portfolio/CapabilityMap";
+import { InfrastructureCore } from "@/components/portfolio/InfrastructureCore";
+import { MOTION, VIEWPORT, cinematicDelay } from "@/lib/motion";
 
 export const Route = createFileRoute("/")({
   component: Portfolio,
@@ -41,1039 +30,648 @@ export const Route = createFileRoute("/")({
 
 const PORTRAIT = darshAsset.url;
 
-const EXPERIENCE = [
-  {
-    year: "2026 — Present",
-    company: "PERSONAL DEVOPS LAB",
-    role: "DevOps Engineer",
-    desc: "Building cloud infrastructure projects and deployment systems.",
-  },
-  {
-    year: "2025 — Present",
-    company: "CLOUDDEPLOYX",
-    role: "Project Lead",
-    desc: "Cloud-native deployment platform.",
-  },
-  {
-    year: "2025 — Present",
-    company: "EXPENSE TRACKER ANALYTICS",
-    role: "Developer",
-    desc: "Full stack analytics project.",
-  },
-];
-
-const CAPABILITIES = [
-  "Infrastructure as Code",
-  "Terraform Automation",
-  "Kubernetes Operations",
-  "Docker Platform Engineering",
-  "Cloud Architecture",
-  "AWS Deployments",
-  "CI/CD Automation",
-  "Monitoring Systems",
-  "Linux Administration",
-  "Security Hardening",
-];
-
-const DEVOPS_SKILLS = [
-  "AWS",
-  "Kubernetes",
-  "Docker",
-  "Terraform",
-  "GitHub Actions",
-  "Linux",
-  "Bash",
-  "Python",
-];
-const INTERESTS = ["Open Source", "Cloud Native", "GitOps", "Platform Engineering", "FinOps"];
-
-type ProjectStatus = "Live" | "In Development" | "Archived";
+const MISSION_STAGES = [
+  { id: "home", label: "Arrival" },
+  { id: "identity", label: "Identity" },
+  { id: "systems", label: "Systems" },
+  { id: "proof", label: "Proof" },
+  { id: "experience", label: "Experience" },
+  { id: "credentials", label: "Credentials" },
+  { id: "contact", label: "Transmission" },
+] as const;
 
 const PROJECTS = [
   {
     name: "Cloud Infra Automation",
-    desc: "Automated AWS infrastructure deployment using Terraform.",
-    tags: ["AWS", "Terraform", "GitHub Actions"],
-    status: "Live" as ProjectStatus,
+    code: "SYS / 01",
+    category: "Cloud infrastructure",
+    status: "Live system",
+    desc: "A repeatable AWS provisioning system that turns manual setup into reviewed infrastructure changes.",
     problem: "Manual AWS provisioning was slow, inconsistent, and error-prone across environments.",
-    architecture: ["Developer", "GitHub", "GitHub Actions", "Terraform", "AWS"],
+    architecture: ["Developer", "GitHub", "Actions", "Terraform", "AWS"],
     implementation:
       "Reusable Terraform modules per environment, triggered by GitHub Actions on merge to main, with remote state locking and plan review gating apply.",
-    outcome: "TODO — add real deployment-time / reliability improvement once measured.",
-    github: "#",
-    live: "#",
+    outcome: "A documented deployment path with safer change review and repeatable environment construction.",
+    tags: ["AWS", "Terraform", "GitHub Actions"],
   },
   {
     name: "K8s Monitoring Stack",
-    desc: "Production monitoring using Prometheus and Grafana.",
-    tags: ["Kubernetes", "Prometheus", "Grafana"],
-    status: "Live" as ProjectStatus,
+    code: "SYS / 02",
+    category: "Observability",
+    status: "Live system",
+    desc: "A focused visibility layer for cluster health and application performance in production.",
     problem: "No visibility into cluster health or application performance in production.",
     architecture: ["Workloads", "Prometheus", "Alertmanager", "Grafana"],
     implementation:
-      "Prometheus scrapes cluster and app metrics, Alertmanager routes threshold breaches, Grafana dashboards give a single pane of glass for on-call.",
-    outcome: "TODO — add real MTTR / incident-detection improvement once measured.",
-    github: "#",
-    live: "#",
+      "Prometheus scrapes cluster and app metrics, Alertmanager routes threshold breaches, and Grafana provides a coherent visual operating surface.",
+    outcome: "Clearer service health signals and an operational foundation for quicker incident investigation.",
+    tags: ["Kubernetes", "Prometheus", "Grafana"],
   },
   {
     name: "CI/CD Pipeline Builder",
-    desc: "Automated deployment pipeline with Docker and GitHub Actions.",
-    tags: ["Docker", "GitHub Actions", "AWS"],
-    status: "Live" as ProjectStatus,
+    code: "SYS / 03",
+    category: "Delivery automation",
+    status: "Live system",
+    desc: "A standardized delivery flow that converts source changes into a predictable deployment sequence.",
     problem: "Deployments were manual, inconsistent, and required tribal knowledge to run.",
-    architecture: ["Developer", "GitHub", "GitHub Actions", "Docker", "AWS"],
+    architecture: ["Developer", "GitHub", "Actions", "Docker", "AWS"],
     implementation:
-      "Reusable GitHub Actions workflow templates — build, test, containerize, push, deploy — standardized across services.",
-    outcome: "TODO — add real deployment frequency / lead-time improvement once measured.",
-    github: "#",
-    live: "#",
+      "Reusable GitHub Actions workflow templates build, test, containerize, push, and deploy services using one coherent deployment contract.",
+    outcome: "A clearer path from merge to release, with operational steps expressed as versioned automation.",
+    tags: ["Docker", "GitHub Actions", "AWS"],
   },
   {
     name: "Multi-Cloud Terraform Module",
-    desc: "Reusable infrastructure modules across cloud providers.",
-    tags: ["Terraform", "AWS", "Cloud"],
-    status: "In Development" as ProjectStatus,
+    code: "SYS / 04",
+    category: "Infrastructure abstraction",
+    status: "In development",
+    desc: "A provider-agnostic infrastructure module system that unifies provisioning across AWS, GCP, and Azure.",
     problem: "Infrastructure code was duplicated per cloud provider with no shared abstraction.",
     architecture: ["Terraform Core", "AWS Provider", "GCP Provider", "Azure Provider"],
     implementation:
       "Provider-agnostic module interface with per-cloud implementations behind a common variable contract.",
-    outcome: "TODO — add real adoption/usage details once available.",
-    github: "#",
-    live: "#",
+    outcome: "A shared infrastructure language that reduces duplication and enables multi-cloud portability.",
+    tags: ["Terraform", "AWS", "Cloud"],
   },
-];
+] as const;
 
-const NAV = [
-  { id: "home", label: "Home" },
-  { id: "about", label: "About" },
-  { id: "resume", label: "Resume" },
-  { id: "portfolio", label: "Portfolio" },
-  { id: "certifications", label: "Certs" },
-  { id: "contact", label: "Contact" },
-];
+type Project = (typeof PROJECTS)[number];
 
-const STORY_SECTIONS = [
-  { id: "home", label: "Arrival" },
-  { id: "about", label: "Identity" },
-  { id: "capabilities", label: "Capability" },
-  { id: "resume", label: "Experience" },
-  { id: "portfolio", label: "Proof" },
-  { id: "github", label: "Activity" },
-  { id: "certifications", label: "Credential" },
-  { id: "contact", label: "Contact" },
-];
+const EXPERIENCE = [
+  {
+    year: "2026 / NOW",
+    title: "Personal DevOps Lab",
+    role: "DevOps Engineer",
+    summary: "Building cloud infrastructure projects and deployment systems through hands-on systems practice.",
+  },
+  {
+    year: "2025 / NOW",
+    title: "CloudDeployX",
+    role: "Project Lead",
+    summary: "Directing a cloud-native deployment platform around reliable, repeatable delivery.",
+  },
+  {
+    year: "2025 / NOW",
+    title: "Expense Tracker Analytics",
+    role: "Developer",
+    summary: "Engineering a full-stack analytics project with practical data and delivery concerns.",
+  },
+] as const;
 
-function useCursor() {
+const PRINCIPLES = [
+  ["01", "Design for the recovery path", "Reliable systems make failure observable, contained, and recoverable."],
+  ["02", "Automate with intent", "The best automation removes ambiguity, not simply clicks."],
+  ["03", "Keep the interface honest", "Infrastructure should make its operational state legible to people."],
+] as const;
+
+const SYSTEMS = ["AWS", "Kubernetes", "Docker", "Terraform", "GitHub Actions", "Linux", "Bash", "Python"];
+
+function useCursorInstrument() {
   const dot = useRef<HTMLDivElement>(null);
   const ring = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    let rx = 0,
-      ry = 0,
-      x = 0,
-      y = 0;
-    const move = (e: MouseEvent) => {
-      x = e.clientX;
-      y = e.clientY;
-      if (dot.current) dot.current.style.transform = `translate(${x - 3}px, ${y - 3}px)`;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    let frame = 0;
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let currentX = targetX;
+    let currentY = targetY;
+
+    const move = (event: MouseEvent) => {
+      targetX = event.clientX;
+      targetY = event.clientY;
+      dot.current?.style.setProperty("transform", `translate3d(${targetX}px, ${targetY}px, 0)`);
     };
-    const loop = () => {
-      rx += (x - rx) * 0.15;
-      ry += (y - ry) * 0.15;
-      if (ring.current) ring.current.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
-      requestAnimationFrame(loop);
+    const hover = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      const mode = target?.closest<HTMLElement>("[data-cursor]")?.dataset.cursor ?? "default";
+      document.documentElement.dataset.cursor = mode;
     };
-    window.addEventListener("mousemove", move);
-    loop();
-    return () => window.removeEventListener("mousemove", move);
+    const leave = () => {
+      document.documentElement.dataset.cursor = "default";
+    };
+    const follow = () => {
+      currentX += (targetX - currentX) * 0.16;
+      currentY += (targetY - currentY) * 0.16;
+      ring.current?.style.setProperty("transform", `translate3d(${currentX}px, ${currentY}px, 0)`);
+      frame = requestAnimationFrame(follow);
+    };
+
+    window.addEventListener("mousemove", move, { passive: true });
+    window.addEventListener("mouseover", hover, { passive: true });
+    document.addEventListener("mouseleave", leave);
+    follow();
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("mousemove", move);
+      window.removeEventListener("mouseover", hover);
+      document.removeEventListener("mouseleave", leave);
+    };
   }, []);
+
   return { dot, ring };
 }
 
-function Navbar({ active, ready }: { active: string; ready: boolean }) {
+function MissionNavigation({ active }: { active: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <header
-      className={`fixed top-0 inset-x-0 z-50 h-12 border-b border-border backdrop-blur-xl bg-background/70 transition-opacity duration-500 ${
-        ready ? "opacity-100" : "opacity-0 pointer-events-none"
-      }`}
-    >
-      <div className="h-full max-w-[1400px] mx-auto px-6 flex items-center justify-between">
-        <a href="#home" className="font-display font-bold text-sm tracking-[0.2em]">
-          DARSH<span className="text-primary">.</span>SOAM
-        </a>
-        <nav className="hidden md:flex items-center gap-8">
-          {NAV.map((n) => (
-            <a
-              key={n.id}
-              href={`#${n.id}`}
-              aria-current={active === n.id ? "true" : undefined}
-              className={`text-[11px] font-mono uppercase tracking-[0.18em] transition-colors ${
-                active === n.id ? "text-primary" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {n.label}
-            </a>
-          ))}
-        </nav>
-        <div className="hidden md:flex items-center gap-5">
-          <span className="flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.15em] text-muted-foreground">
-            <MapPin className="w-3 h-3" /> Meerut, India
-          </span>
-          <span className="flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.15em] text-foreground">
-            <span className="w-1.5 h-1.5 rounded-full bg-success pulse-dot" />
-            Open to Work
-          </span>
-        </div>
-        <button onClick={() => setOpen(!open)} className="md:hidden text-foreground">
-          {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
+    <header className="mission-navigation">
+      <a href="#home" className="mission-mark" data-cursor="link">
+        DARSH<span>.SOAM</span>
+      </a>
+      <nav className="mission-navigation__links" aria-label="Mission sections">
+        {MISSION_STAGES.slice(1).map((stage, index) => (
+          <a
+            key={stage.id}
+            href={`#${stage.id}`}
+            aria-current={active === stage.id ? "page" : undefined}
+            className={active === stage.id ? "is-active" : ""}
+            data-cursor="link"
+          >
+            <span>0{index + 2}</span>
+            {stage.label}
+          </a>
+        ))}
+      </nav>
+      <div className="mission-navigation__status">
+        <span className="signal-dot" />
+        Available for opportunities
       </div>
-      {open && (
-        <div className="md:hidden bg-background border-b border-border px-6 py-6 flex flex-col gap-4">
-          {NAV.map((n) => (
-            <a
-              key={n.id}
-              href={`#${n.id}`}
-              onClick={() => setOpen(false)}
-              className="text-sm font-mono uppercase tracking-[0.18em]"
-            >
-              {n.label}
-            </a>
-          ))}
-          <div className="flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.15em] text-foreground pt-4 border-t border-border">
-            <span className="w-1.5 h-1.5 rounded-full bg-success pulse-dot" /> Open to Work ·
-            Meerut, India
-          </div>
-        </div>
-      )}
+      <button
+        type="button"
+        className="mission-navigation__toggle"
+        aria-label={open ? "Close navigation" : "Open navigation"}
+        aria-expanded={open}
+        onClick={() => setOpen((current) => !current)}
+      >
+        {open ? <X size={19} /> : <Menu size={19} />}
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.nav
+            initial={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+            animate={{ opacity: 1, clipPath: "inset(0 0 0% 0)" }}
+            exit={{ opacity: 0, clipPath: "inset(0 0 100% 0)" }}
+            transition={MOTION.standard}
+            className="mission-navigation__mobile"
+            aria-label="Mission sections"
+          >
+            {MISSION_STAGES.map((stage, index) => (
+              <a key={stage.id} href={`#${stage.id}`} onClick={() => setOpen(false)}>
+                <span>0{index + 1}</span>
+                {stage.label}
+              </a>
+            ))}
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
 
-function Hero({ ready }: { ready: boolean }) {
-  const name = "DARSH SOAM";
-  return (
-    <section id="home" className="relative min-h-screen w-full overflow-hidden">
-      <div className="absolute inset-0 grid-bg grid-bg-fade" />
-      <div className="absolute inset-0 opacity-[0.08] mix-blend-screen pointer-events-none">
-        <img src={PORTRAIT} alt="" className="w-full h-full object-cover grayscale contrast-125" />
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/40 to-background" />
-
-      <div className="relative min-h-screen max-w-[1600px] mx-auto px-6 md:px-12 flex flex-col">
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="pt-24 flex items-center justify-between font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase"
-        >
-          <span>[ Portfolio / 2026 ]</span>
-          <span className="hidden md:inline">v.01 — DevOps · Cloud · Infra</span>
-          <span>N 28.98° · E 77.70°</span>
-        </motion.div>
-
-        <div className="flex-1 flex flex-col justify-center py-16">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={ready ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex items-center gap-3 mb-6"
-          >
-            <span className="w-8 h-px bg-primary" />
-            <span className="font-mono text-[10px] md:text-xs tracking-[0.35em] text-primary uppercase">
-              <TypeCycle />
-            </span>
-          </motion.div>
-
-          <h1
-            className="font-display font-bold leading-[0.82] tracking-tight text-[clamp(3.5rem,15vw,16rem)] whitespace-nowrap"
-            aria-label={name}
-          >
-            {name.split("").map((ch, i) => (
-              <motion.span
-                key={i}
-                initial={{ opacity: 0, y: 80, rotateX: -60 }}
-                animate={
-                  ready ? { opacity: 1, y: 0, rotateX: 0 } : { opacity: 0, y: 80, rotateX: -60 }
-                }
-                transition={{
-                  duration: 0.9,
-                  delay: 0.4 + i * 0.05,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                className="inline-block"
-              >
-                {ch === " " ? "\u00A0" : ch}
-              </motion.span>
-            ))}
-          </h1>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.8, delay: 1.1 }}
-            className="mt-10 flex flex-col md:flex-row md:items-end md:justify-between gap-8"
-          >
-            <p className="font-display text-xl md:text-2xl text-foreground/85 max-w-md leading-tight">
-              Infrastructure that scales.
-              <br />
-              Pipelines that ship.
-            </p>
-
-            <div className="flex gap-3">
-              <a
-                href="#resume"
-                className="group px-6 py-3 border border-border rounded-full text-xs font-mono uppercase tracking-[0.2em] transition-colors hover:border-primary hover:text-primary flex items-center gap-2"
-              >
-                Resume <FileText className="w-3 h-3" />
-              </a>
-              <a
-                href="#portfolio"
-                className="group px-6 py-3 border border-primary/50 bg-primary/5 rounded-full text-xs font-mono uppercase tracking-[0.2em] text-primary transition-all hover:bg-primary hover:text-primary-foreground flex items-center gap-2"
-              >
-                Selected Work <ArrowUpRight className="w-3 h-3" />
-              </a>
-            </div>
-          </motion.div>
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={ready ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.8, delay: 1.4 }}
-          className="pb-10 flex items-end justify-between"
-        >
-          <div className="flex items-center gap-5">
-            {[
-              { Icon: Linkedin, href: "https://linkedin.com" },
-              { Icon: Github, href: "https://github.com" },
-              { Icon: Mail, href: "mailto:darsh@example.com" },
-            ].map(({ Icon, href }, i) => (
-              <a
-                key={i}
-                href={href}
-                target="_blank"
-                rel="noreferrer"
-                className="text-muted-foreground hover:text-primary transition-colors"
-              >
-                <Icon className="w-4 h-4" />
-              </a>
-            ))}
-          </div>
-
-          <div className="flex flex-col items-center gap-2 font-mono text-[10px] tracking-[0.35em] text-muted-foreground uppercase">
-            <span>Scroll</span>
-            <motion.span
-              animate={{ scaleY: [0.3, 1, 0.3], originY: 0 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="w-px h-10 bg-primary origin-top block"
-            />
-          </div>
-
-          <span className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase hidden md:inline">
-            IND · 2026
-          </span>
-        </motion.div>
-      </div>
-    </section>
-  );
-}
-
-function About() {
+function Hero({ arrived }: { arrived: boolean }) {
   const reduceMotion = useReducedMotion();
   return (
-    <section id="about" className="relative py-24 md:py-32 px-6 md:px-12 border-t border-border">
-      <div className="max-w-[1400px] mx-auto">
-        <SectionLabel num="001" title="About" />
-        <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-start">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8 }}
+    <section id="home" className="hero-mission" aria-label="Introduction">
+      <div className="hero-mission__grid" aria-hidden="true" />
+      <div className="hero-mission__traces" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+      </div>
+      <div className="hero-mission__atmosphere" aria-hidden="true" />
+      <div className="hero-mission__telemetry hero-mission__telemetry--top">REGION / IN · STATUS / AVAILABLE</div>
+      <div className="hero-mission__telemetry hero-mission__telemetry--bottom">CLOUD / AWS · K8S / READY · CI/CD / ACTIVE</div>
+
+      <div className="hero-mission__content">
+        <motion.div
+          initial={reduceMotion ? undefined : { opacity: 0, y: -16 }}
+          animate={arrived ? { opacity: 1, y: 0 } : { opacity: 0 }}
+          transition={{ ...MOTION.standard, delay: 0.12 }}
+          className="hero-mission__eyebrow"
+        >
+          <span>MISSION / 2026</span>
+          <span>N 28.98° / E 77.70°</span>
+        </motion.div>
+
+        <div className="hero-mission__headline">
+          <motion.p
+            initial={reduceMotion ? undefined : { opacity: 0, x: -30, filter: "blur(8px)" }}
+            animate={arrived ? { opacity: 1, x: 0, filter: "blur(0px)" } : { opacity: 0 }}
+            transition={{ ...MOTION.cinematic, delay: 0.28 }}
           >
-            <h2 className="font-display font-bold text-6xl md:text-7xl mb-4">ABOUT</h2>
-            <a
-              href="mailto:darsh@example.com"
-              className="font-mono text-sm text-primary hover:underline"
-            >
-              darsh@example.com
-            </a>
-
-            <div className="mt-10 space-y-5 text-foreground/75 leading-relaxed max-w-xl">
-              <p>
-                I'm Darsh Soam, a DevOps & Cloud Engineer focused on building scalable
-                infrastructure, cloud-native systems, and automation pipelines.
-              </p>
-              <p>
-                My work revolves around AWS, Kubernetes, Docker, Terraform, Linux, and modern CI/CD
-                practices.
-              </p>
-              <p>
-                I enjoy transforming manual operations into automated systems and designing
-                platforms that are reliable, secure, and scalable.
-              </p>
-            </div>
-
-            <div className="mt-12 grid grid-cols-2 gap-6 max-w-md">
-              <div>
-                <div className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase mb-2">
-                  Location
-                </div>
-                <div className="font-display text-base">
-                  Meerut, Uttar Pradesh
-                  <br />
-                  India
-                </div>
-              </div>
-              <div>
-                <div className="font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase mb-2">
-                  Availability
-                </div>
-                <div className="font-display text-base flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-success pulse-dot" />
-                  Open to Opportunities
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 1.05 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-            className="relative"
-          >
-            <div className="relative aspect-[4/5] overflow-hidden bg-card">
-              <img
-                src={PORTRAIT}
-                alt="Darsh Soam portrait"
-                className="w-full h-full object-cover"
-                style={{ filter: "grayscale(0.6) brightness(0.45) contrast(1.1)" }}
-              />
-              <div className="absolute inset-0 ring-1 ring-inset ring-border" />
-              <div className="absolute top-4 left-4 font-mono text-[10px] tracking-[0.2em] text-primary uppercase">
-                · 2026
-              </div>
-              <div className="absolute bottom-4 right-4 font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase">
-                D.S / IND
-              </div>
-            </div>
-
-            <span className="absolute -top-4 left-4 font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
-              Find me here
-            </span>
+            DevOps / Cloud Engineer
+          </motion.p>
+          <h1 aria-label="Darsh Soam">
             {[
-              {
-                Icon: Linkedin,
-                href: "https://linkedin.com",
-                label: "LinkedIn",
-                pos: "-left-5 top-[12%]",
-              },
-              {
-                Icon: Github,
-                href: "https://github.com",
-                label: "GitHub",
-                pos: "-right-5 top-[34%]",
-              },
-              {
-                Icon: Mail,
-                href: "mailto:darsh@example.com",
-                label: "Email",
-                pos: "-left-5 top-[58%]",
-              },
-            ].map(({ Icon, href, label, pos }, i) => (
-              <motion.a
-                key={label}
-                href={href}
-                aria-label={label}
-                target="_blank"
-                rel="noreferrer"
-                onMouseEnter={blip}
-                animate={
-                  reduceMotion ? undefined : { y: [0, -8, 0], x: [0, i % 2 === 0 ? 4 : -4, 0] }
-                }
-                transition={{
-                  duration: 4 + i,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: i * 0.8,
-                }}
-                whileHover={{ scale: 1.15 }}
-                className={`absolute ${pos} w-11 h-11 rounded-full bg-card border border-border backdrop-blur flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors`}
-              >
-                <Icon className="w-4 h-4" />
-              </motion.a>
+              ["DARSH", "first"],
+              ["SOAM", "second"],
+            ].map(([word, position], wordIndex) => (
+              <span key={word} className={`hero-mission__word hero-mission__word--${position}`}>
+                {word.split("").map((character, index) => (
+                  <motion.i
+                    key={`${character}-${index}`}
+                    initial={reduceMotion ? undefined : { opacity: 0, y: 64, scale: 1.04, filter: "blur(10px)" }}
+                    animate={arrived ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : { opacity: 0 }}
+                    transition={{ ...MOTION.cinematic, delay: 0.42 + wordIndex * 0.2 + index * 0.055 }}
+                  >
+                    {character}
+                  </motion.i>
+                ))}
+              </span>
             ))}
-          </motion.div>
+          </h1>
         </div>
-      </div>
-    </section>
-  );
-}
 
-function Capabilities() {
-  return (
-    <section
-      id="capabilities"
-      className="relative py-24 md:py-32 px-6 md:px-12 border-t border-border"
-    >
-      <div className="max-w-[1400px] mx-auto">
-        <SectionLabel num="002" title="Capabilities" />
-        <h2 className="font-display font-bold text-5xl md:text-6xl mb-4">
-          What I <span className="text-primary">Build With</span>
-        </h2>
-        <p className="text-sm text-muted-foreground max-w-lg mb-14">
-          Lines show how these technologies work together. Highlighted tags show where I've actually
-          applied them.
-        </p>
-        <CapabilityMap />
-      </div>
-    </section>
-  );
-}
-
-function Resume() {
-  return (
-    <section
-      id="resume"
-      className="relative py-24 md:py-32 px-6 md:px-12 border-t border-border bg-card/30"
-    >
-      <div className="max-w-[1400px] mx-auto">
-        <SectionLabel num="003" title="Resume" />
-        <div className="grid lg:grid-cols-2 gap-16">
-          {/* COL 1 — Experience */}
-          <div>
-            <h3 className="font-display font-bold text-sm tracking-[0.25em] text-primary uppercase mb-8 pb-3 border-b border-border">
-              Experience
-            </h3>
-            <div className="relative pl-6 space-y-8">
-              <span className="absolute left-[3px] top-2 bottom-2 w-px bg-primary/30" />
-              {EXPERIENCE.map((e, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: i * 0.1 }}
-                  className="relative"
-                >
-                  <span className="absolute -left-[23px] top-2 w-2 h-2 rounded-full bg-primary shadow-[0_0_10px_var(--primary)]" />
-                  <div className="font-mono text-[10px] tracking-[0.2em] text-primary uppercase mb-1">
-                    {e.year}
-                  </div>
-                  <div className="font-display font-semibold text-base tracking-wide">
-                    {e.company}
-                  </div>
-                  <div className="font-mono text-[11px] text-muted-foreground mt-1">{e.role}</div>
-                  <p className="text-sm text-foreground/65 mt-2 leading-relaxed">{e.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="mt-12">
-              <h3 className="font-display font-bold text-sm tracking-[0.25em] text-primary uppercase mb-6 pb-3 border-b border-border">
-                Education
-              </h3>
-              <div className="font-display font-semibold text-base">B.Tech Computer Science</div>
-              <div className="font-mono text-[11px] text-muted-foreground mt-1">
-                Meerut Institute of Engineering and Technology
-              </div>
-            </div>
+        <motion.div
+          initial={reduceMotion ? undefined : { opacity: 0, y: 22 }}
+          animate={arrived ? { opacity: 1, y: 0 } : { opacity: 0 }}
+          transition={{ ...MOTION.cinematic, delay: 1.15 }}
+          className="hero-mission__footer"
+        >
+          <p>
+            I build infrastructure that is ready to <em>scale, ship,</em> and recover.
+          </p>
+          <div className="hero-mission__actions">
+            <a href="#proof" className="text-action" data-cursor="project">
+              Explore systems <ArrowDownRight size={16} />
+            </a>
+            <a href="mailto:darsh@example.com" className="text-action text-action--quiet" data-cursor="link">
+              Start a transmission <ArrowUpRight size={15} />
+            </a>
           </div>
+        </motion.div>
+      </div>
+      <InfrastructureCore className="hero-mission__core" />
+      <a href="#identity" className="hero-mission__scroll-cue" data-cursor="link">
+        <span>DESCEND</span>
+        <i />
+      </a>
+    </section>
+  );
+}
 
-          {/* COL 2 — Capabilities list */}
-          <div>
-            <h3 className="font-display font-bold text-sm tracking-[0.25em] text-primary uppercase mb-8 pb-3 border-b border-border">
-              What Can I Do?
-            </h3>
-            <ul className="space-y-2.5 text-sm text-foreground/80">
-              {CAPABILITIES.map((c) => (
-                <li key={c} className="flex items-start gap-2">
-                  <span className="text-primary mt-1.5 w-1 h-1 rounded-full bg-primary shrink-0" />
-                  {c}
-                </li>
-              ))}
-            </ul>
-
-            <h4 className="font-display font-bold text-sm tracking-[0.25em] text-primary uppercase mt-12 mb-6 pb-3 border-b border-border">
-              DevOps Skills
-            </h4>
-            <div className="flex flex-wrap gap-2">
-              {DEVOPS_SKILLS.map((t) => (
-                <span key={t} className="tech-tag">
-                  {t}
-                </span>
-              ))}
-            </div>
-
-            <h4 className="font-display font-bold text-sm tracking-[0.25em] text-primary uppercase mt-12 mb-6 pb-3 border-b border-border">
-              Interests
-            </h4>
-            <div className="space-y-1.5 font-mono text-xs text-foreground/70">
-              {INTERESTS.map((i) => (
-                <div key={i}>· {i}</div>
-              ))}
-            </div>
-          </div>
-        </div>
+function SectionFrame({
+  id,
+  index,
+  eyebrow,
+  title,
+  children,
+  className = "",
+}: {
+  id: string;
+  index: string;
+  eyebrow: string;
+  title: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <section id={id} className={`mission-section ${className}`}>
+      <div className="mission-section__rail" aria-hidden="true">
+        <span>{index}</span>
+        <i />
+      </div>
+      <div className="mission-section__content">
+        <p className="system-eyebrow">{eyebrow}</p>
+        <h2 className="section-title">{title}</h2>
+        {children}
       </div>
     </section>
   );
 }
 
-function ArchitectureDiagram({ nodes }: { nodes: string[] }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
+function Identity() {
+  const reduceMotion = useReducedMotion();
   return (
-    <div ref={ref} className="w-full overflow-x-auto py-2">
-      <div className="flex items-center gap-2 min-w-max">
-        {nodes.map((n, i) => (
-          <div key={n} className="flex items-center gap-2">
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.4, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
-              className="px-3 py-2 rounded-sm border border-primary/30 bg-primary/5 font-mono text-[10px] tracking-[0.1em] uppercase text-foreground/80 whitespace-nowrap"
+    <SectionFrame id="identity" index="02" eyebrow="IDENTITY / OPERATIONAL PROFILE" title={<>The systems behind<br />the systems.</>} className="identity-section">
+      <div className="identity-grid">
+        <motion.div
+          className="identity-copy"
+          initial={reduceMotion ? undefined : { opacity: 0, x: -42, clipPath: "inset(0 100% 0 0)" }}
+          whileInView={{ opacity: 1, x: 0, clipPath: "inset(0 0% 0 0)" }}
+          viewport={VIEWPORT}
+          transition={MOTION.cinematic}
+        >
+          <p className="identity-copy__lead">I translate operational complexity into calm, repeatable infrastructure.</p>
+          <p>
+            I am Darsh Soam, a DevOps and Cloud Engineer focused on cloud-native systems, deployment pipelines, and the connective tissue between code and dependable operations.
+          </p>
+          <p>
+            My work centers on AWS, Kubernetes, Docker, Terraform, Linux, and CI/CD practices that make change visible, reversible, and ready to scale.
+          </p>
+          <div className="identity-copy__meta">
+            <span><MapPin size={14} /> Meerut, Uttar Pradesh / India</span>
+            <span><i className="signal-dot" /> Open to opportunities</span>
+          </div>
+        </motion.div>
+
+        <motion.figure
+          className="identity-portrait"
+          initial={reduceMotion ? undefined : { opacity: 0, y: 30, clipPath: "inset(100% 0 0 0)" }}
+          whileInView={{ opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)" }}
+          viewport={VIEWPORT}
+          transition={{ ...MOTION.cinematic, delay: 0.08 }}
+        >
+          <img src={PORTRAIT} alt="Darsh Soam" />
+          <div className="identity-portrait__wash" />
+          <figcaption>
+            <span>DS / 2026</span>
+            <span>FIELD PROFILE</span>
+          </figcaption>
+          <span className="identity-portrait__axis identity-portrait__axis--x" />
+          <span className="identity-portrait__axis identity-portrait__axis--y" />
+        </motion.figure>
+
+        <div className="identity-principles">
+          {PRINCIPLES.map(([number, title, copy], index) => (
+            <motion.article
+              key={number}
+              initial={reduceMotion ? undefined : { opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={VIEWPORT}
+              transition={{ ...MOTION.standard, delay: cinematicDelay(index, 0.16) }}
             >
-              {n}
-            </motion.div>
-            {i < nodes.length - 1 && (
-              <motion.div
-                initial={{ scaleX: 0, opacity: 0 }}
-                animate={inView ? { scaleX: 1, opacity: 1 } : {}}
-                transition={{ duration: 0.35, delay: i * 0.12 + 0.15, ease: "easeOut" }}
-                className="w-6 h-px bg-primary/40 origin-left"
-              />
-            )}
-          </div>
-        ))}
+              <span>{number}</span>
+              <h3>{title}</h3>
+              <p>{copy}</p>
+            </motion.article>
+          ))}
+        </div>
       </div>
+    </SectionFrame>
+  );
+}
+
+function Systems() {
+  return (
+    <SectionFrame id="systems" index="03" eyebrow="SYSTEMS / INTERDEPENDENCIES" title={<>Technology only matters<br />when it connects.</>} className="systems-section">
+      <div className="systems-section__intro">
+        <p>Explore the relationships that turn discrete tools into an operating system for delivery.</p>
+        <div className="systems-section__signal"><i /> Dependency field / interactive</div>
+      </div>
+      <CapabilityMap />
+    </SectionFrame>
+  );
+}
+
+function ArchitectureFlow({ nodes }: { nodes: readonly string[] }) {
+  return (
+    <div className="architecture-flow" aria-label={`Architecture: ${nodes.join(" then ")}`}>
+      {nodes.map((node, index) => (
+        <span key={node}>
+          <i />
+          {node}
+          {index < nodes.length - 1 && <b aria-hidden="true">→</b>}
+        </span>
+      ))}
     </div>
   );
 }
 
-function ProjectDetail({
-  project,
-  index,
-  onClose,
-}: {
-  project: (typeof PROJECTS)[number];
-  index: number;
-  onClose: () => void;
-}) {
+function ProjectDetail({ project, index, onClose }: { project: Project; index: number; onClose: () => void }) {
   const closeRef = useRef<HTMLButtonElement>(null);
-
   useEffect(() => {
     closeRef.current?.focus();
-    const prevOverflow = document.documentElement.style.overflow;
+    const previous = document.documentElement.style.overflow;
+    const onKeyDown = (event: KeyboardEvent) => event.key === "Escape" && onClose();
     document.documentElement.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", onKey);
+    window.addEventListener("keydown", onKeyDown);
     return () => {
-      window.removeEventListener("keydown", onKey);
-      document.documentElement.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+      document.documentElement.style.overflow = previous;
     };
   }, [onClose]);
 
   return (
     <motion.div
+      className="case-dialog-backdrop"
+      role="presentation"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.25 }}
-      onClick={onClose}
-      className="fixed inset-0 z-[150] flex items-center justify-center p-4 md:p-8 bg-black/55 backdrop-blur-sm"
+      onMouseDown={onClose}
     >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.96, y: 12 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.96, y: 12 }}
-        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        onClick={(e) => e.stopPropagation()}
+      <motion.article
         role="dialog"
         aria-modal="true"
-        aria-labelledby={`project-title-${index}`}
-        className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-card border border-border p-8 md:p-10"
+        aria-labelledby={`case-title-${index}`}
+        className="case-dialog"
+        initial={{ opacity: 0, y: 44, rotateX: -6, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 28, scale: 0.98 }}
+        transition={MOTION.cinematic}
+        onMouseDown={(event) => event.stopPropagation()}
       >
-        <button
-          ref={closeRef}
-          onClick={onClose}
-          aria-label="Close project details"
-          className="absolute top-5 right-5 w-9 h-9 flex items-center justify-center rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
-        >
-          <X className="w-4 h-4" />
+        <button ref={closeRef} type="button" onClick={onClose} className="case-dialog__close" data-cursor="link">
+          Close <X size={16} />
         </button>
-
-        <div className="flex items-center gap-3 mb-2">
-          <span className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground">
-            / 0{index + 1}
-          </span>
-          <span className="font-mono text-[9px] tracking-[0.15em] uppercase px-2 py-1 rounded-sm border border-primary/30 text-primary">
-            {project.status}
-          </span>
+        <div className="case-dialog__head">
+          <p>{project.code} / {project.category}</p>
+          <span>{project.status}</span>
+          <h3 id={`case-title-${index}`}>{project.name}</h3>
         </div>
-
-        <h3
-          id={`project-title-${index}`}
-          className="font-display font-bold text-3xl md:text-4xl tracking-wide mb-6"
-        >
-          {project.name}
-        </h3>
-
-        <div className="space-y-6 text-sm text-foreground/75 leading-relaxed">
-          <div>
-            <div className="font-mono text-[10px] tracking-[0.2em] text-primary uppercase mb-2">
-              Problem
-            </div>
-            <p>{project.problem}</p>
-          </div>
-          <div>
-            <div className="font-mono text-[10px] tracking-[0.2em] text-primary uppercase mb-2">
-              Architecture
-            </div>
-            <ArchitectureDiagram nodes={project.architecture} />
-          </div>
-          <div>
-            <div className="font-mono text-[10px] tracking-[0.2em] text-primary uppercase mb-2">
-              Tech Stack
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {project.tags.map((t) => (
-                <span key={t} className="tech-tag">
-                  {t}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div>
-            <div className="font-mono text-[10px] tracking-[0.2em] text-primary uppercase mb-2">
-              Implementation
-            </div>
-            <p>{project.implementation}</p>
-          </div>
-          <div>
-            <div className="font-mono text-[10px] tracking-[0.2em] text-primary uppercase mb-2">
-              Result / Learning
-            </div>
-            <p className="text-muted-foreground italic">{project.outcome}</p>
-          </div>
+        <div className="case-dialog__matrix">
+          <article><p className="system-eyebrow">PROBLEM</p><p>{project.problem}</p></article>
+          <article><p className="system-eyebrow">ARCHITECTURE</p><ArchitectureFlow nodes={project.architecture} /></article>
+          <article><p className="system-eyebrow">IMPLEMENTATION</p><p>{project.implementation}</p></article>
+          <article><p className="system-eyebrow">OUTCOME</p><p>{project.outcome}</p></article>
         </div>
-
-        <div className="flex items-center gap-3 pt-8 mt-8 border-t border-border">
-          <a
-            href={project.github}
-            className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Github className="w-3.5 h-3.5" /> Code
-          </a>
-          <span className="text-border">|</span>
-          <a
-            href={project.live}
-            className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-primary hover:underline"
-          >
-            Live Demo <ArrowUpRight className="w-3.5 h-3.5" />
-          </a>
-        </div>
-      </motion.div>
+        <div className="case-dialog__tags">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+      </motion.article>
     </motion.div>
   );
 }
 
-function ProjectCard({
-  p,
-  i,
-  onOpen,
-}: {
-  p: (typeof PROJECTS)[number];
-  i: number;
-  onOpen: (i: number) => void;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const onMove = (e: React.MouseEvent) => {
-    const r = ref.current?.getBoundingClientRect();
-    if (!r) return;
-    ref.current!.style.setProperty("--mx", `${e.clientX - r.left}px`);
-    ref.current!.style.setProperty("--my", `${e.clientY - r.top}px`);
+function ProjectCase({ project, index, onOpen }: { project: Project; index: number; onOpen: (index: number) => void }) {
+  const ref = useRef<HTMLElement>(null);
+  const reduceMotion = useReducedMotion();
+  const onPointerMove = (event: PointerEvent<HTMLElement>) => {
+    if (reduceMotion || event.pointerType === "touch" || !ref.current) return;
+    const bounds = ref.current.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+    ref.current.style.setProperty("--case-x", `${x * 8}deg`);
+    ref.current.style.setProperty("--case-y", `${-y * 7}deg`);
+    ref.current.style.setProperty("--spot-x", `${(x + 0.5) * 100}%`);
+    ref.current.style.setProperty("--spot-y", `${(y + 0.5) * 100}%`);
   };
+  const onPointerLeave = () => {
+    ref.current?.style.setProperty("--case-x", "0deg");
+    ref.current?.style.setProperty("--case-y", "0deg");
+  };
+
   return (
-    <motion.div
+    <motion.article
       ref={ref}
-      onMouseMove={onMove}
-      onClick={() => onOpen(i)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          onOpen(i);
-        }
-      }}
-      role="button"
-      tabIndex={0}
-      aria-haspopup="dialog"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.7, delay: i * 0.1 }}
-      className="spotlight-card group bg-card border border-border p-8 md:p-10 flex flex-col min-h-[340px] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+      className="case-world"
+      onPointerMove={onPointerMove}
+      onPointerLeave={onPointerLeave}
+      initial={reduceMotion ? undefined : { opacity: 0, y: 48, clipPath: "inset(16% 0 16% 0)" }}
+      whileInView={{ opacity: 1, y: 0, clipPath: "inset(0% 0 0% 0)" }}
+      viewport={VIEWPORT}
+      transition={{ ...MOTION.cinematic, delay: index * 0.08 }}
     >
-      <div className="flex items-start justify-between mb-8">
-        <span className="font-mono text-[10px] tracking-[0.3em] text-muted-foreground">
-          / 0{i + 1}
-        </span>
-        <span className="font-mono text-[9px] tracking-[0.15em] uppercase px-2 py-1 rounded-sm border border-primary/30 text-primary">
-          {p.status}
-        </span>
+      <div className="case-world__field" aria-hidden="true">
+        <i /><i /><i /><i />
       </div>
-
-      <h3 className="font-display font-bold text-2xl md:text-3xl tracking-wide mb-3 group-hover:text-primary transition-colors">
-        {p.name}
-      </h3>
-      <p className="text-sm text-foreground/65 leading-relaxed mb-6 flex-1">{p.desc}</p>
-
-      <div className="flex flex-wrap gap-1.5 mb-6">
-        {p.tags.map((t) => (
-          <span key={t} className="tech-tag">
-            {t}
-          </span>
-        ))}
+      <div className="case-world__content">
+        <div className="case-world__meta"><span>{project.code}</span><span>{project.status}</span></div>
+        <p className="system-eyebrow">{project.category}</p>
+        <h3>{project.name}</h3>
+        <p className="case-world__description">{project.desc}</p>
+        <ArchitectureFlow nodes={project.architecture} />
+        <div className="case-world__lower">
+          <div>{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+          <button type="button" onClick={() => onOpen(index)} data-cursor="project">
+            Enter case environment <ArrowUpRight size={17} />
+          </button>
+        </div>
       </div>
-
-      <div className="flex items-center gap-3 pt-6 border-t border-border">
-        <a
-          href={p.github}
-          onClick={(e) => e.stopPropagation()}
-          className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <Github className="w-3.5 h-3.5" /> Code
-        </a>
-        <span className="text-border">|</span>
-        <a
-          href={p.live}
-          onClick={(e) => e.stopPropagation()}
-          className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.2em] text-primary hover:underline"
-        >
-          Live Demo <ArrowUpRight className="w-3.5 h-3.5" />
-        </a>
-        <span className="ml-auto flex items-center gap-1 text-[10px] font-mono uppercase tracking-[0.15em] text-muted-foreground group-hover:text-primary transition-colors">
-          View Case Study <ArrowUpRight className="w-3 h-3" />
-        </span>
-      </div>
-    </motion.div>
+    </motion.article>
   );
 }
 
-function Portfolio_() {
+function Proof() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   return (
-    <section
-      id="portfolio"
-      className="relative py-24 md:py-32 px-6 md:px-12 border-t border-border"
-    >
-      <div className="max-w-[1400px] mx-auto">
-        <SectionLabel num="004" title="Portfolio" />
-        <div className="flex items-end justify-between mb-12 flex-wrap gap-6">
-          <h2 className="font-display font-bold text-5xl md:text-6xl">
-            Selected
-            <br />
-            <span className="text-primary">Work</span>
-          </h2>
-          <p className="text-sm text-muted-foreground max-w-sm">
-            A curated set of infrastructure, automation, and cloud-native engineering projects.
-          </p>
-        </div>
-        <div className="grid md:grid-cols-2 gap-5">
-          {PROJECTS.map((p, i) => (
-            <ProjectCard key={p.name} p={p} i={i} onOpen={setOpenIndex} />
-          ))}
-        </div>
+    <SectionFrame id="proof" index="04" eyebrow="PROOF / CASE ENVIRONMENTS" title={<>Evidence, not<br />a feature list.</>} className="proof-section">
+      <div className="proof-section__intro">
+        <p>Each environment documents the operational problem, the system design, and the way implementation becomes a reliable outcome.</p>
+        <span>0{PROJECTS.length} / SELECTED SYSTEMS</span>
       </div>
-
+      <div className="case-worlds">
+        {PROJECTS.map((project, index) => <ProjectCase key={project.name} project={project} index={index} onOpen={setOpenIndex} />)}
+      </div>
       <AnimatePresence>
-        {openIndex !== null && (
-          <ProjectDetail
-            project={PROJECTS[openIndex]}
-            index={openIndex}
-            onClose={() => setOpenIndex(null)}
-          />
-        )}
+        {openIndex !== null && <ProjectDetail project={PROJECTS[openIndex]} index={openIndex} onClose={() => setOpenIndex(null)} />}
       </AnimatePresence>
-    </section>
+    </SectionFrame>
+  );
+}
+
+function Experience() {
+  const reduceMotion = useReducedMotion();
+  return (
+    <SectionFrame id="experience" index="05" eyebrow="EXPERIENCE / SYSTEM TRACE" title={<>A record of moving<br />systems forward.</>} className="experience-section">
+      <div className="experience-layout">
+        <div className="experience-layout__intro">
+          <p>Professional work is treated here as a trace of decisions: each waypoint reflects a system built, clarified, or made more dependable.</p>
+          <div className="experience-layout__skills">{SYSTEMS.map((skill) => <span key={skill}>{skill}</span>)}</div>
+        </div>
+        <ol className="system-trace">
+          {EXPERIENCE.map((entry, index) => (
+            <motion.li
+              key={entry.title}
+              initial={reduceMotion ? undefined : { opacity: 0, x: 26 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={VIEWPORT}
+              transition={{ ...MOTION.standard, delay: index * 0.1 }}
+            >
+              <p>{entry.year}</p>
+              <i aria-hidden="true" />
+              <div><h3>{entry.title}</h3><span>{entry.role}</span><p>{entry.summary}</p></div>
+            </motion.li>
+          ))}
+        </ol>
+      </div>
+    </SectionFrame>
+  );
+}
+
+function Credentials() {
+  const activity = useMemo(() => Array.from({ length: 84 }, (_, index) => ((index * 19 + index * index * 3) % 13) / 13), []);
+  return (
+    <SectionFrame id="credentials" index="06" eyebrow="EVIDENCE / CREDENTIAL REGISTRY" title={<>Signals of practice,<br />not decoration.</>} className="credentials-section">
+      <div className="evidence-grid">
+        <article className="telemetry-field">
+          <div className="telemetry-field__head"><p className="system-eyebrow">ACTIVITY / TELEMETRY FIELD</p><span>GITHUB / TRACE</span></div>
+          <div className="telemetry-field__terrain" aria-label="Illustrative activity intensity field">
+            {activity.map((value, index) => <i key={index} style={{ opacity: 0.12 + value * 0.88 }} />)}
+          </div>
+          <p>Contribution activity rendered as a quiet intensity field. Project evidence lives in the case environments above.</p>
+        </article>
+        <article className="credential-registry">
+          <div className="credential-registry__head"><p className="system-eyebrow">CREDENTIALS / VERIFICATION</p><span>REGISTRY</span></div>
+          <div className="credential-registry__record"><span>01</span><div><h3>Credential registry</h3><p>Issuer, certificate ID, and verification action are ready to be recorded here.</p></div><i>OPEN</i></div>
+          <div className="credential-registry__record"><span>02</span><div><h3>Continuous learning</h3><p>Engineering evidence is maintained alongside applied infrastructure work.</p></div><i>ACTIVE</i></div>
+          <a href="mailto:darsh@example.com?subject=Credential%20verification" className="text-action" data-cursor="link">Request verification <ArrowUpRight size={16} /></a>
+        </article>
+      </div>
+    </SectionFrame>
   );
 }
 
 function Contact() {
   return (
-    <section
-      id="contact"
-      className="relative py-32 md:py-40 px-6 md:px-12 border-t border-border overflow-hidden"
-    >
-      <div className="absolute inset-0 opacity-30 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-primary/10 blur-[120px]" />
-      </div>
-      <div className="relative max-w-[1400px] mx-auto text-center">
-        <SectionLabel num="007" title="Contact" />
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1 }}
-          className="font-display font-bold text-5xl md:text-7xl lg:text-8xl leading-[0.95] max-w-5xl mx-auto"
-        >
-          GET IN <span className="text-primary">TOUCH</span>
-        </motion.h2>
-
-        <p className="text-muted-foreground max-w-xl mx-auto mt-6 mb-12 text-sm leading-relaxed">
-          Have a project, role, or idea in mind? Drop a message and I'll respond as soon as
-          possible.
-        </p>
-
-        <div className="mt-14 flex flex-wrap items-center justify-center gap-4">
-          <a
-            href="mailto:darsh@example.com"
-            onMouseEnter={blip}
-            className="px-7 py-4 bg-primary text-primary-foreground rounded-full text-xs font-mono uppercase tracking-[0.2em] flex items-center gap-2 hover:bg-primary/90 transition-colors"
-          >
-            <Mail className="w-4 h-4" /> Email Me
-          </a>
-          <a
-            href="https://linkedin.com"
-            target="_blank"
-            rel="noreferrer"
-            onMouseEnter={blip}
-            className="px-7 py-4 border border-border rounded-full text-xs font-mono uppercase tracking-[0.2em] flex items-center gap-2 hover:border-primary hover:text-primary transition-colors"
-          >
-            <Linkedin className="w-4 h-4" /> Connect on LinkedIn
-          </a>
-          <a
-            href="#"
-            onMouseEnter={blip}
-            className="px-7 py-4 border border-border rounded-full text-xs font-mono uppercase tracking-[0.2em] flex items-center gap-2 hover:border-primary hover:text-primary transition-colors"
-          >
-            <Download className="w-4 h-4" /> Download Resume
-          </a>
-        </div>
-
-        <div className="mt-20">
-          <ContactForm />
+    <section id="contact" className="transmission-section">
+      <div className="transmission-section__grid" aria-hidden="true" />
+      <div className="transmission-section__content">
+        <p className="system-eyebrow">07 / FINAL TRANSMISSION</p>
+        <h2>Let&apos;s build<br />something <em>reliable.</em></h2>
+        <p>Have a platform problem, cloud initiative, or DevOps role in motion? I would be glad to connect.</p>
+        <div className="transmission-section__actions">
+          <a href="mailto:darsh@example.com" className="transmission-primary" data-cursor="link"><Mail size={18} /> darsh@example.com <ArrowUpRight size={16} /></a>
+          <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="transmission-link" data-cursor="link"><Linkedin size={17} /> LinkedIn</a>
+          <a href="https://github.com" target="_blank" rel="noreferrer" className="transmission-link" data-cursor="link"><Github size={17} /> GitHub</a>
         </div>
       </div>
+      <footer><span>© 2026 DARSH SOAM</span><span>MISSION COMPLETE / CONNECTION OPEN</span></footer>
     </section>
+  );
+}
+
+function MissionReadout({ active }: { active: string }) {
+  const current = Math.max(0, MISSION_STAGES.findIndex((stage) => stage.id === active));
+  return (
+    <aside className="mission-readout" aria-label={`Current section: ${MISSION_STAGES[current].label}`}>
+      <span>0{current + 1}</span><i /><p>{MISSION_STAGES[current].label}</p>
+    </aside>
   );
 }
 
 function ScrollProgress() {
   const { scrollYProgress } = useScroll();
-  const w = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
-  const width = useTransform(w, (v) => `${v * 100}%`);
-  return <motion.div style={{ width }} className="fixed top-0 left-0 h-px bg-primary z-[60]" />;
-}
-
-function ReadingProgress({ active }: { active: string }) {
-  const index = STORY_SECTIONS.findIndex((s) => s.id === active);
-  const current = index === -1 ? 0 : index;
-  return (
-    <div
-      aria-hidden="true"
-      className="fixed left-4 md:left-6 bottom-6 z-40 flex items-center gap-2 md:gap-3 font-mono text-[10px] tracking-[0.2em] md:tracking-[0.25em] text-muted-foreground uppercase"
-    >
-      <span className="text-primary tabular-nums">{String(current + 1).padStart(2, "0")}</span>
-      <span>/</span>
-      <span className="tabular-nums">{String(STORY_SECTIONS.length).padStart(2, "0")}</span>
-      <span className="hidden sm:block w-8 h-px bg-border" />
-      <motion.span
-        key={active}
-        initial={{ opacity: 0, y: 4 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="hidden sm:inline"
-      >
-        {STORY_SECTIONS[current]?.label}
-      </motion.span>
-    </div>
-  );
-}
-
-function ScrollAmbient() {
-  const { scrollYProgress } = useScroll();
-  const glowY = useTransform(scrollYProgress, [0, 1], ["0%", "60%"]);
-  const glowOpacity = useTransform(scrollYProgress, [0, 0.08, 0.92, 1], [0, 0.35, 0.35, 0]);
-  return (
-    <motion.div
-      aria-hidden="true"
-      style={{ top: glowY, opacity: glowOpacity }}
-      className="fixed left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 w-[70vw] h-[70vw] max-w-[900px] max-h-[900px] rounded-full bg-primary/10 blur-[160px] pointer-events-none"
-    />
-  );
-}
-
-function SoundToggle() {
-  const [on, setOn] = useState(false);
-  return (
-    <button
-      onClick={() => {
-        const next = !on;
-        setOn(next);
-        setSoundEnabled(next);
-        if (next) blip();
-      }}
-      aria-pressed={on}
-      aria-label={on ? "Disable interface sounds" : "Enable interface sounds"}
-      className="fixed bottom-6 right-6 z-50 w-11 h-11 rounded-full border border-border bg-card/80 backdrop-blur flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-colors"
-    >
-      {on ? <Volume2 className="w-4 h-4 text-primary" /> : <VolumeX className="w-4 h-4" />}
-    </button>
-  );
+  const scaleX = useSpring(scrollYProgress, { stiffness: 90, damping: 28, mass: 0.2 });
+  const atmosphere = useTransform(scrollYProgress, [0, 0.45, 1], [0.3, 0.85, 0.08]);
+  return <><motion.div className="scroll-progress" style={{ scaleX }} /><motion.div className="scroll-atmosphere" style={{ opacity: atmosphere }} /></>;
 }
 
 function Portfolio() {
-  const { dot, ring } = useCursor();
+  const { dot, ring } = useCursorInstrument();
   const [active, setActive] = useState("home");
-  const [hasArrived, setHasArrived] = useState(false);
-  const ids = useMemo(() => STORY_SECTIONS.map((s) => s.id), []);
+  const [arrived, setArrived] = useState(false);
+  const onArrivalComplete = useCallback(() => setArrived(true), []);
+  const ids = useMemo(() => MISSION_STAGES.map((stage) => stage.id), []);
 
   useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) setActive(e.target.id);
-        });
-      },
-      { rootMargin: "-40% 0px -55% 0px" },
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => entry.isIntersecting && setActive(entry.target.id)),
+      { rootMargin: "-42% 0px -48% 0px" },
     );
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) obs.observe(el);
-    });
-    return () => obs.disconnect();
+    ids.forEach((id) => document.getElementById(id) && observer.observe(document.getElementById(id)!));
+    return () => observer.disconnect();
   }, [ids]);
 
   return (
-    <div className="noise relative bg-background text-foreground min-h-screen">
-      <ScrollAmbient />
-      <ArrivalSequence onComplete={() => setHasArrived(true)} />
-      <div ref={dot} className="cursor-dot" />
-      <div ref={ring} className="cursor-ring" />
+    <div className="mission-shell">
       <ScrollProgress />
-      <ReadingProgress active={active} />
-      <Navbar active={active} ready={hasArrived} />
+      <ArrivalSequence onComplete={onArrivalComplete} />
+      <div ref={dot} className="cursor-dot" aria-hidden="true" />
+      <div ref={ring} className="cursor-ring" aria-hidden="true" />
+      <MissionNavigation active={active} />
+      <MissionReadout active={active} />
       <main>
-        <Hero ready={hasArrived} />
-        <TechMarquee />
-        <About />
-        <Capabilities />
-        <StatStrip />
-        <Resume />
-        <Portfolio_ />
-        <GithubActivity />
-        <Certifications label={<SectionLabel num="006" title="Certifications" />} />
+        <Hero arrived={arrived} />
+        <Identity />
+        <Systems />
+        <Proof />
+        <Experience />
+        <Credentials />
         <Contact />
       </main>
-      <SiteFooter />
-      <SoundToggle />
     </div>
   );
 }
