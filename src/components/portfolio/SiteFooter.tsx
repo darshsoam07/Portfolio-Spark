@@ -1,60 +1,92 @@
-import { motion } from "motion/react";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowUp, Github, Linkedin, Mail, ShieldCheck, Terminal } from "lucide-react";
+import { PROFILE, SOCIALS } from "@/data/portfolioData";
 
-const LINKS = [
-  { id: "home", label: "Home" },
-  { id: "about", label: "About" },
-  { id: "resume", label: "Resume" },
-  { id: "portfolio", label: "Portfolio" },
-  { id: "contact", label: "Contact" },
-];
+export function SiteFooter() {
+  const [time, setTime] = useState("");
 
-export function SiteFooter({ onNav }: { onNav?: () => void }) {
+  useEffect(() => {
+    const update = () => {
+      const now = new Date();
+      setTime(
+        now.toLocaleTimeString("en-US", {
+          hour12: false,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })
+      );
+    };
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <motion.footer
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      className="border-t border-border px-6 md:px-12 py-10"
-    >
-      <div className="max-w-[1400px] mx-auto grid gap-8 md:grid-cols-3 items-center">
-        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-          © 2026 Darsh Soam. Built for shipping, not scrolling.
-        </p>
+    <footer className="border-t border-[rgba(230,240,245,0.08)] bg-[#07090b] py-12 px-6 md:px-10">
+      <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* Left: Identity */}
+        <div className="flex flex-col items-center md:items-start gap-1">
+          <div className="font-display font-bold text-sm tracking-wider uppercase text-[#f1f6f7]">
+            DARSH<span className="text-[#b7ff3c]">.</span>SOAM
+          </div>
+          <p className="font-mono text-[10px] text-[#73848b] tracking-wider">
+            Cloud · DevOps · Automation · Agentic AI
+          </p>
+        </div>
 
-        <nav className="flex flex-wrap justify-start md:justify-center gap-5">
-          {LINKS.map((l) => (
-            <a
-              key={l.id}
-              href={`#${l.id}`}
-              onClick={onNav}
-              className="text-[11px] font-mono uppercase tracking-[0.18em] text-muted-foreground hover:text-primary transition-colors"
-            >
-              {l.label}
-            </a>
-          ))}
-        </nav>
+        {/* Center: Philosophy */}
+        <div className="text-center font-mono text-[11px] text-[#b3c0c4]">
+          Built with curiosity. Engineered with intention. <br />
+          <span className="text-[#73848b] text-[10px]">
+            © {new Date().getFullYear()} {PROFILE.name} · MEERUT, IN · UTC+05:30 [{time}]
+          </span>
+        </div>
 
-        <div className="flex md:justify-end items-center gap-5">
-          {[
-            { Icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-            { Icon: Github, href: "https://github.com", label: "GitHub" },
-            { Icon: Mail, href: "mailto:darsh@example.com", label: "Email" },
-          ].map(({ Icon, href, label }) => (
+        {/* Right: Socials & Back to Top */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <a
-              key={label}
-              href={href}
-              aria-label={label}
+              href={PROFILE.github}
               target="_blank"
               rel="noreferrer"
-              className="text-muted-foreground hover:text-primary transition-colors"
+              aria-label="GitHub Profile"
+              className="p-2 rounded bg-[#0e1317] border border-[rgba(230,240,245,0.08)] text-[#b3c0c4] hover:text-[#b7ff3c] hover:border-[#b7ff3c] transition-colors"
             >
-              <Icon className="w-4 h-4" />
+              <Github className="w-4 h-4" />
             </a>
-          ))}
+            <a
+              href={PROFILE.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn Profile"
+              className="p-2 rounded bg-[#0e1317] border border-[rgba(230,240,245,0.08)] text-[#b3c0c4] hover:text-[#b7ff3c] hover:border-[#b7ff3c] transition-colors"
+            >
+              <Linkedin className="w-4 h-4" />
+            </a>
+            <a
+              href={`mailto:${PROFILE.email}`}
+              aria-label="Email Contact"
+              className="p-2 rounded bg-[#0e1317] border border-[rgba(230,240,245,0.08)] text-[#b3c0c4] hover:text-[#b7ff3c] hover:border-[#b7ff3c] transition-colors"
+            >
+              <Mail className="w-4 h-4" />
+            </a>
+          </div>
+
+          <button
+            onClick={scrollToTop}
+            aria-label="Scroll to top"
+            className="flex items-center gap-1.5 px-3 py-2 rounded bg-[#0e1317] border border-[rgba(230,240,245,0.1)] font-mono text-[10px] uppercase text-[#73848b] hover:text-[#f1f6f7] hover:border-[#b7ff3c] transition-colors"
+          >
+            <span>Top</span>
+            <ArrowUp className="w-3 h-3" />
+          </button>
         </div>
       </div>
-    </motion.footer>
+    </footer>
   );
 }

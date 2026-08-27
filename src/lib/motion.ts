@@ -1,23 +1,39 @@
-export const EASE_SIGNATURE = [0.16, 1, 0.3, 1] as const;
-export const EASE_ACCELERATE = [0.65, 0, 0.35, 1] as const;
-export const EASE_TRANSMIT = [0.22, 0.7, 0.16, 1] as const;
+export const EASE_PRECISE = [0.22, 0.8, 0.2, 1] as const;
+export const EASE_HEAVY = [0.65, 0, 0.35, 1] as const;
 
+/**
+ * Semantic motion grammar — every transition belongs to a layer
+ * so motion communicates hierarchy, not decoration.
+ */
 export const MOTION = {
-  micro: { duration: 0.18, ease: EASE_SIGNATURE },
-  standard: { duration: 0.56, ease: EASE_SIGNATURE },
-  cinematic: { duration: 1.05, ease: EASE_SIGNATURE },
-  event: { duration: 2.8, ease: EASE_TRANSMIT },
-  stagger: 0.075,
+  section: { duration: 0.65, ease: EASE_PRECISE },
+  component: { duration: 0.4, ease: EASE_PRECISE },
+  micro: { duration: 0.16, ease: EASE_PRECISE },
+  interaction: { duration: 0.24, ease: EASE_PRECISE },
+  cinematic: { duration: 0.85, ease: EASE_HEAVY },
 } as const;
 
-export const ARRIVAL_ENABLE_SESSION_SKIP = true;
-export const ARRIVAL_SESSION_KEY = "darsh-arrival-v2";
-
-export const VIEWPORT = {
+/** Shared viewport trigger for scroll reveals */
+export const VIEWPORT_REVEAL = {
   once: true,
-  margin: "-12% 0px -12% 0px",
+  amount: 0.15,
+  margin: "0px 0px -8% 0px",
 } as const;
 
-export function cinematicDelay(index: number, base = 0) {
-  return base + index * MOTION.stagger;
-}
+/** Fade-up reveal for sections */
+export const SECTION_REVEAL = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: MOTION.section },
+} as const;
+
+/** Stagger container — use with `variants` on parent */
+export const STAGGER_CONTAINER = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+} as const;
+
+/** Individual item in a stagger group */
+export const STAGGER_ITEM = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: MOTION.component },
+} as const;
