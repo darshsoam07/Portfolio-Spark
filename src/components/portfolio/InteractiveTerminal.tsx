@@ -290,17 +290,25 @@ export function InteractiveTerminal() {
           onClick={() => inputRef.current?.focus()}
           className="p-4 sm:p-6 min-h-[360px] max-h-[500px] overflow-y-auto font-mono text-xs flex flex-col gap-4 cursor-text"
         >
-          {logs.map((log) => (
-            <div key={log.id} className="flex flex-col gap-1.5">
-              <div className="flex items-center gap-2 text-[#73848b] text-[11px]">
-                <span className="text-[#b7ff3c]">➜</span>
-                <span className="text-[#38bdf8]">darsh-soam</span>
-                <span className="text-[#f1f6f7]">{log.command}</span>
-                <span className="ml-auto text-[9px] text-[#73848b]">{log.timestamp}</span>
+          <div
+            role="log"
+            aria-live="polite"
+            aria-atomic="false"
+            aria-label="Terminal output"
+            className="flex flex-col gap-4"
+          >
+            {logs.map((log) => (
+              <div key={log.id} className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-2 text-[#73848b] text-[11px]">
+                  <span className="text-[#b7ff3c]">➜</span>
+                  <span className="text-[#38bdf8]">darsh-soam</span>
+                  <span className="text-[#f1f6f7]">{log.command}</span>
+                  <span className="ml-auto text-[9px] text-[#73848b]">{log.timestamp}</span>
+                </div>
+                <div className="pl-4">{log.output}</div>
               </div>
-              <div className="pl-4">{log.output}</div>
-            </div>
-          ))}
+            ))}
+          </div>
 
           {/* Active Input Line */}
           <div className="flex items-center gap-2 pt-2 text-[#f1f6f7]">
@@ -313,6 +321,7 @@ export function InteractiveTerminal() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
+              aria-label="Terminal command input"
               placeholder="type a command (e.g. help, deploy, whoami)..."
               className="flex-1 bg-transparent border-none outline-none font-mono text-xs text-[#f1f6f7] placeholder-[#73848b]/50"
               autoComplete="off"

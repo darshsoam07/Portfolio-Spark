@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Build/infra endpoints — no SEO value
+Disallow: /.mcp/
+Disallow: /.well-known/
+
+# NOTE: keep this host in sync with SITE_URL in src/lib/site.ts
+Sitemap: https://darshsoam07-portfolio-spark.workers.dev/sitemap.xml

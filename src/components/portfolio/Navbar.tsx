@@ -24,7 +24,10 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
-    const handleScroll = () => {
+    let rafId: number | null = null;
+
+    const measure = () => {
+      rafId = null;
       setScrolled(window.scrollY > 40);
 
       // Scroll progress
@@ -32,22 +35,49 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
       setScrollProgress(docHeight > 0 ? window.scrollY / docHeight : 0);
 
       // Active section detection
-      const sectionIds = NAV_LINKS.map((item) => item.id);
-      for (const id of sectionIds) {
+      for (const { id } of NAV_LINKS) {
         const el = document.getElementById(id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 200 && rect.bottom >= 200) {
-            setActiveSection(id);
-            break;
-          }
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= 200 && rect.bottom >= 200) {
+          setActiveSection(id);
+          break;
         }
       }
     };
 
+    // Coalesce bursts of scroll events into one measurement per frame —
+    // getBoundingClientRect() on every section per event forces layout.
+    const handleScroll = () => {
+      if (rafId !== null) return;
+      rafId = window.requestAnimationFrame(measure);
+    };
+
+    measure(); // sync state when the page loads already scrolled
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafId !== null) window.cancelAnimationFrame(rafId);
+    };
   }, []);
+
+  // Mobile drawer: lock body scroll and close on Escape
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileMenuOpen(false);
+    };
+    window.addEventListener("keydown", handleKey);
+
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      window.removeEventListener("keydown", handleKey);
+      document.body.style.overflow = prev;
+    };
+  }, [mobileMenuOpen]);
 
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
@@ -168,6 +198,7 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(false)}
+                aria-label="Close navigation"
                 className="p-1.5 text-[#b3c0c4] hover:text-[#f1f6f7]"
               >
                 <X className="w-5 h-5" />
