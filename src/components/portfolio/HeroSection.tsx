@@ -3,10 +3,6 @@ import { motion } from "motion/react";
 import {
   ArrowDown,
   ArrowUpRight,
-  Boxes,
-  Cloud,
-  Cpu,
-  Layers,
   Terminal,
   Zap,
 } from "lucide-react";
@@ -172,29 +168,6 @@ export function HeroSection() {
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-[#07090b] via-transparent to-transparent opacity-80" />
-
-              {/* Floating Chips */}
-              <div className="absolute top-6 left-4 z-20 flex flex-col gap-2">
-                <div className="flex items-center gap-2 px-2.5 py-1 rounded bg-[#07090b]/85 border border-[#b7ff3c]/30 font-mono text-[9px] text-[#b7ff3c] tracking-wider backdrop-blur-md">
-                  <Cloud className="w-3 h-3 text-[#b7ff3c]" />
-                  <span>AWS VPC / EC2 / S3</span>
-                </div>
-                <div className="flex items-center gap-2 px-2.5 py-1 rounded bg-[#07090b]/85 border border-[#38bdf8]/30 font-mono text-[9px] text-[#38bdf8] tracking-wider backdrop-blur-md">
-                  <Boxes className="w-3 h-3 text-[#38bdf8]" />
-                  <span>K8S / PODS NOMINAL</span>
-                </div>
-              </div>
-
-              <div className="absolute bottom-6 right-4 z-20 flex flex-col gap-2 items-end">
-                <div className="flex items-center gap-2 px-2.5 py-1 rounded bg-[#07090b]/85 border border-[rgba(230,240,245,0.2)] font-mono text-[9px] text-[#f1f6f7] tracking-wider backdrop-blur-md">
-                  <Layers className="w-3 h-3 text-[#b7ff3c]" />
-                  <span>Terraform IaC Synced</span>
-                </div>
-                <div className="flex items-center gap-2 px-2.5 py-1 rounded bg-[#07090b]/85 border border-[#b7ff3c]/40 font-mono text-[9px] text-[#b7ff3c] tracking-wider backdrop-blur-md">
-                  <Cpu className="w-3 h-3 text-[#b7ff3c]" />
-                  <span>Agentic AI Workflows</span>
-                </div>
-              </div>
             </div>
           </div>
         </motion.div>
