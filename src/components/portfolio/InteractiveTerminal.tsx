@@ -46,8 +46,14 @@ export function InteractiveTerminal() {
     ]);
   }, []);
 
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [logs]);
 
   const handleCommand = (cmdText: string) => {

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Navbar } from "@/components/portfolio/Navbar";
 import { HeroSection } from "@/components/portfolio/HeroSection";
 import { SystemsTopology } from "@/components/portfolio/SystemsTopology";
@@ -24,6 +24,9 @@ import {
   ShieldCheck,
 } from "lucide-react";
 
+// Lazy-load WebGL Arrival Tunnel to isolate Three.js bundle chunk
+const ArrivalTunnel = lazy(() => import("@/components/portfolio/ArrivalTunnel"));
+
 export const Route = createFileRoute("/")({
   component: PortfolioPage,
 });
@@ -43,6 +46,26 @@ const MARQUEE_ITEMS = [
 
 function PortfolioPage() {
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [showTunnel, setShowTunnel] = useState<boolean>(false);
+
+  useEffect(() => {
+    try {
+      if (typeof window === "undefined") return;
+      const hasPlayed = sessionStorage.getItem("portfolioIntroPlayed");
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const canvas = document.createElement("canvas");
+      const hasWebGL = !!(
+        window.WebGLRenderingContext &&
+        (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
+      );
+
+      if (!hasPlayed && !prefersReduced && hasWebGL) {
+        setShowTunnel(true);
+      }
+    } catch {
+      // Safe fallback: proceed straight to portfolio
+    }
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -57,6 +80,13 @@ function PortfolioPage() {
 
   return (
     <div className="relative bg-[#07090b] text-[#f1f6f7] min-h-screen font-sans selection:bg-[#b7ff3c] selection:text-[#07090b] grid-bg">
+      {/* WebGL Arrival Tunnel (rendered only once per session, before site reveal) */}
+      {showTunnel && (
+        <Suspense fallback={null}>
+          <ArrivalTunnel onFinish={() => setShowTunnel(false)} />
+        </Suspense>
+      )}
+
       {/* Top Navbar */}
       <Navbar onOpenCommandPalette={() => setCommandPaletteOpen(true)} />
 

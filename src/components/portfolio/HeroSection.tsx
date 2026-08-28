@@ -168,7 +168,7 @@ export function HeroSection() {
               <img
                 src={darshPortrait}
                 alt="Darsh Soam"
-                className="w-full h-full object-cover object-top filter grayscale contrast-125 brightness-95 opacity-90 transition-all duration-500 hover:grayscale-0 hover:opacity-100"
+                className="w-full h-full object-cover object-top filter contrast-125 brightness-95 opacity-90 transition-all duration-500 hover:opacity-100"
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-[#07090b] via-transparent to-transparent opacity-80" />
