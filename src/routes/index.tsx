@@ -48,6 +48,19 @@ function PortfolioPage() {
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [showTunnel, setShowTunnel] = useState<boolean>(false);
 
+  // NEW: force the page to always start at the top, regardless of URL hash
+  // or the browser's native scroll-restoration on refresh.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     try {
       if (typeof window === "undefined") return;
@@ -83,7 +96,12 @@ function PortfolioPage() {
       {/* WebGL Arrival Tunnel (rendered only once per session, before site reveal) */}
       {showTunnel && (
         <Suspense fallback={null}>
-          <ArrivalTunnel onFinish={() => setShowTunnel(false)} />
+          <ArrivalTunnel
+            onFinish={() => {
+              setShowTunnel(false);
+              window.scrollTo(0, 0);
+            }}
+          />
         </Suspense>
       )}
 
