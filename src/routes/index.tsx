@@ -11,6 +11,7 @@ import { InteractiveTerminal } from "@/components/portfolio/InteractiveTerminal"
 import { ContactSection } from "@/components/portfolio/ContactSection";
 import { SiteFooter } from "@/components/portfolio/SiteFooter";
 import { CommandPaletteModal } from "@/components/portfolio/CommandPaletteModal";
+import { PortfolioIntro } from "@/components/portfolio/PortfolioIntro";
 import {
   Boxes,
   Cloud,
@@ -57,6 +58,9 @@ function PortfolioPage() {
 
   return (
     <div className="relative bg-[#07090b] text-[#f1f6f7] min-h-screen font-sans selection:bg-[#b7ff3c] selection:text-[#07090b] grid-bg">
+      {/* Isolated Portfolio Arrival Intro Animation */}
+      <PortfolioIntro />
+
       {/* Top Navbar */}
       <Navbar onOpenCommandPalette={() => setCommandPaletteOpen(true)} />
 

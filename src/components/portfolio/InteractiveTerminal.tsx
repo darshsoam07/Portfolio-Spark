@@ -22,32 +22,36 @@ const WELCOME_BANNER = `
  Type 'help' to inspect available system commands.
 `;
 
+const INITIAL_LOGS: CommandLog[] = [
+  {
+    id: "welcome",
+    command: "init --system",
+    output: (
+      <pre className="font-mono text-[11px] sm:text-xs text-[#b7ff3c] leading-tight overflow-x-auto whitespace-pre">
+        {WELCOME_BANNER}
+      </pre>
+    ),
+    timestamp: new Date().toLocaleTimeString(),
+  },
+];
+
 export function InteractiveTerminal() {
   const [input, setInput] = useState("");
-  const [logs, setLogs] = useState<CommandLog[]>([]);
+  const [logs, setLogs] = useState<CommandLog[]>(INITIAL_LOGS);
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState<number>(-1);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const terminalBodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
-    // Initial welcome banner log
-    setLogs([
-      {
-        id: "welcome",
-        command: "init --system",
-        output: (
-          <pre className="font-mono text-[11px] sm:text-xs text-[#b7ff3c] leading-tight overflow-x-auto whitespace-pre">
-            {WELCOME_BANNER}
-          </pre>
-        ),
-        timestamp: new Date().toLocaleTimeString(),
-      },
-    ]);
-  }, []);
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (terminalBodyRef.current) {
+      terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight;
+    }
   }, [logs]);
 
   const handleCommand = (cmdText: string) => {
@@ -287,6 +291,7 @@ export function InteractiveTerminal() {
 
         {/* Terminal Screen Body */}
         <div
+          ref={terminalBodyRef}
           onClick={() => inputRef.current?.focus()}
           className="p-4 sm:p-6 min-h-[360px] max-h-[500px] overflow-y-auto font-mono text-xs flex flex-col gap-4 cursor-text"
         >
@@ -328,7 +333,6 @@ export function InteractiveTerminal() {
               spellCheck="false"
             />
           </div>
-          <div ref={bottomRef} />
         </div>
       </div>
     </motion.section>

@@ -55,8 +55,7 @@ export function CertificateModal({ credential, onClose }: CertificateModalProps)
             className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl border border-[rgba(230,240,245,0.15)] bg-[#0e1317] shadow-2xl"
             initial={{ opacity: 0, scale: 0.95, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 12 }}
-            transition={{ duration: MOTION.component.duration, ease: MOTION.component.ease as unknown as number[] }}
+            transition={MOTION.component}
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-[rgba(230,240,245,0.08)]">
