@@ -22,30 +22,26 @@ const WELCOME_BANNER = `
  Type 'help' to inspect available system commands.
 `;
 
+const INITIAL_LOGS: CommandLog[] = [
+  {
+    id: "welcome",
+    command: "init --system",
+    output: (
+      <pre className="font-mono text-[11px] sm:text-xs text-[#b7ff3c] leading-tight overflow-x-auto whitespace-pre">
+        {WELCOME_BANNER}
+      </pre>
+    ),
+    timestamp: new Date().toLocaleTimeString(),
+  },
+];
+
 export function InteractiveTerminal() {
   const [input, setInput] = useState("");
-  const [logs, setLogs] = useState<CommandLog[]>([]);
+  const [logs, setLogs] = useState<CommandLog[]>(INITIAL_LOGS);
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState<number>(-1);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    // Initial welcome banner log
-    setLogs([
-      {
-        id: "welcome",
-        command: "init --system",
-        output: (
-          <pre className="font-mono text-[11px] sm:text-xs text-[#b7ff3c] leading-tight overflow-x-auto whitespace-pre">
-            {WELCOME_BANNER}
-          </pre>
-        ),
-        timestamp: new Date().toLocaleTimeString(),
-      },
-    ]);
-  }, []);
-
   const isFirstRender = useRef(true);
 
   useEffect(() => {
