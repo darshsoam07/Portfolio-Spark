@@ -31,7 +31,7 @@ const INITIAL_LOGS: CommandLog[] = [
         {WELCOME_BANNER}
       </pre>
     ),
-    timestamp: new Date().toLocaleTimeString(),
+    timestamp: "SYSTEM READY",
   },
 ];
 
