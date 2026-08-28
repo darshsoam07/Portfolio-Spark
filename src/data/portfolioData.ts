@@ -440,7 +440,7 @@ export const PROJECTS: ProjectItem[] = [
       "Category-based filtering and statistical spending analytics.",
       "Seamless CSV export enabling portable financial backups.",
     ],
-    githubUrl: "https://github.com/darshsoam07",
+    githubUrl: "https://github.com/darshsoam07/Expense-Tracker-with-Insights",
   },
 ];
 
