@@ -1,0 +1,13 @@
+# Cloudflare _headers. Nitro appends its own generated rules below this file's
+# contents at build time, so the /assets/* immutable cache rule still applies.
+#
+# The resume is a public download by design, but Google extracts and indexes
+# PDF text — which would put the phone number inside it into search results as
+# scrapeable text. noindex keeps it downloadable for humans while staying out
+# of the index.
+#
+# Deliberately NOT paired with "Disallow: /resume.pdf" in robots.txt: a
+# disallowed URL is never fetched, so the crawler would never see this header.
+# Crawl it, then decline to index it.
+/resume.pdf
+  x-robots-tag: noindex
