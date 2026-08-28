@@ -115,6 +115,17 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en" className="dark scroll-smooth">
       <head>
         <HeadContent />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (!sessionStorage.getItem('portfolioIntroPlayed') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                  document.documentElement.classList.add('intro-pending');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
       </head>
       <body className="bg-[#07090b] text-[#f1f6f7] antialiased overflow-x-hidden selection:bg-[#b7ff3c] selection:text-[#07090b]">
         {children}

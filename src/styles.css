@@ -52,6 +52,19 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   Intro Synchronization Gate — prevents portfolio flash before intro
+   ───────────────────────────────────────────────────────────────────────────── */
+html.intro-pending body {
+  overflow: hidden !important;
+}
+
+html.intro-pending #portfolio-root {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
    Background Grid
    ───────────────────────────────────────────────────────────────────────────── */
 .grid-bg {
