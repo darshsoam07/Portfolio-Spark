@@ -44,6 +44,7 @@ export function TechStackSection() {
             <button
               key={category.id}
               onClick={() => setActiveCategoryId(category.id)}
+              aria-pressed={isSelected}
               className={`p-4 rounded-xl border text-left transition-all duration-200 ${
                 isSelected
                   ? "bg-[#151d23] border-[#b7ff3c] shadow-[0_0_20px_-6px_rgba(183,255,60,0.25)]"

@@ -52,6 +52,7 @@ export function ProjectCaseStudies() {
                 setActiveProjectId(project.id);
                 setActiveStepIndex(0);
               }}
+              aria-pressed={activeProject.id === project.id}
               className={`px-4 py-2 rounded font-mono text-xs uppercase tracking-wider transition-all ${
                 activeProject.id === project.id
                   ? "bg-[#b7ff3c] text-[#07090b] font-bold shadow-sm"
@@ -139,10 +140,12 @@ export function ProjectCaseStudies() {
 
             {/* Pipeline Step Progress */}
             <div className="hidden sm:flex items-center justify-between mb-6 px-2">
-              {activeProject.pipelineSteps.map((_, idx) => (
-                <div key={idx} className="flex items-center flex-1 last:flex-none">
+              {activeProject.pipelineSteps.map((step, idx) => (
+                <div key={step.phase} className="flex items-center flex-1 last:flex-none">
                   <button
                     onClick={() => setActiveStepIndex(idx)}
+                    aria-label={`Jump to pipeline stage ${step.phase}`}
+                    aria-pressed={activeStepIndex === idx}
                     className={`w-3 h-3 rounded-full transition-all duration-300 shrink-0 ${
                       activeStepIndex === idx
                         ? "bg-[#b7ff3c] shadow-[0_0_8px_rgba(183,255,60,0.5)]"
@@ -168,6 +171,7 @@ export function ProjectCaseStudies() {
                 <button
                   key={step.phase}
                   onClick={() => setActiveStepIndex(idx)}
+                  aria-pressed={activeStepIndex === idx}
                   className={`p-3 rounded border text-left transition-all ${
                     activeStepIndex === idx
                       ? "bg-[#151d23] border-[#b7ff3c] shadow-[0_0_15px_-4px_rgba(183,255,60,0.3)]"

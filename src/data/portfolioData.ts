@@ -366,7 +366,8 @@ export const PROJECTS: ProjectItem[] = [
       "Automated CI/CD workflow eliminating manual intervention from commit to cloud.",
       "Hardened IAM security policies following the principle of least privilege.",
     ],
-    githubUrl: "https://github.com/darshsoam07",
+    // No public repo yet — omitting githubUrl hides the "Source Code" button.
+    // Add the real repo URL here to bring the button back.
   },
   {
     id: "expense-tracker-insights",
@@ -439,7 +440,7 @@ export const PROJECTS: ProjectItem[] = [
       "Category-based filtering and statistical spending analytics.",
       "Seamless CSV export enabling portable financial backups.",
     ],
-    githubUrl: "https://github.com/darshsoam07",
+    githubUrl: "https://github.com/darshsoam07/Expense-Tracker-with-Insights",
   },
 ];
 

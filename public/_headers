@@ -1,0 +1,19 @@
+# Cloudflare/Netlify `_headers`. Nitro appends its own generated rules below
+# this file's contents, so the /assets/* immutable cache rule still applies.
+#
+# NOT the resume protection. This rule is defense-in-depth only, and it is a
+# silent no-op on any other target: under the Vercel preset this whole file is
+# copied to .vercel/output/static/_headers and served as a public file at
+# /_headers, where nothing reads it. Verified by building with
+# NITRO_PRESET=vercel — the generated config.json contained only the /assets/*
+# cache rule, with no trace of the line below.
+#
+# The actual guarantee is "Disallow: /resume.pdf" in public/robots.txt, which is
+# copied verbatim into the static output on every preset. If you delete this
+# file, nothing is lost; if you delete that line, the phone number in the PDF
+# becomes indexable.
+#
+# Nitro routeRules would be the native fix, but @lovable.dev/vite-tanstack-config
+# only forwards preset/output/cloudflare, so they are unreachable from here.
+/resume.pdf
+  x-robots-tag: noindex

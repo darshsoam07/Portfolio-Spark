@@ -7,10 +7,19 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { MotionConfig } from "motion/react";
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { OG_IMAGE_PATH, SITE_URL, absoluteUrl } from "../lib/site";
+
+const PAGE_TITLE = "Darsh Soam — Cloud & DevOps Engineer | Infrastructure, Automation & AI";
+const SOCIAL_TITLE = "Darsh Soam — Cloud & DevOps Engineer";
+const SEO_DESCRIPTION =
+  "Portfolio of Darsh Soam: Cloud & DevOps Engineer specializing in AWS, Kubernetes, Docker, Terraform, CI/CD, and Agentic AI applications.";
+const SOCIAL_DESCRIPTION =
+  "Engineering the systems behind the experience. AWS, Kubernetes, Terraform, CI/CD, and AI systems.";
 
 function NotFoundComponent() {
   return (
@@ -79,23 +88,36 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Darsh Soam — Cloud & DevOps Engineer | Infrastructure, Automation & AI" },
-      {
-        name: "description",
-        content:
-          "Portfolio of Darsh Soam: Cloud & DevOps Engineer specializing in AWS, Kubernetes, Docker, Terraform, CI/CD, and Agentic AI applications.",
-      },
+      { title: PAGE_TITLE },
+      { name: "description", content: SEO_DESCRIPTION },
       { name: "author", content: "Darsh Soam" },
-      { property: "og:title", content: "Darsh Soam — Cloud & DevOps Engineer" },
-      {
-        property: "og:description",
-        content: "Engineering the systems behind the experience. AWS, Kubernetes, Terraform, CI/CD, and AI systems.",
-      },
+
+      // Open Graph
+      { property: "og:title", content: SOCIAL_TITLE },
+      { property: "og:description", content: SOCIAL_DESCRIPTION },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:site_name", content: "Darsh Soam" },
+      { property: "og:image", content: absoluteUrl(OG_IMAGE_PATH) },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: SOCIAL_TITLE },
+      { property: "og:locale", content: "en_US" },
+
+      // Twitter / X
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: SOCIAL_TITLE },
+      { name: "twitter:description", content: SOCIAL_DESCRIPTION },
+      { name: "twitter:image", content: absoluteUrl(OG_IMAGE_PATH) },
+      { name: "twitter:image:alt", content: SOCIAL_TITLE },
+
       { name: "theme-color", content: "#07090b" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "canonical", href: SITE_URL },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "apple-touch-icon", href: OG_IMAGE_PATH },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -129,7 +151,14 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      {/*
+        reducedMotion="user" makes every motion component honour
+        prefers-reduced-motion: transform/layout animation is dropped while
+        opacity still animates, so entrance reveals still resolve to visible.
+      */}
+      <MotionConfig reducedMotion="user">
+        <Outlet />
+      </MotionConfig>
     </QueryClientProvider>
   );
 }

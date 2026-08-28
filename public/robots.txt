@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# Build/infra endpoints — no SEO value
+Disallow: /.mcp/
+Disallow: /.well-known/
+
+# The resume is a deliberate public download, but it carries a phone number and
+# Google extracts PDF text — indexing it would turn that number into
+# searchable, bulk-scrapeable text. Blocking the crawl keeps it out.
+#
+# This lives here rather than in a response header because robots.txt is copied
+# verbatim into the static output on every Nitro preset. Header-based rules are
+# per-platform (_headers = Cloudflare/Netlify, routes[].headers = Vercel) and
+# silently stop applying if the deploy target changes.
+Disallow: /resume.pdf
+
+# NOTE: keep this host in sync with SITE_URL in src/lib/site.ts
+Sitemap: https://darshsoam07-portfolio-spark.workers.dev/sitemap.xml

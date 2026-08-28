@@ -150,6 +150,7 @@ export function SystemsTopology() {
                     onClick={() => { if (!isSimulating) setSelectedNodeId(node.id); }}
                     onMouseEnter={() => setHoveredNodeId(node.id)}
                     onMouseLeave={() => setHoveredNodeId(null)}
+                    aria-pressed={isSelected}
                     className={`text-left p-4 rounded-lg border transition-all duration-200 relative group overflow-hidden ${
                       isSelected
                         ? "bg-[#151d23] border-[#b7ff3c] shadow-[0_0_20px_-5px_rgba(183,255,60,0.25)]"

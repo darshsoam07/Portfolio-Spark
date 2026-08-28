@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Single-page portfolio: only "/" is a distinct URL. The section anchors
+  (#systems, #work, ...) are fragments of this same document, not separate
+  pages, so they are intentionally not listed.
+
+  NOTE: keep this host in sync with SITE_URL in src/lib/site.ts
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://darshsoam07-portfolio-spark.workers.dev/</loc>
+    <lastmod>2026-08-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>

@@ -150,16 +150,14 @@ export function CommandPaletteModal({ isOpen, onClose }: CommandPaletteModalProp
       opt.category.toLowerCase().includes(query.toLowerCase())
   );
 
+  // Escape only. The ⌘K/Ctrl+K toggle is owned by the parent route
+  // (src/routes/index.tsx) — handling it here too made the two listeners
+  // fight, so ⌘K could never close the palette.
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        if (isOpen) onClose();
-        else onClose(); // parent handles toggle
-      }
-      if (e.key === "Escape" && isOpen) {
-        onClose();
-      }
+      if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -184,6 +182,7 @@ export function CommandPaletteModal({ isOpen, onClose }: CommandPaletteModalProp
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            aria-label="Search commands and sections"
             placeholder="Type a command or jump to section..."
             className="flex-1 bg-transparent border-none outline-none font-sans text-sm text-[#f1f6f7] placeholder-[#73848b]"
           />

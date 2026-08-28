@@ -6,6 +6,7 @@ import {
   Boxes,
   Cloud,
   Cpu,
+  Download,
   Layers,
   Terminal,
   Zap,
@@ -112,6 +113,15 @@ export function HeroSection() {
               <ArrowUpRight className="w-3.5 h-3.5" />
             </button>
 
+            <a
+              href={PROFILE.resumeUrl}
+              download
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded border border-[#38bdf8]/50 bg-[#38bdf8]/10 text-[#38bdf8] font-mono text-xs uppercase tracking-widest hover:bg-[#38bdf8] hover:text-[#07090b] transition-all"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Download Resume</span>
+            </a>
+
             <button
               onClick={() => scrollTo("terminal")}
               className="inline-flex items-center gap-2 px-4 py-3.5 rounded border border-[rgba(230,240,245,0.1)] bg-[#07090b] text-[#73848b] font-mono text-xs uppercase tracking-widest hover:text-[#38bdf8] hover:border-[#38bdf8]/40 transition-all"
@@ -168,7 +178,7 @@ export function HeroSection() {
               <img
                 src={darshPortrait}
                 alt="Darsh Soam"
-                className="w-full h-full object-cover object-top filter grayscale contrast-125 brightness-95 opacity-90 transition-all duration-500 hover:grayscale-0 hover:opacity-100"
+                className="w-full h-full object-cover object-top transition-transform duration-500"
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-[#07090b] via-transparent to-transparent opacity-80" />

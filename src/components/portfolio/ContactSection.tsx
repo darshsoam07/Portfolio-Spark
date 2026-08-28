@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import {
+  AlertTriangle,
   ArrowUpRight,
   CheckCircle2,
   MapPin,
@@ -10,21 +11,63 @@ import {
 import { PROFILE } from "@/data/portfolioData";
 import { SECTION_REVEAL, STAGGER_CONTAINER, STAGGER_ITEM, VIEWPORT_REVEAL } from "@/lib/motion";
 
+/**
+ * Formspree form ID — set VITE_FORMSPREE_FORM_ID in .env to activate delivery.
+ * Without it the form reports an honest error instead of faking success.
+ */
+const FORMSPREE_FORM_ID = import.meta.env.VITE_FORMSPREE_FORM_ID as string | undefined;
+
+type SubmitStatus = "idle" | "sending" | "sent" | "error";
+
 export function ContactSection() {
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<SubmitStatus>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const loading = status === "sending";
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formState.email || !formState.message) return;
-    setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
+    if (!FORMSPREE_FORM_ID) {
+      setStatus("error");
+      setErrorMessage(
+        "This form isn't connected to a delivery endpoint yet. Please email me directly instead."
+      );
+      return;
+    }
+
+    setStatus("sending");
+    setErrorMessage("");
+
+    try {
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_FORM_ID}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: formState.name,
+          email: formState.email,
+          message: formState.message,
+          _subject: `Portfolio contact from ${formState.name || formState.email}`,
+        }),
+      });
+
+      if (!res.ok) {
+        const body = (await res.json().catch(() => null)) as
+          | { errors?: { message: string }[] }
+          | null;
+        throw new Error(body?.errors?.[0]?.message ?? `Delivery failed (HTTP ${res.status}).`);
+      }
+
+      setStatus("sent");
       setFormState({ name: "", email: "", message: "" });
-    }, 800);
+    } catch (err) {
+      setStatus("error");
+      setErrorMessage(
+        err instanceof Error ? err.message : "Network error — the message was not sent."
+      );
+    }
   };
 
   return (
@@ -134,7 +177,7 @@ export function ContactSection() {
               <span>Transmit Secure Message</span>
             </div>
 
-            {submitted ? (
+            {status === "sent" ? (
               <div className="p-6 rounded-xl border border-[#b7ff3c]/40 bg-[#b7ff3c]/10 text-center flex flex-col items-center gap-3">
                 <CheckCircle2 className="w-8 h-8 text-[#b7ff3c]" />
                 <h4 className="font-display font-bold text-lg text-[#f1f6f7]">Message Transmitted</h4>
@@ -142,7 +185,7 @@ export function ContactSection() {
                   Thank you! Your communication has been dispatched. I will respond shortly.
                 </p>
                 <button
-                  onClick={() => setSubmitted(false)}
+                  onClick={() => setStatus("idle")}
                   className="mt-2 px-4 py-2 rounded bg-[#07090b] border border-[rgba(230,240,245,0.1)] font-mono text-xs text-[#f1f6f7] hover:border-[#b7ff3c]"
                 >
                   Send another message
@@ -191,6 +234,24 @@ export function ContactSection() {
                     className="w-full px-4 py-3 rounded-lg bg-[#07090b] border border-[rgba(230,240,245,0.1)] font-sans text-sm text-[#f1f6f7] placeholder-[#73848b]/50 focus:outline-none focus:border-[#b7ff3c] transition-colors resize-none"
                   />
                 </div>
+
+                {status === "error" && (
+                  <div
+                    role="alert"
+                    className="flex items-start gap-2.5 p-3 rounded-lg border border-[#ff5a5f]/40 bg-[#ff5a5f]/10"
+                  >
+                    <AlertTriangle className="w-4 h-4 text-[#ff5a5f] shrink-0 mt-0.5" />
+                    <div className="font-sans text-xs text-[#f1f6f7] leading-relaxed">
+                      {errorMessage}{" "}
+                      <a
+                        href={`mailto:${PROFILE.email}`}
+                        className="font-mono text-[#b7ff3c] underline underline-offset-2 hover:no-underline"
+                      >
+                        {PROFILE.email}
+                      </a>
+                    </div>
+                  </div>
+                )}
 
                 <button
                   type="submit"
