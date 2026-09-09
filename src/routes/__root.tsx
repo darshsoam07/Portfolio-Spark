@@ -11,12 +11,15 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { useLenisGsap } from "../hooks/useLenisGsap";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#07090b] px-4 text-[#f1f6f7]">
+    <div className="flex min-h-screen items-center justify-center bg-[#07080a] px-4 text-[#f1f6f7]">
       <div className="max-w-md text-center">
-        <div className="font-mono text-xs uppercase tracking-[0.3em] text-[#b7ff3c] mb-2">[ 404 / NOT FOUND ]</div>
+        <div className="font-mono text-xs uppercase tracking-[0.3em] text-[#b7ff3c] mb-2">
+          [ 404 / NOT FOUND ]
+        </div>
         <h1 className="text-7xl font-bold font-display tracking-tight">404</h1>
         <h2 className="mt-3 text-lg font-mono text-[#b3c0c4]">System node does not exist.</h2>
         <p className="mt-2 text-sm text-[#7c8c92] font-body">
@@ -25,7 +28,7 @@ function NotFoundComponent() {
         <div className="mt-6">
           <Link
             to="/"
-            className="inline-flex items-center justify-center border border-[#b7ff3c]/40 bg-[#b7ff3c]/10 px-5 py-2.5 text-xs font-mono uppercase tracking-[0.2em] text-[#b7ff3c] transition-all hover:bg-[#b7ff3c] hover:text-[#07090b]"
+            className="inline-flex items-center justify-center border border-[#b7ff3c]/40 bg-[#b7ff3c]/10 px-5 py-2.5 text-xs font-mono uppercase tracking-[0.2em] text-[#b7ff3c] transition-all hover:bg-[#b7ff3c] hover:text-[#07080a]"
           >
             Return to Signal
           </Link>
@@ -43,12 +46,12 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#07090b] px-4 text-[#f1f6f7]">
+    <div className="flex min-h-screen items-center justify-center bg-[#07080a] px-4 text-[#f1f6f7]">
       <div className="max-w-md text-center">
-        <div className="font-mono text-xs uppercase tracking-[0.3em] text-[#ff5a5f] mb-2">[ ERROR / EXCEPTION ]</div>
-        <h1 className="text-xl font-bold font-display text-[#f1f6f7]">
-          Execution Halted
-        </h1>
+        <div className="font-mono text-xs uppercase tracking-[0.3em] text-[#ff5a5f] mb-2">
+          [ ERROR / EXCEPTION ]
+        </div>
+        <h1 className="text-xl font-bold font-display text-[#f1f6f7]">Execution Halted</h1>
         <p className="mt-2 text-sm text-[#7c8c92] font-body">
           An unhandled error occurred during runtime rendering.
         </p>
@@ -58,7 +61,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
               router.invalidate();
               reset();
             }}
-            className="inline-flex items-center justify-center border border-[#b7ff3c] bg-[#b7ff3c] px-4 py-2 text-xs font-mono uppercase tracking-[0.2em] text-[#07090b] transition-all hover:bg-[#b7ff3c]/90"
+            className="inline-flex items-center justify-center border border-[#b7ff3c] bg-[#b7ff3c] px-4 py-2 text-xs font-mono uppercase tracking-[0.2em] text-[#07080a] transition-all hover:bg-[#b7ff3c]/90"
           >
             Re-execute
           </button>
@@ -89,10 +92,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "Darsh Soam — Cloud & DevOps Engineer" },
       {
         property: "og:description",
-        content: "Engineering the systems behind the experience. AWS, Kubernetes, Terraform, CI/CD, and AI systems.",
+        content:
+          "Engineering the systems behind the experience. AWS, Kubernetes, Terraform, CI/CD, and AI systems.",
       },
       { property: "og:type", content: "website" },
-      { name: "theme-color", content: "#07090b" },
+      { name: "theme-color", content: "#07080a" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -127,7 +131,7 @@ function RootShell({ children }: { children: ReactNode }) {
           }}
         />
       </head>
-      <body className="bg-[#07090b] text-[#f1f6f7] antialiased overflow-x-hidden selection:bg-[#b7ff3c] selection:text-[#07090b]">
+      <body className="bg-[#07080a] text-[#f1f6f7] antialiased overflow-x-hidden selection:bg-[#b7ff3c] selection:text-[#07080a]">
         {children}
         <Scripts />
       </body>
@@ -137,6 +141,8 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  // Mount Lenis smooth scroll exactly once at the application shell
+  useLenisGsap();
 
   return (
     <QueryClientProvider client={queryClient}>

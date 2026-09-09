@@ -1,8 +1,15 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Cpu } from "lucide-react";
 import { SKILL_CATEGORIES } from "@/data/portfolioData";
-import { MOTION, SECTION_REVEAL, STAGGER_CONTAINER, STAGGER_ITEM, VIEWPORT_REVEAL } from "@/lib/motion";
+import {
+  MOTION,
+  SECTION_REVEAL,
+  STAGGER_CONTAINER,
+  STAGGER_ITEM,
+  VIEWPORT_REVEAL,
+} from "@/lib/motion";
+import { MotionCard } from "./MotionCard";
 
 export function TechStackSection() {
   const [activeCategoryId, setActiveCategoryId] = useState<string>(SKILL_CATEGORIES[0].id);
@@ -30,13 +37,13 @@ export function TechStackSection() {
             ENGINEERING <span className="text-[#b7ff3c]">STACK.</span>
           </h2>
           <p className="text-[#b3c0c4] text-sm md:text-base max-w-2xl mt-4 font-sans leading-relaxed">
-            Organized hierarchically across system tiers — from cloud primitives and declarative infrastructure
-            code to container orchestration, backend APIs, and agentic workflows.
+            Organized hierarchically across system tiers — from cloud primitives and declarative
+            infrastructure code to container orchestration, backend APIs, and agentic workflows.
           </p>
         </div>
       </div>
 
-      {/* Layer Tabs */}
+      {/* Layer Tabs — carbon/lime theme with motion layout indicator */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-10">
         {SKILL_CATEGORIES.map((category) => {
           const isSelected = activeCategory.id === category.id;
@@ -44,20 +51,40 @@ export function TechStackSection() {
             <button
               key={category.id}
               onClick={() => setActiveCategoryId(category.id)}
-              className={`p-4 rounded-xl border text-left transition-all duration-200 ${
+              className={`relative p-4 rounded-xl border text-left transition-all duration-200 overflow-hidden ${
                 isSelected
-                  ? "bg-[#151d23] border-[#b7ff3c] shadow-[0_0_20px_-6px_rgba(183,255,60,0.25)]"
-                  : "bg-[#0e1317] border-[rgba(230,240,245,0.08)] hover:border-[rgba(230,240,245,0.2)] hover:bg-[#12181e]"
+                  ? "border-[#b7ff3c] text-[#f1f6f7]"
+                  : "bg-[var(--graphite)] border-[rgba(230,240,245,0.08)] hover:border-[rgba(230,240,245,0.2)] hover:bg-[var(--surface-hover)]"
               }`}
+              style={
+                isSelected
+                  ? { background: "var(--surface-hover)" }
+                  : { background: "var(--graphite)" }
+              }
             >
-              <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">
-                {category.eyebrow.split("//")[0]}
-              </div>
-              <div className="font-display font-bold text-sm sm:text-base text-[#f1f6f7] mt-1">
-                {category.title}
-              </div>
-              <div className="font-mono text-[10px] text-[#b7ff3c] mt-2">
-                {category.skills.length} primitives
+              {/* Animated lime background for selected tab */}
+              {isSelected && (
+                <motion.span
+                  layoutId="stack-tab-indicator"
+                  className="absolute inset-0 rounded-xl"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, rgba(183,255,60,0.08) 0%, rgba(183,255,60,0.03) 100%)",
+                    boxShadow: "0 0 20px -6px rgba(183,255,60,0.25)",
+                  }}
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
+              <div className="relative z-10">
+                <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">
+                  {category.eyebrow.split("//")[0]}
+                </div>
+                <div className="font-display font-bold text-sm sm:text-base text-[#f1f6f7] mt-1">
+                  {category.title}
+                </div>
+                <div className="font-mono text-[10px] text-[#b7ff3c] mt-2">
+                  {category.skills.length} primitives
+                </div>
               </div>
             </button>
           );
@@ -72,7 +99,8 @@ export function TechStackSection() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: MOTION.component.duration }}
-          className="p-6 sm:p-10 rounded-2xl border border-[rgba(230,240,245,0.1)] bg-[#0e1317]/80 backdrop-blur-md"
+          className="p-6 sm:p-10 rounded-2xl border border-[rgba(230,240,245,0.1)] backdrop-blur-md"
+          style={{ background: "var(--surface)" }}
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-[rgba(230,240,245,0.08)]">
             <div>
@@ -95,22 +123,20 @@ export function TechStackSection() {
             className="grid sm:grid-cols-2 gap-4"
           >
             {activeCategory.skills.map((skill) => (
-              <motion.div
-                key={skill.name}
-                variants={STAGGER_ITEM}
-                className="p-5 rounded-xl border border-[rgba(230,240,245,0.06)] bg-[#07090b] hover:border-[#b7ff3c]/30 transition-colors"
-              >
-                <div className="flex items-center justify-between gap-2 mb-2">
-                  <h4 className="font-display font-bold text-base text-[#f1f6f7]">
-                    {skill.name}
-                  </h4>
-                  <span className="px-2.5 py-0.5 rounded bg-[#b7ff3c]/10 text-[#b7ff3c] border border-[#b7ff3c]/20 font-mono text-[9px] uppercase tracking-wider font-semibold">
-                    {skill.badge}
-                  </span>
-                </div>
-                <p className="font-mono text-xs text-[#73848b] leading-relaxed">
-                  {skill.details}
-                </p>
+              <motion.div key={skill.name} variants={STAGGER_ITEM}>
+                <MotionCard className="p-5 rounded-xl" intensity={4}>
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <h4 className="font-display font-bold text-base text-[#f1f6f7]">
+                      {skill.name}
+                    </h4>
+                    <span className="px-2.5 py-0.5 rounded bg-[#b7ff3c]/10 text-[#b7ff3c] border border-[#b7ff3c]/20 font-mono text-[9px] uppercase tracking-wider font-semibold">
+                      {skill.badge}
+                    </span>
+                  </div>
+                  <p className="font-mono text-xs text-[#73848b] leading-relaxed">
+                    {skill.details}
+                  </p>
+                </MotionCard>
               </motion.div>
             ))}
           </motion.div>

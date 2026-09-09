@@ -1,11 +1,6 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import {
-  Activity,
-  ArrowRight,
-  Play,
-  Workflow,
-} from "lucide-react";
+import { Activity, ArrowRight, Play, Workflow } from "lucide-react";
 import { SYSTEM_NODES } from "@/data/portfolioData";
 import { MOTION, SECTION_REVEAL, VIEWPORT_REVEAL } from "@/lib/motion";
 
@@ -15,12 +10,11 @@ export function SystemsTopology() {
   const [isSimulating, setIsSimulating] = useState(false);
   const [simStep, setSimStep] = useState(-1);
 
-  const selectedNode =
-    SYSTEM_NODES.find((node) => node.id === selectedNodeId) || SYSTEM_NODES[0];
+  const selectedNode = SYSTEM_NODES.find((node) => node.id === selectedNodeId) || SYSTEM_NODES[0];
 
   // Determine which node's connections to highlight (hover takes priority over selection)
   const activeConnections = hoveredNodeId
-    ? SYSTEM_NODES.find((n) => n.id === hoveredNodeId)?.connectsTo ?? []
+    ? (SYSTEM_NODES.find((n) => n.id === hoveredNodeId)?.connectsTo ?? [])
     : selectedNode.connectsTo;
   const activeNodeId = hoveredNodeId ?? selectedNodeId;
 
@@ -64,8 +58,9 @@ export function SystemsTopology() {
             SYSTEMS <span className="text-[#b7ff3c]">THAT MOVE.</span>
           </h2>
           <p className="text-[#b3c0c4] text-sm md:text-base max-w-2xl mt-4 font-sans leading-relaxed">
-            Technologies are not isolated badges. They form an interconnected pipeline where code commits flow
-            through automated testing, containerization, Infrastructure as Code, and resilient cloud orchestration.
+            Technologies are not isolated badges. They form an interconnected pipeline where code
+            commits flow through automated testing, containerization, Infrastructure as Code, and
+            resilient cloud orchestration.
           </p>
         </div>
 
@@ -76,13 +71,15 @@ export function SystemsTopology() {
             className={`inline-flex items-center gap-2 px-5 py-2.5 rounded font-mono text-xs uppercase tracking-wider transition-all ${
               isSimulating
                 ? "bg-[#b7ff3c]/20 border border-[#b7ff3c] text-[#b7ff3c] animate-pulse cursor-not-allowed"
-                : "bg-[#b7ff3c] text-[#07090b] font-bold hover:bg-[#b7ff3c]/90 shadow-[0_0_15px_-3px_rgba(183,255,60,0.3)]"
+                : "bg-[#b7ff3c] text-[#07080a] font-bold hover:bg-[#b7ff3c]/90 shadow-[0_0_15px_-3px_rgba(183,255,60,0.3)]"
             }`}
           >
             {isSimulating ? (
               <>
                 <Activity className="w-3.5 h-3.5 animate-spin" />
-                <span>Simulating Step {simStep + 1} / {SYSTEM_NODES.length}...</span>
+                <span>
+                  Simulating Step {simStep + 1} / {SYSTEM_NODES.length}...
+                </span>
               </>
             ) : (
               <>
@@ -98,7 +95,7 @@ export function SystemsTopology() {
       <div className="grid lg:grid-cols-12 gap-8 items-start">
         {/* Left: Interactive Topology Canvas */}
         <div className="lg:col-span-7 flex flex-col gap-4">
-          <div className="p-4 sm:p-6 rounded-xl border border-[rgba(230,240,245,0.1)] bg-[#0e1317]/80 backdrop-blur-md">
+          <div className="p-4 sm:p-6 rounded-xl border border-[rgba(230,240,245,0.1)] bg-[#0f1216]/80 backdrop-blur-md">
             <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-wider text-[#73848b] pb-4 mb-4 border-b border-[rgba(230,240,245,0.06)]">
               <span>Interactive Pipeline Topology</span>
               <span>Hover or click to inspect</span>
@@ -117,8 +114,8 @@ export function SystemsTopology() {
                         isActive || isSimActive
                           ? "bg-[#b7ff3c] shadow-[0_0_8px_rgba(183,255,60,0.5)]"
                           : isConnected
-                          ? "bg-[#38bdf8] shadow-[0_0_6px_rgba(56,189,248,0.4)]"
-                          : "bg-[#1a2028] border border-[rgba(230,240,245,0.15)]"
+                            ? "bg-[#38bdf8] shadow-[0_0_6px_rgba(56,189,248,0.4)]"
+                            : "bg-[#1c2128] border border-[rgba(230,240,245,0.15)]"
                       }`}
                     />
                     {i < SYSTEM_NODES.length - 1 && (
@@ -127,8 +124,8 @@ export function SystemsTopology() {
                           isSimulating && simStep >= i
                             ? "bg-[#b7ff3c]/60"
                             : isConnected || isActive
-                            ? "bg-[#38bdf8]/30"
-                            : "bg-[rgba(230,240,245,0.08)]"
+                              ? "bg-[#38bdf8]/30"
+                              : "bg-[rgba(230,240,245,0.08)]"
                         }`}
                       />
                     )}
@@ -147,15 +144,17 @@ export function SystemsTopology() {
                 return (
                   <button
                     key={node.id}
-                    onClick={() => { if (!isSimulating) setSelectedNodeId(node.id); }}
+                    onClick={() => {
+                      if (!isSimulating) setSelectedNodeId(node.id);
+                    }}
                     onMouseEnter={() => setHoveredNodeId(node.id)}
                     onMouseLeave={() => setHoveredNodeId(null)}
                     className={`text-left p-4 rounded-lg border transition-all duration-200 relative group overflow-hidden ${
                       isSelected
-                        ? "bg-[#151d23] border-[#b7ff3c] shadow-[0_0_20px_-5px_rgba(183,255,60,0.25)]"
+                        ? "bg-[#171b21] border-[#b7ff3c] shadow-[0_0_20px_-5px_rgba(183,255,60,0.25)]"
                         : isConnected || isHoverSource
-                        ? "bg-[#0e1317] border-[#38bdf8]/50 hover:border-[#38bdf8]"
-                        : "bg-[#0b0f13] border-[rgba(230,240,245,0.08)] hover:border-[rgba(230,240,245,0.2)] hover:bg-[#0e1317]"
+                          ? "bg-[#0f1216] border-[#38bdf8]/50 hover:border-[#38bdf8]"
+                          : "bg-[#0a0c0f] border-[rgba(230,240,245,0.08)] hover:border-[rgba(230,240,245,0.2)] hover:bg-[#0f1216]"
                     }`}
                   >
                     {isSelected && (
@@ -169,7 +168,9 @@ export function SystemsTopology() {
                       {isSelected ? (
                         <span className="h-2 w-2 rounded-full bg-[#b7ff3c] animate-node-pulse" />
                       ) : isConnected ? (
-                        <span className="font-mono text-[8px] text-[#38bdf8] uppercase">Connected</span>
+                        <span className="font-mono text-[8px] text-[#38bdf8] uppercase">
+                          Connected
+                        </span>
                       ) : null}
                     </div>
 
@@ -196,7 +197,7 @@ export function SystemsTopology() {
 
         {/* Right: Inspector Panel with animated content swap */}
         <div className="lg:col-span-5 sticky top-24">
-          <div className="p-6 rounded-xl border border-[#b7ff3c]/30 bg-[#0e1317] backdrop-blur-md shadow-2xl relative overflow-hidden">
+          <div className="p-6 rounded-xl border border-[#b7ff3c]/30 bg-[#0f1216] backdrop-blur-md shadow-2xl relative overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between pb-4 mb-5 border-b border-[rgba(230,240,245,0.08)]">
               <div className="flex items-center gap-2">
@@ -229,23 +230,36 @@ export function SystemsTopology() {
                 </div>
 
                 {/* Role */}
-                <div className="mb-6 p-3.5 rounded bg-[#07090b] border border-[rgba(230,240,245,0.06)]">
-                  <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b] mb-1">SYSTEM ROLE</div>
-                  <p className="text-sm text-[#cbd5e1] leading-relaxed font-sans">{selectedNode.role}</p>
+                <div className="mb-6 p-3.5 rounded bg-[#07080a] border border-[rgba(230,240,245,0.06)]">
+                  <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b] mb-1">
+                    SYSTEM ROLE
+                  </div>
+                  <p className="text-sm text-[#cbd5e1] leading-relaxed font-sans">
+                    {selectedNode.role}
+                  </p>
                 </div>
 
                 {/* Description */}
                 <div className="mb-6">
-                  <div className="font-mono text-[10px] uppercase tracking-wider text-[#73848b] mb-2">IMPLEMENTATION SUMMARY</div>
-                  <p className="text-sm text-[#b3c0c4] leading-relaxed font-sans">{selectedNode.description}</p>
+                  <div className="font-mono text-[10px] uppercase tracking-wider text-[#73848b] mb-2">
+                    IMPLEMENTATION SUMMARY
+                  </div>
+                  <p className="text-sm text-[#b3c0c4] leading-relaxed font-sans">
+                    {selectedNode.description}
+                  </p>
                 </div>
 
                 {/* Tools */}
                 <div className="mb-6">
-                  <div className="font-mono text-[10px] uppercase tracking-wider text-[#73848b] mb-2">CORE UTILITIES</div>
+                  <div className="font-mono text-[10px] uppercase tracking-wider text-[#73848b] mb-2">
+                    CORE UTILITIES
+                  </div>
                   <div className="flex flex-wrap gap-2">
                     {selectedNode.tools.map((t) => (
-                      <span key={t} className="px-2.5 py-1 rounded bg-[#b7ff3c]/10 border border-[#b7ff3c]/20 font-mono text-[10px] text-[#b7ff3c]">
+                      <span
+                        key={t}
+                        className="px-2.5 py-1 rounded bg-[#b7ff3c]/10 border border-[#b7ff3c]/20 font-mono text-[10px] text-[#b7ff3c]"
+                      >
                         {t}
                       </span>
                     ))}
@@ -254,7 +268,9 @@ export function SystemsTopology() {
 
                 {/* Connected Nodes */}
                 <div>
-                  <div className="font-mono text-[10px] uppercase tracking-wider text-[#73848b] mb-2">DOWNSTREAM TARGETS</div>
+                  <div className="font-mono text-[10px] uppercase tracking-wider text-[#73848b] mb-2">
+                    DOWNSTREAM TARGETS
+                  </div>
                   <div className="flex flex-wrap gap-2">
                     {selectedNode.connectsTo.map((targetId) => {
                       const target = SYSTEM_NODES.find((n) => n.id === targetId);
@@ -262,7 +278,7 @@ export function SystemsTopology() {
                         <button
                           key={targetId}
                           onClick={() => setSelectedNodeId(targetId)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#38bdf8]/10 border border-[#38bdf8]/30 font-mono text-[10px] text-[#38bdf8] hover:bg-[#38bdf8] hover:text-[#07090b] transition-colors"
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#38bdf8]/10 border border-[#38bdf8]/30 font-mono text-[10px] text-[#38bdf8] hover:bg-[#38bdf8] hover:text-[#07080a] transition-colors"
                         >
                           <span>{target?.label || targetId}</span>
                           <ArrowRight className="w-3 h-3" />

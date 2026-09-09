@@ -1,11 +1,6 @@
 import { useRef, useState } from "react";
 import { motion } from "motion/react";
-import {
-  ArrowDown,
-  ArrowUpRight,
-  Terminal,
-  Zap,
-} from "lucide-react";
+import { ArrowDown, ArrowUpRight, Terminal, Zap } from "lucide-react";
 import { PROFILE } from "@/data/portfolioData";
 import darshPortrait from "@/assets/darsh.jpeg";
 import { MOTION, STAGGER_CONTAINER, STAGGER_ITEM } from "@/lib/motion";
@@ -66,13 +61,19 @@ export function HeroSection() {
           className="lg:col-span-7 flex flex-col justify-center"
         >
           {/* Eyebrow */}
-          <motion.div variants={STAGGER_ITEM} className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#b7ff3c]/10 border border-[#b7ff3c]/30 text-[#b7ff3c] font-mono text-[10px] uppercase tracking-[0.2em] mb-6 w-max">
+          <motion.div
+            variants={STAGGER_ITEM}
+            className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#b7ff3c]/10 border border-[#b7ff3c]/30 text-[#b7ff3c] font-mono text-[10px] uppercase tracking-[0.2em] mb-6 w-max"
+          >
             <Zap className="w-3 h-3" />
             <span>Infrastructure · Automation · AI</span>
           </motion.div>
 
           {/* Name */}
-          <motion.h1 variants={STAGGER_ITEM} className="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-[#f1f6f7] leading-[0.95] mb-6">
+          <motion.h1
+            variants={STAGGER_ITEM}
+            className="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-[#f1f6f7] leading-[0.95] mb-6"
+          >
             DARSH <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f1f6f7] via-[#cbd5e1] to-[#b7ff3c]">
               SOAM
@@ -80,21 +81,28 @@ export function HeroSection() {
           </motion.h1>
 
           {/* Role */}
-          <motion.h2 variants={STAGGER_ITEM} className="font-mono text-base sm:text-lg text-[#b7ff3c] font-medium tracking-wide mb-4">
-            Cloud & DevOps Engineer <span className="text-[#73848b]">|</span> Infrastructure & Automation Enthusiast
+          <motion.h2
+            variants={STAGGER_ITEM}
+            className="font-mono text-base sm:text-lg text-[#b7ff3c] font-medium tracking-wide mb-4"
+          >
+            Cloud & DevOps Engineer <span className="text-[#73848b]">|</span> Infrastructure &
+            Automation Enthusiast
           </motion.h2>
 
           {/* Description */}
-          <motion.p variants={STAGGER_ITEM} className="text-[#b3c0c4] text-base sm:text-lg leading-relaxed max-w-2xl mb-8 font-sans font-normal">
-            Building repeatable, automated systems at the convergence of AWS Cloud, Kubernetes orchestration,
-            Terraform Infrastructure as Code, and Agentic AI workflows.
+          <motion.p
+            variants={STAGGER_ITEM}
+            className="text-[#b3c0c4] text-base sm:text-lg leading-relaxed max-w-2xl mb-8 font-sans font-normal"
+          >
+            Building repeatable, automated systems at the convergence of AWS Cloud, Kubernetes
+            orchestration, Terraform Infrastructure as Code, and Agentic AI workflows.
           </motion.p>
 
           {/* CTAs */}
           <motion.div variants={STAGGER_ITEM} className="flex flex-wrap items-center gap-4 mb-10">
             <button
               onClick={() => scrollTo("systems")}
-              className="group inline-flex items-center gap-2.5 px-6 py-3.5 rounded bg-[#b7ff3c] text-[#07090b] font-mono text-xs uppercase tracking-widest font-bold hover:bg-[#b7ff3c]/90 transition-all shadow-[0_0_20px_-5px_rgba(183,255,60,0.4)]"
+              className="group inline-flex items-center gap-2.5 px-6 py-3.5 rounded bg-[#b7ff3c] text-[#07080a] font-mono text-xs uppercase tracking-widest font-bold hover:bg-[#b7ff3c]/90 transition-all shadow-[0_0_20px_-5px_rgba(183,255,60,0.4)]"
             >
               <span>Explore Systems Map</span>
               <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
@@ -102,7 +110,7 @@ export function HeroSection() {
 
             <button
               onClick={() => scrollTo("work")}
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded border border-[rgba(230,240,245,0.15)] bg-[#0e1317] text-[#f1f6f7] font-mono text-xs uppercase tracking-widest hover:border-[#b7ff3c] hover:text-[#b7ff3c] transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded border border-[rgba(230,240,245,0.15)] bg-[#0f1216] text-[#f1f6f7] font-mono text-xs uppercase tracking-widest hover:border-[#b7ff3c] hover:text-[#b7ff3c] transition-all"
             >
               <span>View Case Studies</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -110,7 +118,7 @@ export function HeroSection() {
 
             <button
               onClick={() => scrollTo("terminal")}
-              className="inline-flex items-center gap-2 px-4 py-3.5 rounded border border-[rgba(230,240,245,0.1)] bg-[#07090b] text-[#73848b] font-mono text-xs uppercase tracking-widest hover:text-[#38bdf8] hover:border-[#38bdf8]/40 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-3.5 rounded border border-[rgba(230,240,245,0.1)] bg-[#07080a] text-[#73848b] font-mono text-xs uppercase tracking-widest hover:text-[#38bdf8] hover:border-[#38bdf8]/40 transition-all"
             >
               <Terminal className="w-3.5 h-3.5 text-[#38bdf8]" />
               <span>CLI</span>
@@ -118,20 +126,35 @@ export function HeroSection() {
           </motion.div>
 
           {/* Spec Grid */}
-          <motion.div variants={STAGGER_ITEM} className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-6 border-t border-[rgba(230,240,245,0.08)]">
-            <div className="p-3 rounded border border-[rgba(230,240,245,0.06)] bg-[#0e1317]/50">
-              <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">Education</div>
-              <div className="font-mono text-xs text-[#f1f6f7] font-semibold mt-1">B.Tech CSE @ MIET</div>
+          <motion.div
+            variants={STAGGER_ITEM}
+            className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-6 border-t border-[rgba(230,240,245,0.08)]"
+          >
+            <div className="p-3 rounded border border-[rgba(230,240,245,0.06)] bg-[#0f1216]/50">
+              <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">
+                Education
+              </div>
+              <div className="font-mono text-xs text-[#f1f6f7] font-semibold mt-1">
+                B.Tech CSE @ MIET
+              </div>
               <div className="font-mono text-[9px] text-[#38bdf8] mt-0.5">2024 — 2028</div>
             </div>
-            <div className="p-3 rounded border border-[rgba(230,240,245,0.06)] bg-[#0e1317]/50">
-              <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">Cloud & IaC</div>
-              <div className="font-mono text-xs text-[#f1f6f7] font-semibold mt-1">AWS & Terraform</div>
+            <div className="p-3 rounded border border-[rgba(230,240,245,0.06)] bg-[#0f1216]/50">
+              <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">
+                Cloud & IaC
+              </div>
+              <div className="font-mono text-xs text-[#f1f6f7] font-semibold mt-1">
+                AWS & Terraform
+              </div>
               <div className="font-mono text-[9px] text-[#b7ff3c] mt-0.5">Docker · K8s · Linux</div>
             </div>
-            <div className="col-span-2 sm:col-span-1 p-3 rounded border border-[rgba(230,240,245,0.06)] bg-[#0e1317]/50">
-              <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">Certifications</div>
-              <div className="font-mono text-xs text-[#f1f6f7] font-semibold mt-1">Oracle & OpenAI</div>
+            <div className="col-span-2 sm:col-span-1 p-3 rounded border border-[rgba(230,240,245,0.06)] bg-[#0f1216]/50">
+              <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">
+                Certifications
+              </div>
+              <div className="font-mono text-xs text-[#f1f6f7] font-semibold mt-1">
+                Oracle & OpenAI
+              </div>
               <div className="font-mono text-[9px] text-[#38bdf8] mt-0.5">Agentic AI Certified</div>
             </div>
           </motion.div>
@@ -145,29 +168,37 @@ export function HeroSection() {
           transition={{ duration: MOTION.cinematic.duration, delay: 0.3 }}
         >
           <div
-            className="relative w-full max-w-[420px] aspect-[4/5] rounded-xl border border-[rgba(230,240,245,0.12)] bg-[#0e1317]/90 p-3 shadow-2xl backdrop-blur-md overflow-hidden transition-transform duration-300 ease-out"
+            className="relative w-full max-w-[420px] aspect-[4/5] rounded-xl border border-[rgba(230,240,245,0.12)] bg-[#0f1216]/90 p-3 shadow-2xl backdrop-blur-md overflow-hidden transition-transform duration-300 ease-out"
             style={{
               transform: `perspective(1000px) rotateY(${mousePos.x}deg) rotateX(${-mousePos.y}deg)`,
             }}
           >
             {/* Corner HUD */}
-            <div className="absolute top-2 left-2 font-mono text-[8px] text-[#73848b] z-20">+ TOP_L // 01</div>
-            <div className="absolute top-2 right-2 font-mono text-[8px] text-[#b7ff3c] z-20">STATUS: ACTIVE</div>
-            <div className="absolute bottom-2 left-2 font-mono text-[8px] text-[#38bdf8] z-20">NODE: DARSH-PROD-01</div>
-            <div className="absolute bottom-2 right-2 font-mono text-[8px] text-[#73848b] z-20">+ BOT_R // 02</div>
+            <div className="absolute top-2 left-2 font-mono text-[8px] text-[#73848b] z-20">
+              + TOP_L // 01
+            </div>
+            <div className="absolute top-2 right-2 font-mono text-[8px] text-[#b7ff3c] z-20">
+              STATUS: ACTIVE
+            </div>
+            <div className="absolute bottom-2 left-2 font-mono text-[8px] text-[#38bdf8] z-20">
+              NODE: DARSH-PROD-01
+            </div>
+            <div className="absolute bottom-2 right-2 font-mono text-[8px] text-[#73848b] z-20">
+              + BOT_R // 02
+            </div>
 
             {/* Scanline */}
             <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-[#b7ff3c]/5 to-transparent h-12 animate-scanline z-20" />
 
             {/* Image */}
-            <div className="relative w-full h-full rounded-lg overflow-hidden border border-[rgba(230,240,245,0.08)] bg-[#07090b]">
+            <div className="relative w-full h-full rounded-lg overflow-hidden border border-[rgba(230,240,245,0.08)] bg-[#07080a]">
               <img
                 src={darshPortrait}
                 alt="Darsh Soam"
                 className="w-full h-full object-cover object-top filter contrast-125 brightness-95 opacity-90 transition-all duration-500 hover:opacity-100"
               />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-[#07090b] via-transparent to-transparent opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#07080a] via-transparent to-transparent opacity-80" />
             </div>
           </div>
         </motion.div>
@@ -193,11 +224,15 @@ export function HeroSection() {
           {PROFILE.philosophy.map((item) => (
             <div
               key={item.step}
-              className="p-2.5 rounded border border-[rgba(230,240,245,0.06)] bg-[#0e1317]/60 hover:border-[#b7ff3c]/40 transition-colors"
+              className="p-2.5 rounded border border-[rgba(230,240,245,0.06)] bg-[#0f1216]/60 hover:border-[#b7ff3c]/40 transition-colors"
             >
               <div className="font-mono text-[9px] text-[#b7ff3c]">{item.step}</div>
-              <div className="font-display font-semibold text-xs text-[#f1f6f7] mt-0.5">{item.name}</div>
-              <div className="font-mono text-[8px] text-[#73848b] truncate mt-0.5">{item.detail}</div>
+              <div className="font-display font-semibold text-xs text-[#f1f6f7] mt-0.5">
+                {item.name}
+              </div>
+              <div className="font-mono text-[8px] text-[#73848b] truncate mt-0.5">
+                {item.detail}
+              </div>
             </div>
           ))}
         </div>

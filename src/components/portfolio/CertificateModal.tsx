@@ -45,18 +45,23 @@ export function CertificateModal({ credential, onClose }: CertificateModalProps)
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: MOTION.interaction.duration }}
-          onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
+          onClick={(e) => {
+            if (e.target === overlayRef.current) onClose();
+          }}
         >
           {/* Backdrop */}
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
 
           {/* Modal Content */}
           <motion.div
-            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl border border-[rgba(230,240,245,0.15)] bg-[#0e1317] shadow-2xl"
+            className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl border border-[rgba(230,240,245,0.15)] bg-[#0f1216] shadow-2xl"
             initial={{ opacity: 0, scale: 0.95, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 12 }}
-            transition={{ duration: MOTION.component.duration, ease: MOTION.component.ease as unknown as number[] }}
+            transition={{
+              duration: MOTION.component.duration,
+              ease: MOTION.component.ease as unknown as number[],
+            }}
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-[rgba(230,240,245,0.08)]">
@@ -70,7 +75,7 @@ export function CertificateModal({ credential, onClose }: CertificateModalProps)
                 ref={closeRef}
                 onClick={onClose}
                 aria-label="Close certificate preview"
-                className="p-2 rounded border border-[rgba(230,240,245,0.1)] bg-[#07090b] text-[#b3c0c4] hover:text-[#f1f6f7] hover:border-[#b7ff3c] transition-colors"
+                className="p-2 rounded border border-[rgba(230,240,245,0.1)] bg-[#07080a] text-[#b3c0c4] hover:text-[#f1f6f7] hover:border-[#b7ff3c] transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -79,7 +84,7 @@ export function CertificateModal({ credential, onClose }: CertificateModalProps)
             {/* Certificate Image */}
             {credential.certificateImage && (
               <div className="px-6 pt-6">
-                <div className="rounded-lg border border-[rgba(230,240,245,0.08)] bg-[#07090b] overflow-hidden">
+                <div className="rounded-lg border border-[rgba(230,240,245,0.08)] bg-[#07080a] overflow-hidden">
                   <img
                     src={credential.certificateImage}
                     alt={`${credential.title} certificate`}
@@ -107,18 +112,30 @@ export function CertificateModal({ credential, onClose }: CertificateModalProps)
               </p>
 
               <div className="grid grid-cols-2 gap-3 pt-2">
-                <div className="p-3 rounded border border-[rgba(230,240,245,0.06)] bg-[#07090b]">
-                  <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">Issued</div>
-                  <div className="font-mono text-xs text-[#f1f6f7] font-semibold mt-1">{credential.issuedDate}</div>
+                <div className="p-3 rounded border border-[rgba(230,240,245,0.06)] bg-[#07080a]">
+                  <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">
+                    Issued
+                  </div>
+                  <div className="font-mono text-xs text-[#f1f6f7] font-semibold mt-1">
+                    {credential.issuedDate}
+                  </div>
                 </div>
-                <div className="p-3 rounded border border-[rgba(230,240,245,0.06)] bg-[#07090b]">
-                  <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">Category</div>
-                  <div className="font-mono text-xs text-[#38bdf8] font-semibold mt-1">{credential.category}</div>
+                <div className="p-3 rounded border border-[rgba(230,240,245,0.06)] bg-[#07080a]">
+                  <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">
+                    Category
+                  </div>
+                  <div className="font-mono text-xs text-[#38bdf8] font-semibold mt-1">
+                    {credential.category}
+                  </div>
                 </div>
                 {credential.provider && (
-                  <div className="col-span-2 p-3 rounded border border-[rgba(230,240,245,0.06)] bg-[#07090b]">
-                    <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">Provider</div>
-                    <div className="font-mono text-xs text-[#f1f6f7] font-semibold mt-1">{credential.provider}</div>
+                  <div className="col-span-2 p-3 rounded border border-[rgba(230,240,245,0.06)] bg-[#07080a]">
+                    <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">
+                      Provider
+                    </div>
+                    <div className="font-mono text-xs text-[#f1f6f7] font-semibold mt-1">
+                      {credential.provider}
+                    </div>
                   </div>
                 )}
               </div>

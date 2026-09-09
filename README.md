@@ -1,6 +1,6 @@
 # Portfolio Spark
 
-Build me a modern, interactive personal portfolio website.     https://dennissnellenberg.com/ https://www.wallofportfolios.in/portfolios/sahor-debbarma/ https://www.wallofportfolios.in/portfolios/prerna/https://www.wallofportfolios.in/portfolios/gurjot-singh-ahluwalia/ I have listed you with some amazing portfolio designs use them as an inspiration so it catches the eye of a recruiter and industry relevant whenever posted on linkedin. 
+Build me a modern, interactive personal portfolio website. https://dennissnellenberg.com/ https://www.wallofportfolios.in/portfolios/sahor-debbarma/ https://www.wallofportfolios.in/portfolios/prerna/https://www.wallofportfolios.in/portfolios/gurjot-singh-ahluwalia/ I have listed you with some amazing portfolio designs use them as an inspiration so it catches the eye of a recruiter and industry relevant whenever posted on linkedin.
 
 Here are all my project documents — use them as the single source of truth.
 
@@ -56,7 +56,7 @@ Here are all my project documents — use them as the single source of truth.
 
 **Hosting:** Will deploy via Lovable's built-in hosting
 
-**Key Libraries:** 
+**Key Libraries:**
 
 - Framer Motion for animations
 
@@ -64,7 +64,7 @@ Here are all my project documents — use them as the single source of truth.
 
 - React Scroll for smooth navigation
 
-**Constraints:** 
+**Constraints:**
 
 - Fully static, no API calls
 
@@ -82,7 +82,7 @@ Here are all my project documents — use them as the single source of truth.
 
 **First Screen:** Hero section — full viewport, animated name + tagline + CTA button ("View My Work")
 
-**Core User Journey:** 
+**Core User Journey:**
 
 1. Visitor lands on Hero → reads name + tagline
 

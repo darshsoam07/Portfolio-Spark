@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { Terminal as TerminalIcon, CornerDownLeft, Sparkles, X, Maximize2 } from "lucide-react";
 import { PROFILE, PROJECTS, CERTIFICATIONS, EDUCATION } from "@/data/portfolioData";
 import { SECTION_REVEAL, VIEWPORT_REVEAL } from "@/lib/motion";
+import { TiltCard } from "./TiltCard";
 
 interface CommandLog {
   id: string;
@@ -69,15 +70,42 @@ export function InteractiveTerminal() {
         response = (
           <div className="flex flex-col gap-1 font-mono text-xs text-[#b3c0c4]">
             <div className="text-[#38bdf8] font-bold mb-1">AVAILABLE COMMANDS:</div>
-            <div><span className="text-[#b7ff3c]">whoami</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Display professional identity and philosophy</div>
-            <div><span className="text-[#b7ff3c]">systems</span> &nbsp;&nbsp;&nbsp;&nbsp; - List infrastructure topology components</div>
-            <div><span className="text-[#b7ff3c]">projects</span> &nbsp;&nbsp;&nbsp; - Inspect engineered case studies</div>
-            <div><span className="text-[#b7ff3c]">stack</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - View technology layers & primitives</div>
-            <div><span className="text-[#b7ff3c]">education</span> &nbsp;&nbsp; - Review MIET university credentials</div>
-            <div><span className="text-[#b7ff3c]">certs</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - List verified Oracle & OpenAI credentials</div>
-            <div><span className="text-[#b7ff3c]">contact</span> &nbsp;&nbsp;&nbsp;&nbsp; - Show verified contact channels</div>
-            <div><span className="text-[#b7ff3c]">deploy</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Simulate automated CI/CD pipeline rollout</div>
-            <div><span className="text-[#b7ff3c]">clear</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Clear console output</div>
+            <div>
+              <span className="text-[#b7ff3c]">whoami</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Display professional identity and philosophy
+            </div>
+            <div>
+              <span className="text-[#b7ff3c]">systems</span> &nbsp;&nbsp;&nbsp;&nbsp; - List
+              infrastructure topology components
+            </div>
+            <div>
+              <span className="text-[#b7ff3c]">projects</span> &nbsp;&nbsp;&nbsp; - Inspect
+              engineered case studies
+            </div>
+            <div>
+              <span className="text-[#b7ff3c]">stack</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              View technology layers & primitives
+            </div>
+            <div>
+              <span className="text-[#b7ff3c]">education</span> &nbsp;&nbsp; - Review MIET
+              university credentials
+            </div>
+            <div>
+              <span className="text-[#b7ff3c]">certs</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              List verified Oracle & OpenAI credentials
+            </div>
+            <div>
+              <span className="text-[#b7ff3c]">contact</span> &nbsp;&nbsp;&nbsp;&nbsp; - Show
+              verified contact channels
+            </div>
+            <div>
+              <span className="text-[#b7ff3c]">deploy</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Simulate automated CI/CD pipeline rollout
+            </div>
+            <div>
+              <span className="text-[#b7ff3c]">clear</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -
+              Clear console output
+            </div>
           </div>
         );
         break;
@@ -85,9 +113,13 @@ export function InteractiveTerminal() {
       case "whoami":
         response = (
           <div className="font-mono text-xs text-[#cbd5e1] leading-relaxed">
-            <p className="text-[#b7ff3c] font-bold">{PROFILE.name} — {PROFILE.role}</p>
+            <p className="text-[#b7ff3c] font-bold">
+              {PROFILE.name} — {PROFILE.role}
+            </p>
             <p className="mt-1">{PROFILE.subheadline}</p>
-            <p className="text-[#73848b] mt-1">Location: {PROFILE.location.short} ({PROFILE.location.coords})</p>
+            <p className="text-[#73848b] mt-1">
+              Location: {PROFILE.location.short} ({PROFILE.location.coords})
+            </p>
           </div>
         );
         break;
@@ -113,7 +145,9 @@ export function InteractiveTerminal() {
           <div className="flex flex-col gap-2 font-mono text-xs">
             {PROJECTS.map((p) => (
               <div key={p.id} className="p-2 rounded bg-white/5 border border-white/5">
-                <span className="text-[#b7ff3c] font-bold">{p.number} // {p.title}</span>
+                <span className="text-[#b7ff3c] font-bold">
+                  {p.number} // {p.title}
+                </span>
                 <p className="text-[#b3c0c4] text-[11px] mt-0.5">{p.problem}</p>
                 <p className="text-[#38bdf8] text-[10px] mt-1">Stack: {p.tags.join(" · ")}</p>
               </div>
@@ -126,11 +160,26 @@ export function InteractiveTerminal() {
         response = (
           <div className="font-mono text-xs text-[#cbd5e1] leading-relaxed">
             <p className="text-[#b7ff3c] font-bold mb-1">TECHNICAL STACK MATRIX:</p>
-            <p><span className="text-[#38bdf8]">Cloud & IaC:</span> AWS (EC2, S3, VPC, IAM, RDS), Terraform, Linux</p>
-            <p><span className="text-[#38bdf8]">Containers & CI/CD:</span> Docker, Kubernetes, GitHub Actions, Git</p>
-            <p><span className="text-[#38bdf8]">Agentic & Gen AI:</span> Agentic AI, LLM Apps, RAG, LangChain</p>
-            <p><span className="text-[#38bdf8]">Backend & Languages:</span> Python, Java, Flask, REST APIs, Bash, SQL, SQLite</p>
-            <p><span className="text-[#38bdf8]">Security:</span> DevSecOps, Infrastructure & Container Hardening</p>
+            <p>
+              <span className="text-[#38bdf8]">Cloud & IaC:</span> AWS (EC2, S3, VPC, IAM, RDS),
+              Terraform, Linux
+            </p>
+            <p>
+              <span className="text-[#38bdf8]">Containers & CI/CD:</span> Docker, Kubernetes, GitHub
+              Actions, Git
+            </p>
+            <p>
+              <span className="text-[#38bdf8]">Agentic & Gen AI:</span> Agentic AI, LLM Apps, RAG,
+              LangChain
+            </p>
+            <p>
+              <span className="text-[#38bdf8]">Backend & Languages:</span> Python, Java, Flask, REST
+              APIs, Bash, SQL, SQLite
+            </p>
+            <p>
+              <span className="text-[#38bdf8]">Security:</span> DevSecOps, Infrastructure &
+              Container Hardening
+            </p>
           </div>
         );
         break;
@@ -139,8 +188,12 @@ export function InteractiveTerminal() {
         response = (
           <div className="font-mono text-xs text-[#cbd5e1]">
             <p className="text-[#b7ff3c] font-bold">{EDUCATION[0].degree}</p>
-            <p className="text-[#f1f6f7]">{EDUCATION[0].institution} ({EDUCATION[0].period})</p>
-            <p className="text-[#73848b] text-[11px] mt-1">Coursework: {EDUCATION[0].coursework.join(", ")}</p>
+            <p className="text-[#f1f6f7]">
+              {EDUCATION[0].institution} ({EDUCATION[0].period})
+            </p>
+            <p className="text-[#73848b] text-[11px] mt-1">
+              Coursework: {EDUCATION[0].coursework.join(", ")}
+            </p>
           </div>
         );
         break;
@@ -162,9 +215,34 @@ export function InteractiveTerminal() {
         response = (
           <div className="font-mono text-xs text-[#cbd5e1] leading-relaxed">
             <p className="text-[#b7ff3c] font-bold mb-1">DIRECT COMMUNICATION CHANNELS:</p>
-            <p>Email: <a href={`mailto:${PROFILE.email}`} className="text-[#38bdf8] hover:underline">{PROFILE.email}</a></p>
-            <p>LinkedIn: <a href={PROFILE.linkedin} target="_blank" rel="noreferrer" className="text-[#38bdf8] hover:underline">{PROFILE.linkedin}</a></p>
-            <p>GitHub: <a href={PROFILE.github} target="_blank" rel="noreferrer" className="text-[#38bdf8] hover:underline">{PROFILE.github}</a></p>
+            <p>
+              Email:{" "}
+              <a href={`mailto:${PROFILE.email}`} className="text-[#38bdf8] hover:underline">
+                {PROFILE.email}
+              </a>
+            </p>
+            <p>
+              LinkedIn:{" "}
+              <a
+                href={PROFILE.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[#38bdf8] hover:underline"
+              >
+                {PROFILE.linkedin}
+              </a>
+            </p>
+            <p>
+              GitHub:{" "}
+              <a
+                href={PROFILE.github}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[#38bdf8] hover:underline"
+              >
+                {PROFILE.github}
+              </a>
+            </p>
             <p>Phone: {PROFILE.phone}</p>
           </div>
         );
@@ -173,13 +251,32 @@ export function InteractiveTerminal() {
       case "deploy":
         response = (
           <div className="font-mono text-xs text-[#b7ff3c] leading-relaxed space-y-1">
-            <p className="text-[#f1f6f7]">[DEPLOY] Starting zero-downtime rolling release to AWS cluster...</p>
-            <p>[01/05] Validating Terraform remote state ... <span className="text-[#b7ff3c]">OK (0.3s)</span></p>
-            <p>[02/05] Building multi-stage Docker artifact ... <span className="text-[#b7ff3c]">OK (1.2s)</span></p>
-            <p>[03/05] Pushing image to container registry ... <span className="text-[#b7ff3c]">OK (0.8s)</span></p>
-            <p>[04/05] Scheduling Kubernetes pods (3 replicas) ... <span className="text-[#b7ff3c]">HEALTHY (0.6s)</span></p>
-            <p>[05/05] CloudWatch traffic health-checks passing ... <span className="text-[#38bdf8]">100% NOMINAL</span></p>
-            <p className="text-[#f1f6f7] font-bold mt-2">✓ SYSTEM DEPLOYMENT SUCCESSFUL [0 errors, 0 warnings]</p>
+            <p className="text-[#f1f6f7]">
+              [DEPLOY] Starting zero-downtime rolling release to AWS cluster...
+            </p>
+            <p>
+              [01/05] Validating Terraform remote state ...{" "}
+              <span className="text-[#b7ff3c]">OK (0.3s)</span>
+            </p>
+            <p>
+              [02/05] Building multi-stage Docker artifact ...{" "}
+              <span className="text-[#b7ff3c]">OK (1.2s)</span>
+            </p>
+            <p>
+              [03/05] Pushing image to container registry ...{" "}
+              <span className="text-[#b7ff3c]">OK (0.8s)</span>
+            </p>
+            <p>
+              [04/05] Scheduling Kubernetes pods (3 replicas) ...{" "}
+              <span className="text-[#b7ff3c]">HEALTHY (0.6s)</span>
+            </p>
+            <p>
+              [05/05] CloudWatch traffic health-checks passing ...{" "}
+              <span className="text-[#38bdf8]">100% NOMINAL</span>
+            </p>
+            <p className="text-[#f1f6f7] font-bold mt-2">
+              ✓ SYSTEM DEPLOYMENT SUCCESSFUL [0 errors, 0 warnings]
+            </p>
           </div>
         );
         break;
@@ -191,7 +288,8 @@ export function InteractiveTerminal() {
       default:
         response = (
           <div className="font-mono text-xs text-[#ff5a5f]">
-            Command not recognized: '{trimmed}'. Type <span className="text-[#b7ff3c]">'help'</span> for available commands.
+            Command not recognized: '{trimmed}'. Type <span className="text-[#b7ff3c]">'help'</span>{" "}
+            for available commands.
           </div>
         );
     }
@@ -250,8 +348,10 @@ export function InteractiveTerminal() {
             SYSTEM <span className="text-[#b7ff3c]">CLI.</span>
           </h2>
           <p className="text-[#b3c0c4] text-sm md:text-base max-w-2xl mt-4 font-sans leading-relaxed">
-            Explore the portfolio via an interactive terminal. Type <code className="text-[#b7ff3c]">whoami</code>,{" "}
-            <code className="text-[#b7ff3c]">systems</code>, <code className="text-[#b7ff3c]">projects</code>, or{" "}
+            Explore the portfolio via an interactive terminal. Type{" "}
+            <code className="text-[#b7ff3c]">whoami</code>,{" "}
+            <code className="text-[#b7ff3c]">systems</code>,{" "}
+            <code className="text-[#b7ff3c]">projects</code>, or{" "}
             <code className="text-[#b7ff3c]">deploy</code>.
           </p>
         </div>
@@ -262,7 +362,7 @@ export function InteractiveTerminal() {
             <button
               key={cmd}
               onClick={() => handleCommand(cmd)}
-              className="px-2.5 py-1 rounded bg-[#0e1317] border border-[rgba(230,240,245,0.1)] font-mono text-[10px] text-[#b3c0c4] hover:border-[#b7ff3c] hover:text-[#b7ff3c] transition-colors"
+              className="px-2.5 py-1 rounded bg-[#0f1216] border border-[rgba(230,240,245,0.1)] font-mono text-[10px] text-[#b3c0c4] hover:border-[#b7ff3c] hover:text-[#b7ff3c] transition-colors"
             >
               ${cmd}
             </button>
@@ -270,60 +370,62 @@ export function InteractiveTerminal() {
         </div>
       </div>
 
-      {/* Terminal Window Frame */}
-      <div className="rounded-xl border border-[rgba(230,240,245,0.12)] bg-[#07090b] shadow-2xl overflow-hidden backdrop-blur-md">
-        {/* Terminal Title Bar */}
-        <div className="flex items-center justify-between px-4 py-3 bg-[#0e1317] border-b border-[rgba(230,240,245,0.08)]">
-          <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded-full bg-[#ff5a5f]/80" />
-            <div className="h-3 w-3 rounded-full bg-[#ffb547]/80" />
-            <div className="h-3 w-3 rounded-full bg-[#b7ff3c]/80" />
-            <span className="font-mono text-xs text-[#73848b] ml-2">
-              darsh@infra-control-room:~
-            </span>
-          </div>
-          <div className="font-mono text-[10px] text-[#73848b] uppercase tracking-wider hidden sm:block">
-            BASH / ZSH EMULATOR
-          </div>
-        </div>
-
-        {/* Terminal Screen Body */}
-        <div
-          onClick={() => inputRef.current?.focus()}
-          className="p-4 sm:p-6 min-h-[360px] max-h-[500px] overflow-y-auto font-mono text-xs flex flex-col gap-4 cursor-text"
-        >
-          {logs.map((log) => (
-            <div key={log.id} className="flex flex-col gap-1.5">
-              <div className="flex items-center gap-2 text-[#73848b] text-[11px]">
-                <span className="text-[#b7ff3c]">➜</span>
-                <span className="text-[#38bdf8]">darsh-soam</span>
-                <span className="text-[#f1f6f7]">{log.command}</span>
-                <span className="ml-auto text-[9px] text-[#73848b]">{log.timestamp}</span>
-              </div>
-              <div className="pl-4">{log.output}</div>
+      {/* Terminal Window Frame — wrapped in TiltCard for tactile tilt interaction */}
+      <TiltCard className="rounded-xl shadow-2xl overflow-hidden" intensity={8}>
+        <div className="rounded-xl border border-[rgba(230,240,245,0.12)] bg-[#07080a] overflow-hidden backdrop-blur-md">
+          {/* Terminal Title Bar */}
+          <div className="flex items-center justify-between px-4 py-3 bg-[#0f1216] border-b border-[rgba(230,240,245,0.08)]">
+            <div className="flex items-center gap-2">
+              <div className="h-3 w-3 rounded-full bg-[#ff5a5f]/80" />
+              <div className="h-3 w-3 rounded-full bg-[#ffb547]/80" />
+              <div className="h-3 w-3 rounded-full bg-[#b7ff3c]/80" />
+              <span className="font-mono text-xs text-[#73848b] ml-2">
+                darsh@infra-control-room:~
+              </span>
             </div>
-          ))}
-
-          {/* Active Input Line */}
-          <div className="flex items-center gap-2 pt-2 text-[#f1f6f7]">
-            <span className="text-[#b7ff3c]">➜</span>
-            <span className="text-[#38bdf8]">darsh-soam</span>
-            <span className="text-[#73848b]">$</span>
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="type a command (e.g. help, deploy, whoami)..."
-              className="flex-1 bg-transparent border-none outline-none font-mono text-xs text-[#f1f6f7] placeholder-[#73848b]/50"
-              autoComplete="off"
-              spellCheck="false"
-            />
+            <div className="font-mono text-[10px] text-[#73848b] uppercase tracking-wider hidden sm:block">
+              BASH / ZSH EMULATOR
+            </div>
           </div>
-          <div ref={bottomRef} />
+
+          {/* Terminal Screen Body */}
+          <div
+            onClick={() => inputRef.current?.focus()}
+            className="p-4 sm:p-6 min-h-[360px] max-h-[500px] overflow-y-auto font-mono text-xs flex flex-col gap-4 cursor-text"
+          >
+            {logs.map((log) => (
+              <div key={log.id} className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-2 text-[#73848b] text-[11px]">
+                  <span className="text-[#b7ff3c]">➜</span>
+                  <span className="text-[#38bdf8]">darsh-soam</span>
+                  <span className="text-[#f1f6f7]">{log.command}</span>
+                  <span className="ml-auto text-[9px] text-[#73848b]">{log.timestamp}</span>
+                </div>
+                <div className="pl-4">{log.output}</div>
+              </div>
+            ))}
+
+            {/* Active Input Line */}
+            <div className="flex items-center gap-2 pt-2 text-[#f1f6f7]">
+              <span className="text-[#b7ff3c]">➜</span>
+              <span className="text-[#38bdf8]">darsh-soam</span>
+              <span className="text-[#73848b]">$</span>
+              <input
+                ref={inputRef}
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="type a command (e.g. help, deploy, whoami)..."
+                className="flex-1 bg-transparent border-none outline-none font-mono text-xs text-[#f1f6f7] placeholder-[#73848b]/50"
+                autoComplete="off"
+                spellCheck="false"
+              />
+            </div>
+            <div ref={bottomRef} />
+          </div>
         </div>
-      </div>
+      </TiltCard>
     </motion.section>
   );
 }

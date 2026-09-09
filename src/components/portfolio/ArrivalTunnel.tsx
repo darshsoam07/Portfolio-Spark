@@ -16,7 +16,7 @@ const LOCAL_ASSET_IMAGES = [
 ];
 
 const TUNNEL_DEFAULTS = {
-  background: "#07090b",
+  background: "#07080a",
   lineColor: "#253038",
   lineOpacity: 55,
   colors: ["#b7ff3c", "#38bdf8", "#ffb547", "#a78bfa", "#ff5a5f", "#4ade80"],
@@ -159,7 +159,7 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
 
       const fogNear = Math.min(
         FOG_FAR * (1 - Math.min(100, Math.max(0, TUNNEL_DEFAULTS.fade)) / 100),
-        FOG_FAR - 0.01
+        FOG_FAR - 0.01,
       );
       scene.fog = new THREE.Fog(new THREE.Color(TUNNEL_DEFAULTS.background), fogNear, FOG_FAR);
 
@@ -203,31 +203,22 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
       const geoWall = new THREE.PlaneGeometry(SEGMENT_DEPTH, rowH);
 
       const geoTubeZ = new THREE.TubeGeometry(
-        new THREE.LineCurve3(
-          new THREE.Vector3(0, 0, 0),
-          new THREE.Vector3(0, 0, -SEGMENT_DEPTH)
-        ),
+        new THREE.LineCurve3(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -SEGMENT_DEPTH)),
         1,
         LINE_RADIUS,
-        8
+        8,
       );
       const geoTubeX = new THREE.TubeGeometry(
-        new THREE.LineCurve3(
-          new THREE.Vector3(0, 0, 0),
-          new THREE.Vector3(TUNNEL_WIDTH, 0, 0)
-        ),
+        new THREE.LineCurve3(new THREE.Vector3(0, 0, 0), new THREE.Vector3(TUNNEL_WIDTH, 0, 0)),
         1,
         LINE_RADIUS,
-        8
+        8,
       );
       const geoTubeY = new THREE.TubeGeometry(
-        new THREE.LineCurve3(
-          new THREE.Vector3(0, 0, 0),
-          new THREE.Vector3(0, TUNNEL_HEIGHT, 0)
-        ),
+        new THREE.LineCurve3(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, TUNNEL_HEIGHT, 0)),
         1,
         LINE_RADIUS,
-        8
+        8,
       );
 
       const colorMats = TUNNEL_DEFAULTS.colors.map(
@@ -235,7 +226,7 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
           new THREE.MeshBasicMaterial({
             color: new THREE.Color(hex),
             side: THREE.DoubleSide,
-          })
+          }),
       );
 
       const imageMats = LOCAL_ASSET_IMAGES.map((url) => {
@@ -261,7 +252,7 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
           undefined,
           () => {
             // Ignore missing texture
-          }
+          },
         );
         return mat;
       });
@@ -385,9 +376,7 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
         const dt = last ? Math.min((now - last) / 1000, 1 / 30) : 1 / 60;
         last = now;
 
-        const speedFactor = pressed
-          ? TUNNEL_DEFAULTS.boost / 10
-          : TUNNEL_DEFAULTS.speed / 100;
+        const speedFactor = pressed ? TUNNEL_DEFAULTS.boost / 10 : TUNNEL_DEFAULTS.speed / 100;
         scrollPos += speedFactor;
         const want = -SCROLL_TO_Z * scrollPos;
         camera.position.z += CAMERA_CHASE * (want - camera.position.z);
@@ -464,15 +453,18 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.7, ease: [0.65, 0, 0.35, 1] }}
-          className="fixed inset-0 z-[999999] bg-[#07090b] flex items-center justify-center overflow-hidden select-none"
+          className="fixed inset-0 z-[999999] bg-[#07080a] flex items-center justify-center overflow-hidden select-none"
         >
           {/* Three.js Canvas Container */}
-          <div ref={frameRef} className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing">
+          <div
+            ref={frameRef}
+            className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing"
+          >
             <canvas ref={canvasRef} className="w-full h-full block" />
           </div>
 
           {/* Vignette & Contrast Shroud */}
-          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(7,9,11,0.6)_0%,rgba(7,9,11,0.85)_100%)]" />
+          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(7,8,10,0.6)_0%,rgba(7,8,10,0.85)_100%)]" />
 
           {/* Floating Centered Identity */}
           <motion.div
@@ -510,7 +502,7 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
             <button
               onClick={finishIntro}
               aria-label="Skip Arrival Animation"
-              className="group flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[rgba(230,240,245,0.15)] bg-[#07090b]/80 backdrop-blur-md font-mono text-[11px] uppercase tracking-wider text-[#b3c0c4] hover:text-[#b7ff3c] hover:border-[#b7ff3c] transition-all"
+              className="group flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[rgba(230,240,245,0.15)] bg-[#07080a]/80 backdrop-blur-md font-mono text-[11px] uppercase tracking-wider text-[#b3c0c4] hover:text-[#b7ff3c] hover:border-[#b7ff3c] transition-all"
             >
               <span>Skip Intro</span>
               <kbd className="px-1.5 py-0.5 rounded bg-[rgba(230,240,245,0.08)] text-[9px] text-[#73848b] group-hover:text-[#b7ff3c]">

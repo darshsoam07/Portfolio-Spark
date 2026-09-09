@@ -119,11 +119,9 @@ function PortfolioPage() {
   }, []);
 
   return (
-    <div className="relative bg-[#07090b] text-[#f1f6f7] min-h-screen font-sans selection:bg-[#b7ff3c] selection:text-[#07090b] grid-bg">
+    <div className="relative bg-[#07080a] text-[#f1f6f7] min-h-screen font-sans selection:bg-[#b7ff3c] selection:text-[#07080a] grid-bg">
       {/* 1. Intro Animation Layer (Controls viewport from frame 0 until finished) */}
-      {introActive && (
-        <ArrivalTunnel onFinish={handleIntroComplete} />
-      )}
+      {introActive && <ArrivalTunnel onFinish={handleIntroComplete} />}
 
       {/* 2. Existing Portfolio (Completely hidden until intro finishes, then smoothly revealed once) */}
       <div
@@ -143,14 +141,14 @@ function PortfolioPage() {
           <HeroSection />
 
           {/* Continuous Tech Stream Marquee */}
-          <div className="relative py-4 border-y border-[rgba(230,240,245,0.08)] bg-[#0e1317]/60 overflow-hidden">
+          <div className="relative py-4 border-y border-[rgba(230,240,245,0.08)] bg-[#0f1216]/60 overflow-hidden">
             <div className="marquee-continuous flex items-center gap-6">
               {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, idx) => {
                 const Icon = item.icon;
                 return (
                   <div
                     key={idx}
-                    className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[rgba(230,240,245,0.08)] bg-[#07090b] font-mono text-[11px] uppercase tracking-wider text-[#b3c0c4] shrink-0"
+                    className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[rgba(230,240,245,0.08)] bg-[#07080a] font-mono text-[11px] uppercase tracking-wider text-[#b3c0c4] shrink-0"
                   >
                     <Icon className="w-3.5 h-3.5 text-[#b7ff3c]" />
                     <span>{item.label}</span>

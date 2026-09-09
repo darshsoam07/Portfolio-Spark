@@ -66,7 +66,7 @@ export function CertificationsSection() {
               key={cert.id}
               variants={STAGGER_ITEM}
               onClick={() => setSelectedCredential(cert)}
-              className={`${offset.float} text-left p-6 rounded-xl border border-[rgba(230,240,245,0.1)] bg-[#0e1317]/80 backdrop-blur-md flex flex-col justify-between hover:border-[#b7ff3c]/40 transition-all duration-300 hover:shadow-[0_0_24px_-6px_rgba(183,255,60,0.12)] hover:-translate-y-1 group`}
+              className={`${offset.float} text-left p-6 rounded-xl border border-[rgba(230,240,245,0.1)] bg-[#0f1216]/80 backdrop-blur-md flex flex-col justify-between hover:border-[#b7ff3c]/40 transition-all duration-300 hover:shadow-[0_0_24px_-6px_rgba(183,255,60,0.12)] hover:-translate-y-1 group`}
               style={{
                 transform: `translate(${offset.x}px, ${offset.y}px)`,
               }}
@@ -77,9 +77,7 @@ export function CertificationsSection() {
                   <span className="px-2 py-0.5 rounded bg-[#b7ff3c]/10 text-[#b7ff3c] border border-[#b7ff3c]/20 font-mono text-[9px] font-semibold uppercase">
                     {cert.issuer}
                   </span>
-                  <span className="font-mono text-[10px] text-[#73848b]">
-                    {cert.year}
-                  </span>
+                  <span className="font-mono text-[10px] text-[#73848b]">{cert.year}</span>
                 </div>
 
                 <h3 className="font-display font-bold text-lg text-[#f1f6f7] group-hover:text-[#b7ff3c] transition-colors leading-snug">

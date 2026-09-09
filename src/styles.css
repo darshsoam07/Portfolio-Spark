@@ -7,12 +7,12 @@
   --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
 
   /* ── 8-Token Palette ── */
-  --color-deep: #050709;
-  --color-background: #07090b;
-  --color-surface: #0e1317;
-  --color-surface-hover: #151d23;
-  --color-surface-card: #0b0f13;
-  --color-graphite: #1a2028;
+  --color-deep: #040506;
+  --color-background: #07080a;
+  --color-surface: #0f1216;
+  --color-surface-hover: #171b21;
+  --color-surface-card: #0a0c0f;
+  --color-graphite: #1c2128;
 
   --color-border: rgba(230, 240, 245, 0.08);
   --color-border-strong: rgba(230, 240, 245, 0.18);
@@ -23,9 +23,32 @@
 
   /* Accent — signal, not decoration */
   --color-primary: #b7ff3c;
-  --color-primary-foreground: #07090b;
+  --color-primary-foreground: #07080a;
   --color-accent-cyan: #38bdf8;
   --color-error: #ff5a5f;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Design System Tokens (CSS Custom Properties)
+   ───────────────────────────────────────────────────────────────────────────── */
+:root {
+  /* Core surfaces */
+  --deep: #040506;
+  --background: #07080a;
+  --surface: #0f1216;
+  --surface-hover: #171b21;
+  --surface-card: #0a0c0f;
+  --graphite: #1c2128;
+
+  /* Accent signals */
+  --signal: #b7ff3c;
+  --telemetry: #38bdf8;
+
+  /* Glass effect */
+  --color-glass-border: rgba(230, 240, 245, 0.1);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(230, 240, 245, 0.06);
+  --shadow-signal: 0 0 24px -4px rgba(183, 255, 60, 0.35), 0 0 48px -12px rgba(183, 255, 60, 0.15);
+  --shadow-signal-sm: 0 0 16px -6px rgba(183, 255, 60, 0.3);
 }
 
 @layer base {
@@ -49,6 +72,13 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+  /* ── Global focus ring — lime signal for accessibility ── */
+  :focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -68,16 +98,9 @@ html.intro-pending #portfolio-root {
    Background Grid
    ───────────────────────────────────────────────────────────────────────────── */
 .grid-bg {
-  background-image: linear-gradient(
-      to right,
-      rgba(230, 240, 245, 0.04) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      rgba(230, 240, 245, 0.04) 1px,
-      transparent 1px
-    );
+  background-image:
+    linear-gradient(to right, rgba(230, 240, 245, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(230, 240, 245, 0.04) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -94,8 +117,12 @@ html.intro-pending #portfolio-root {
    Marquee
    ───────────────────────────────────────────────────────────────────────────── */
 @keyframes marqueeContinuous {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .marquee-continuous {
@@ -112,8 +139,12 @@ html.intro-pending #portfolio-root {
    Scanline (Hero Portrait)
    ───────────────────────────────────────────────────────────────────────────── */
 @keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(1000%); }
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(1000%);
+  }
 }
 
 .animate-scanline {
@@ -124,13 +155,22 @@ html.intro-pending #portfolio-root {
    Flow Signal — traveling dot on SVG paths
    ───────────────────────────────────────────────────────────────────────────── */
 @keyframes flowSignal {
-  0% { stroke-dashoffset: 200; }
-  100% { stroke-dashoffset: 0; }
+  0% {
+    stroke-dashoffset: 200;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes nodePulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(183, 255, 60, 0.4); }
-  50% { box-shadow: 0 0 12px 3px rgba(183, 255, 60, 0.15); }
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(183, 255, 60, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 12px 3px rgba(183, 255, 60, 0.15);
+  }
 }
 
 .animate-node-pulse {
@@ -141,21 +181,42 @@ html.intro-pending #portfolio-root {
    Credential Float — subtle idle drift
    ───────────────────────────────────────────────────────────────────────────── */
 @keyframes credentialFloat1 {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-3px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
 }
 @keyframes credentialFloat2 {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-2.5px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-2.5px);
+  }
 }
 @keyframes credentialFloat3 {
-  0%, 100% { transform: translateY(0px) translateX(0px); }
-  50% { transform: translateY(-2px) translateX(1px); }
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  50% {
+    transform: translateY(-2px) translateX(1px);
+  }
 }
 
-.credential-float-1 { animation: credentialFloat1 5s ease-in-out infinite; }
-.credential-float-2 { animation: credentialFloat2 6s ease-in-out infinite 0.5s; }
-.credential-float-3 { animation: credentialFloat3 7s ease-in-out infinite 1s; }
+.credential-float-1 {
+  animation: credentialFloat1 5s ease-in-out infinite;
+}
+.credential-float-2 {
+  animation: credentialFloat2 6s ease-in-out infinite 0.5s;
+}
+.credential-float-3 {
+  animation: credentialFloat3 7s ease-in-out infinite 1s;
+}
 
 /* ─────────────────────────────────────────────────────────────────────────────
    Scroll Progress Bar (navbar)
@@ -175,11 +236,7 @@ html.intro-pending #portfolio-root {
    Interactive Surfaces
    ───────────────────────────────────────────────────────────────────────────── */
 .tech-card {
-  background: linear-gradient(
-    135deg,
-    rgba(14, 19, 23, 0.8) 0%,
-    rgba(11, 15, 19, 0.95) 100%
-  );
+  background: linear-gradient(135deg, rgba(15, 18, 22, 0.8) 0%, rgba(10, 12, 15, 0.95) 100%);
   border: 1px solid rgba(230, 240, 245, 0.08);
   backdrop-filter: blur(12px);
   transition: all 0.25s cubic-bezier(0.22, 0.8, 0.2, 1);
@@ -187,16 +244,36 @@ html.intro-pending #portfolio-root {
 
 .tech-card:hover {
   border-color: rgba(183, 255, 60, 0.3);
-  box-shadow: 0 0 24px -6px rgba(183, 255, 60, 0.12);
+  box-shadow: var(--shadow-signal-sm);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Glass Surface — shared glass card primitive
+   ───────────────────────────────────────────────────────────────────────────── */
+.glass-surface {
+  background: linear-gradient(135deg, rgba(15, 18, 22, 0.85) 0%, rgba(10, 12, 15, 0.95) 100%);
+  border: 1px solid var(--color-glass-border);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--shadow-glass);
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
    Custom Scrollbar
    ───────────────────────────────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: #07090b; }
-::-webkit-scrollbar-thumb { background: #1c2730; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #b7ff3c; }
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #07080a;
+}
+::-webkit-scrollbar-thumb {
+  background: #1c2730;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--signal);
+}
 
 /* ─────────────────────────────────────────────────────────────────────────────
    Reduced Motion

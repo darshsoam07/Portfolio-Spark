@@ -286,7 +286,13 @@ export const SYSTEM_NODES: SystemNode[] = [
     categoryLabel: "Intelligent Systems",
     description:
       "Intelligent agents, retrieval-augmented generation (RAG), and LangChain orchestration integrated into cloud flows.",
-    tools: ["LangChain", "RAG Pipelines", "Agentic Workflows", "Vector Search", "OpenAI / Oracle AI"],
+    tools: [
+      "LangChain",
+      "RAG Pipelines",
+      "Agentic Workflows",
+      "Vector Search",
+      "OpenAI / Oracle AI",
+    ],
     connectsTo: ["github", "aws"],
     role: "Empowers applications with autonomous decision-making, natural language reasoning, and dynamic task automation.",
   },
@@ -318,13 +324,15 @@ export const PROJECTS: ProjectItem[] = [
         phase: "01 / Source & Trigger",
         action: "Developer pushes code commit to main",
         tech: "Git + GitHub",
-        details: "Branch protection rules enforce commit verification and trigger GitHub Actions webhook.",
+        details:
+          "Branch protection rules enforce commit verification and trigger GitHub Actions webhook.",
       },
       {
         phase: "02 / Automated CI Pipeline",
         action: "Build, security scan & test suite execution",
         tech: "GitHub Actions",
-        details: "Automated unit testing, dependency vulnerability audits, and static code analysis.",
+        details:
+          "Automated unit testing, dependency vulnerability audits, and static code analysis.",
       },
       {
         phase: "03 / Containerization",
@@ -336,13 +344,15 @@ export const PROJECTS: ProjectItem[] = [
         phase: "04 / Infrastructure as Code",
         action: "Terraform plan verification & apply",
         tech: "Terraform HCL",
-        details: "Declaratively provisions and verifies AWS VPC, public/private subnets, EC2 nodes, and strict IAM roles.",
+        details:
+          "Declaratively provisions and verifies AWS VPC, public/private subnets, EC2 nodes, and strict IAM roles.",
       },
       {
         phase: "05 / Orchestration & Rollout",
         action: "Kubernetes deployment rollout & service routing",
         tech: "Kubernetes",
-        details: "Applies manifests, manages rolling updates, readiness probes, and internal service networking.",
+        details:
+          "Applies manifests, manages rolling updates, readiness probes, and internal service networking.",
       },
       {
         phase: "06 / Observability",
@@ -392,37 +402,43 @@ export const PROJECTS: ProjectItem[] = [
         phase: "01 / User Interaction",
         action: "Client-side category filtering & entry input",
         tech: "Tailwind CSS + JS",
-        details: "Instant responsive UI feedback with category badges, date range filters, and modal dialogues.",
+        details:
+          "Instant responsive UI feedback with category badges, date range filters, and modal dialogues.",
       },
       {
         phase: "02 / REST API Request",
         action: "Structured JSON payload dispatch",
         tech: "Fetch API + REST",
-        details: "Clean asynchronous endpoints for authentication, expense creation, updates, and deletion.",
+        details:
+          "Clean asynchronous endpoints for authentication, expense creation, updates, and deletion.",
       },
       {
         phase: "03 / Backend Controller",
         action: "Data validation, sanitization & business logic",
         tech: "Python / Flask",
-        details: "Validates transaction types, checks authentication sessions, and computes categorical budgets.",
+        details:
+          "Validates transaction types, checks authentication sessions, and computes categorical budgets.",
       },
       {
         phase: "04 / Persistent Storage",
         action: "ACID-compliant SQLite relational persistence",
         tech: "SQLite 3",
-        details: "Structured relational tables storing indexed user accounts, categories, timestamps, and amounts.",
+        details:
+          "Structured relational tables storing indexed user accounts, categories, timestamps, and amounts.",
       },
       {
         phase: "05 / Analytics Computation",
         action: "Statistical aggregation & trend computation",
         tech: "Python Analytics",
-        details: "Calculates total expenditure, monthly breakdown, category distribution, and highest-spend vectors.",
+        details:
+          "Calculates total expenditure, monthly breakdown, category distribution, and highest-spend vectors.",
       },
       {
         phase: "06 / Portable Export",
         action: "On-demand CSV transaction generation",
         tech: "CSV Stream Engine",
-        details: "Enables users to export their complete financial ledger for external analysis and backup.",
+        details:
+          "Enables users to export their complete financial ledger for external analysis and backup.",
       },
     ],
     techStack: [
@@ -450,10 +466,26 @@ export const SKILL_CATEGORIES = [
     eyebrow: "Layer 01 // Foundation",
     description: "Cloud architecture, Infrastructure as Code, and resilient compute systems.",
     skills: [
-      { name: "AWS (Amazon Web Services)", badge: "Core", details: "EC2, S3, VPC, IAM, RDS, ELB, CloudWatch, Route 53" },
-      { name: "Terraform", badge: "IaC", details: "Declarative infrastructure, state management, provider modules" },
-      { name: "Linux Administration", badge: "OS", details: "Ubuntu/Debian, shell scripting, permissions, systemd, networking" },
-      { name: "Cloud Architecture", badge: "Design", details: "VPC subnets, security groups, routing tables, high availability" },
+      {
+        name: "AWS (Amazon Web Services)",
+        badge: "Core",
+        details: "EC2, S3, VPC, IAM, RDS, ELB, CloudWatch, Route 53",
+      },
+      {
+        name: "Terraform",
+        badge: "IaC",
+        details: "Declarative infrastructure, state management, provider modules",
+      },
+      {
+        name: "Linux Administration",
+        badge: "OS",
+        details: "Ubuntu/Debian, shell scripting, permissions, systemd, networking",
+      },
+      {
+        name: "Cloud Architecture",
+        badge: "Design",
+        details: "VPC subnets, security groups, routing tables, high availability",
+      },
     ],
   },
   {
@@ -462,10 +494,26 @@ export const SKILL_CATEGORIES = [
     eyebrow: "Layer 02 // Delivery",
     description: "Packaging, orchestration, automated testing, and continuous deployment.",
     skills: [
-      { name: "Docker", badge: "Containers", details: "Multi-stage builds, layer caching, Docker Compose, container security" },
-      { name: "Kubernetes", badge: "Orchestration", details: "Pod scheduling, Services, Deployments, ConfigMaps, Ingress" },
-      { name: "GitHub Actions", badge: "CI/CD", details: "Automated pipelines, workflow dispatch, secret injection, artifact publishing" },
-      { name: "Git & GitHub", badge: "VCS", details: "Branching strategies, code review workflows, release tagging" },
+      {
+        name: "Docker",
+        badge: "Containers",
+        details: "Multi-stage builds, layer caching, Docker Compose, container security",
+      },
+      {
+        name: "Kubernetes",
+        badge: "Orchestration",
+        details: "Pod scheduling, Services, Deployments, ConfigMaps, Ingress",
+      },
+      {
+        name: "GitHub Actions",
+        badge: "CI/CD",
+        details: "Automated pipelines, workflow dispatch, secret injection, artifact publishing",
+      },
+      {
+        name: "Git & GitHub",
+        badge: "VCS",
+        details: "Branching strategies, code review workflows, release tagging",
+      },
     ],
   },
   {
@@ -474,11 +522,31 @@ export const SKILL_CATEGORIES = [
     eyebrow: "Layer 03 // Intelligence",
     description: "Next-generation autonomous agents, retrieval systems, and LLM applications.",
     skills: [
-      { name: "Agentic AI", badge: "Agents", details: "Autonomous agent workflows, function calling, tool execution loops" },
-      { name: "LLM Applications", badge: "GenAI", details: "Prompt engineering, structured outputs, API integration" },
-      { name: "RAG & Vector Search", badge: "Retrieval", details: "Retrieval-Augmented Generation, chunking, contextual embeddings" },
-      { name: "LangChain", badge: "Framework", details: "Chains, memory, tool orchestration, document loaders" },
-      { name: "ML Fundamentals", badge: "Theory", details: "Supervised/unsupervised learning fundamentals, feature representations" },
+      {
+        name: "Agentic AI",
+        badge: "Agents",
+        details: "Autonomous agent workflows, function calling, tool execution loops",
+      },
+      {
+        name: "LLM Applications",
+        badge: "GenAI",
+        details: "Prompt engineering, structured outputs, API integration",
+      },
+      {
+        name: "RAG & Vector Search",
+        badge: "Retrieval",
+        details: "Retrieval-Augmented Generation, chunking, contextual embeddings",
+      },
+      {
+        name: "LangChain",
+        badge: "Framework",
+        details: "Chains, memory, tool orchestration, document loaders",
+      },
+      {
+        name: "ML Fundamentals",
+        badge: "Theory",
+        details: "Supervised/unsupervised learning fundamentals, feature representations",
+      },
     ],
   },
   {
@@ -487,12 +555,36 @@ export const SKILL_CATEGORIES = [
     eyebrow: "Layer 04 // Application",
     description: "Backend development, scripting, data structures, and database systems.",
     skills: [
-      { name: "Python", badge: "Language", details: "Backend development, scripting, automation, data handling" },
-      { name: "Java", badge: "Language", details: "Object-oriented programming, Data Structures & Algorithms" },
-      { name: "Flask & REST APIs", badge: "Backend", details: "Microservice endpoints, routing, request validation, middleware" },
-      { name: "Bash Scripting", badge: "Automation", details: "System automation, cron tasks, deployment scripts" },
-      { name: "SQLite & Oracle Database", badge: "Databases", details: "Relational schema design, SQL querying, transactional integrity" },
-      { name: "Tailwind CSS & JavaScript", badge: "Frontend", details: "Modern interactive UI, semantic HTML, responsive layouts" },
+      {
+        name: "Python",
+        badge: "Language",
+        details: "Backend development, scripting, automation, data handling",
+      },
+      {
+        name: "Java",
+        badge: "Language",
+        details: "Object-oriented programming, Data Structures & Algorithms",
+      },
+      {
+        name: "Flask & REST APIs",
+        badge: "Backend",
+        details: "Microservice endpoints, routing, request validation, middleware",
+      },
+      {
+        name: "Bash Scripting",
+        badge: "Automation",
+        details: "System automation, cron tasks, deployment scripts",
+      },
+      {
+        name: "SQLite & Oracle Database",
+        badge: "Databases",
+        details: "Relational schema design, SQL querying, transactional integrity",
+      },
+      {
+        name: "Tailwind CSS & JavaScript",
+        badge: "Frontend",
+        details: "Modern interactive UI, semantic HTML, responsive layouts",
+      },
     ],
   },
   {
@@ -501,9 +593,21 @@ export const SKILL_CATEGORIES = [
     eyebrow: "Layer 05 // Protection",
     description: "Infrastructure hardening, container vulnerability scanning, and secure CI/CD.",
     skills: [
-      { name: "DevSecOps", badge: "Security", details: "Automated security checks in CI/CD, least-privilege access" },
-      { name: "Infrastructure Security", badge: "Cloud", details: "IAM role boundaries, VPC security groups, encryption in transit/at rest" },
-      { name: "Container Security", badge: "Workloads", details: "Non-root container execution, minimal base images, vulnerability audits" },
+      {
+        name: "DevSecOps",
+        badge: "Security",
+        details: "Automated security checks in CI/CD, least-privilege access",
+      },
+      {
+        name: "Infrastructure Security",
+        badge: "Cloud",
+        details: "IAM role boundaries, VPC security groups, encryption in transit/at rest",
+      },
+      {
+        name: "Container Security",
+        badge: "Workloads",
+        details: "Non-root container execution, minimal base images, vulnerability audits",
+      },
     ],
   },
 ];

@@ -147,7 +147,7 @@ export function CommandPaletteModal({ isOpen, onClose }: CommandPaletteModalProp
     (opt) =>
       opt.title.toLowerCase().includes(query.toLowerCase()) ||
       opt.subtitle?.toLowerCase().includes(query.toLowerCase()) ||
-      opt.category.toLowerCase().includes(query.toLowerCase())
+      opt.category.toLowerCase().includes(query.toLowerCase()),
   );
 
   useEffect(() => {
@@ -173,11 +173,11 @@ export function CommandPaletteModal({ isOpen, onClose }: CommandPaletteModalProp
       onClick={onClose}
     >
       <div
-        className="w-full max-w-xl rounded-2xl border border-[rgba(230,240,245,0.15)] bg-[#0e1317] shadow-2xl overflow-hidden"
+        className="w-full max-w-xl rounded-2xl border border-[rgba(230,240,245,0.15)] bg-[#0f1216] shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Header */}
-        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[rgba(230,240,245,0.08)] bg-[#07090b]">
+        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-[rgba(230,240,245,0.08)] bg-[#07080a]">
           <Search className="w-4 h-4 text-[#73848b]" />
           <input
             type="text"
@@ -208,7 +208,7 @@ export function CommandPaletteModal({ isOpen, onClose }: CommandPaletteModalProp
                   className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-white/5 transition-colors text-left group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded bg-[#07090b] border border-[rgba(230,240,245,0.08)] text-[#b7ff3c] group-hover:border-[#b7ff3c]">
+                    <div className="p-2 rounded bg-[#07080a] border border-[rgba(230,240,245,0.08)] text-[#b7ff3c] group-hover:border-[#b7ff3c]">
                       <Icon className="w-4 h-4" />
                     </div>
                     <div>
@@ -216,9 +216,7 @@ export function CommandPaletteModal({ isOpen, onClose }: CommandPaletteModalProp
                         {item.title}
                       </div>
                       {item.subtitle && (
-                        <div className="font-mono text-[11px] text-[#73848b]">
-                          {item.subtitle}
-                        </div>
+                        <div className="font-mono text-[11px] text-[#73848b]">{item.subtitle}</div>
                       )}
                     </div>
                   </div>
@@ -230,7 +228,7 @@ export function CommandPaletteModal({ isOpen, onClose }: CommandPaletteModalProp
         </div>
 
         {/* Footer info */}
-        <div className="flex items-center justify-between px-4 py-2.5 bg-[#07090b] border-t border-[rgba(230,240,245,0.06)] font-mono text-[10px] text-[#73848b]">
+        <div className="flex items-center justify-between px-4 py-2.5 bg-[#07080a] border-t border-[rgba(230,240,245,0.06)] font-mono text-[10px] text-[#73848b]">
           <span>Navigation & Actions</span>
           <span>Darsh Soam Portfolio CLI</span>
         </div>
