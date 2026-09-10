@@ -94,6 +94,21 @@ html.intro-pending #portfolio-root {
   pointer-events: none !important;
 }
 
+/* The intro overlay is server-rendered, so on a repeat visit it would paint
+   before hydration can unmount it — a frozen "TRANSIT SIGNAL // INITIALIZING"
+   screen whose duration scales with how long the JS takes to boot. Suppressing
+   it pre-paint with the same single class the head script sets removes that
+   window entirely, and is also what lets the head script's fail-safe timeout
+   clear a stuck overlay. */
+html:not(.intro-pending) #arrival-tunnel {
+  display: none !important;
+}
+
+html.intro-failsafe #portfolio-root {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 /* ─────────────────────────────────────────────────────────────────────────────
    Background Grid
    ───────────────────────────────────────────────────────────────────────────── */

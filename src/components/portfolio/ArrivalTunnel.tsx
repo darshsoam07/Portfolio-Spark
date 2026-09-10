@@ -2,9 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { motion, AnimatePresence } from "motion/react";
 import { MOTION } from "@/lib/motion";
+import { markIntroPlayed } from "@/lib/intro-gate";
 import darshPortrait from "@/assets/darsh.jpeg";
-
-const SESSION_KEY = "portfolioIntroPlayed";
 
 const LOCAL_ASSET_IMAGES = [
   darshPortrait,
@@ -36,18 +35,6 @@ const CAMERA_CHASE = 0.12;
 const FADE_IN = 0.8;
 const FOG_FAR = NUM_SEGMENTS * SEGMENT_DEPTH * 0.95;
 
-function isWebGLAvailable(): boolean {
-  try {
-    const canvas = document.createElement("canvas");
-    return !!(
-      window.WebGLRenderingContext &&
-      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
-    );
-  } catch {
-    return false;
-  }
-}
-
 export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
   const [isActive, setIsActive] = useState<boolean>(true);
   const [isExiting, setIsExiting] = useState<boolean>(false);
@@ -58,11 +45,7 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
   const finishIntro = () => {
     if (hasFinishedRef.current) return;
     hasFinishedRef.current = true;
-    try {
-      sessionStorage.setItem(SESSION_KEY, "true");
-    } catch {
-      // Ignore private browsing storage restrictions
-    }
+    markIntroPlayed();
     setIsExiting(true);
     setTimeout(() => {
       setIsActive(false);
@@ -72,43 +55,13 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
   };
 
   useEffect(() => {
-    // 1. Check session storage
-    try {
-      if (sessionStorage.getItem(SESSION_KEY)) {
-        setIsActive(false);
-        onFinish?.();
-        return;
-      }
-    } catch {
-      // In case of sandbox error
-    }
+    if (!isActive) return;
 
-    // 2. Check prefers-reduced-motion
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      try {
-        sessionStorage.setItem(SESSION_KEY, "true");
-      } catch {
-        /* ignore */
-      }
-      setIsActive(false);
-      onFinish?.();
-      return;
-    }
-
-    // 3. Check WebGL support
-    if (!isWebGLAvailable()) {
-      try {
-        sessionStorage.setItem(SESSION_KEY, "true");
-      } catch {
-        /* ignore */
-      }
-      setIsActive(false);
-      onFinish?.();
-      return;
-    }
+    // Eligibility (session flag, prefers-reduced-motion, WebGL support) is
+    // decided exactly once by the shared gate in @/lib/intro-gate, and this
+    // component is only mounted when the intro should actually play.
+    // Re-probing it here created a second, never-released WebGL context and
+    // could return a different answer than the parent, so it is gone.
 
     // Lock scrolling
     const origOverflow = document.body.style.overflow;
@@ -129,6 +82,8 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
 
     // Hard fail-safe safety timer
     const safetyTimer = setTimeout(() => {
+      hasFinishedRef.current = true;
+      markIntroPlayed();
       setIsActive(false);
       document.body.style.overflow = origOverflow;
       onFinish?.();
@@ -438,6 +393,8 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
       };
     } catch {
       // If WebGL runtime fails, bypass immediately
+      hasFinishedRef.current = true;
+      markIntroPlayed();
       setIsActive(false);
       onFinish?.();
     }
@@ -450,6 +407,7 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
       {!isExiting ? (
         <motion.div
           key="arrival-tunnel"
+          id="arrival-tunnel"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.7, ease: [0.65, 0, 0.35, 1] }}

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { ArrivalTunnel } from "@/components/portfolio/ArrivalTunnel";
 import { Navbar } from "@/components/portfolio/Navbar";
 import { HeroSection } from "@/components/portfolio/HeroSection";
@@ -12,6 +12,7 @@ import { InteractiveTerminal } from "@/components/portfolio/InteractiveTerminal"
 import { ContactSection } from "@/components/portfolio/ContactSection";
 import { SiteFooter } from "@/components/portfolio/SiteFooter";
 import { CommandPaletteModal } from "@/components/portfolio/CommandPaletteModal";
+import { clearIntroPending, markIntroPlayed, shouldPlayIntro } from "@/lib/intro-gate";
 import {
   Boxes,
   Cloud,
@@ -42,55 +43,42 @@ const MARQUEE_ITEMS = [
   { label: "SQLite & Oracle DB", icon: Database },
 ];
 
-function isIntroRequired(): boolean {
-  if (typeof window === "undefined") return false;
-  try {
-    if (sessionStorage.getItem("portfolioIntroPlayed")) return false;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
-    const canvas = document.createElement("canvas");
-    return !!(
-      window.WebGLRenderingContext &&
-      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
-    );
-  } catch {
-    return false;
-  }
-}
+// Layout effects are flushed in the commit phase, before the browser paints,
+// so resolving the intro decision there cannot produce a visible flash. On
+// the server we fall back to useEffect purely to avoid React's "useLayoutEffect
+// does nothing on the server" warning — the decision is never made during SSR.
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 function PortfolioPage() {
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
 
-  // Deterministic state:
-  // On fresh sessions: intro is active, portfolio is hidden.
-  // On repeat sessions: intro is skipped, portfolio is immediately visible.
-  const [introActive, setIntroActive] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return isIntroRequired();
-    }
-    return true; // SSR renders with intro active (portfolio protected)
-  });
+  // The first render is IDENTICAL on the server and on the client (always
+  // `true`), so hydration can never mismatch. The real decision is applied
+  // below in a layout effect, before paint. `introActive` only ever goes
+  // true -> false, so the intro cannot replay on a re-render or a client-side
+  // navigation back to this route.
+  const [introActive, setIntroActive] = useState<boolean>(true);
 
-  const [portfolioRevealed, setPortfolioRevealed] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return !isIntroRequired();
-    }
-    return false; // SSR renders portfolio hidden
-  });
+  // Derived, not a second piece of independent state. The intro layer and the
+  // portfolio layer can no longer disagree about whether the intro is running.
+  const portfolioRevealed = !introActive;
 
-  const handleIntroComplete = () => {
-    try {
-      sessionStorage.setItem("portfolioIntroPlayed", "true");
-      document.documentElement.classList.remove("intro-pending");
-    } catch {
-      // Ignore private browsing restrictions
-    }
-    setPortfolioRevealed(true);
+  const handleIntroComplete = useCallback(() => {
+    markIntroPlayed();
+    clearIntroPending();
     setIntroActive(false);
     window.scrollTo(0, 0);
-  };
+  }, []);
+
+  useIsomorphicLayoutEffect(() => {
+    // One evaluation of the one source of truth, after hydration, before paint.
+    if (!shouldPlayIntro()) {
+      clearIntroPending();
+      setIntroActive(false);
+    }
+  }, []);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
@@ -98,13 +86,6 @@ function PortfolioPage() {
       window.history.replaceState(null, "", window.location.pathname + window.location.search);
     }
     window.scrollTo(0, 0);
-
-    // If client session already played intro, ensure class cleanup and immediate display
-    if (!isIntroRequired()) {
-      document.documentElement.classList.remove("intro-pending");
-      setPortfolioRevealed(true);
-      setIntroActive(false);
-    }
   }, []);
 
   useEffect(() => {

@@ -122,14 +122,39 @@ function RootShell({ children }: { children: ReactNode }) {
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              try {
-                if (!sessionStorage.getItem('portfolioIntroPlayed') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                  document.documentElement.classList.add('intro-pending');
-                }
-              } catch (e) {}
+              (function () {
+                var root = document.documentElement;
+                var shouldPlay = false;
+                try {
+                  shouldPlay =
+                    !sessionStorage.getItem('portfolioIntroPlayed') &&
+                    !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                } catch (e) {}
+                if (!shouldPlay) return;
+                root.classList.add('intro-pending');
+                // Fail-safe. The gate is CSS-based and normally removed by
+                // React once the intro finishes, so if the client bundle never
+                // boots (stale CDN chunk, blocked asset, runtime error) nothing
+                // would ever remove it and the visitor would be stranded on a
+                // black page with scroll locked. Never let that happen.
+                setTimeout(function () {
+                  root.classList.remove('intro-pending');
+                  root.classList.add('intro-failsafe');
+                }, 6000);
+              })();
             `,
           }}
         />
+        <noscript>
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+                #arrival-tunnel { display: none !important; }
+                #portfolio-root { opacity: 1 !important; visibility: visible !important; }
+              `,
+            }}
+          />
+        </noscript>
       </head>
       <body className="bg-[#07080a] text-[#f1f6f7] antialiased overflow-x-hidden selection:bg-[#b7ff3c] selection:text-[#07080a]">
         {children}
