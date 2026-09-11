@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { ArrivalTunnel } from "@/components/portfolio/ArrivalTunnel";
+import { cancelIntroFailsafe, clearIntroPending, shouldPlayIntro } from "@/lib/intro-gate";
 import { Navbar } from "@/components/portfolio/Navbar";
 import { HeroSection } from "@/components/portfolio/HeroSection";
 import { SystemsTopology } from "@/components/portfolio/SystemsTopology";
@@ -42,52 +43,37 @@ const MARQUEE_ITEMS = [
   { label: "SQLite & Oracle DB", icon: Database },
 ];
 
-function isIntroRequired(): boolean {
-  if (typeof window === "undefined") return false;
-  try {
-    if (sessionStorage.getItem("portfolioIntroPlayed")) return false;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
-    const canvas = document.createElement("canvas");
-    return !!(
-      window.WebGLRenderingContext &&
-      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
-    );
-  } catch {
-    return false;
-  }
-}
+// useLayoutEffect logs a warning when run during SSR, so fall back to useEffect
+// on the server. On the client we need the layout-effect timing: the skip
+// decision has to be applied before the browser paints.
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 function PortfolioPage() {
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
 
-  // Deterministic state:
-  // On fresh sessions: intro is active, portfolio is hidden.
-  // On repeat sessions: intro is skipped, portfolio is immediately visible.
-  const [introActive, setIntroActive] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return isIntroRequired();
-    }
-    return true; // SSR renders with intro active (portfolio protected)
-  });
+  // The server and the client both start with the intro active, unconditionally.
+  // That makes the first render byte-identical in both environments, so there is
+  // no hydration mismatch and nothing for React to discard and re-render.
+  const [introActive, setIntroActive] = useState<boolean>(true);
 
-  const [portfolioRevealed, setPortfolioRevealed] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return !isIntroRequired();
-    }
-    return false; // SSR renders portfolio hidden
-  });
-
-  const handleIntroComplete = () => {
-    try {
-      sessionStorage.setItem("portfolioIntroPlayed", "true");
-      document.documentElement.classList.remove("intro-pending");
-    } catch {
-      // Ignore private browsing restrictions
-    }
-    setPortfolioRevealed(true);
+  const handleIntroComplete = useCallback(() => {
+    clearIntroPending();
+    cancelIntroFailsafe();
     setIntroActive(false);
     window.scrollTo(0, 0);
-  };
+  }, []);
+
+  // Runs on hydration, before the browser paints. Reaching this proves the
+  // bundle booted, so the application now owns revealing the portfolio and the
+  // boot fail-safe must be cancelled — otherwise it could fire mid-intro on a
+  // slow connection and cut the animation short.
+  useIsomorphicLayoutEffect(() => {
+    cancelIntroFailsafe();
+    if (!shouldPlayIntro()) {
+      clearIntroPending();
+      setIntroActive(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -98,13 +84,6 @@ function PortfolioPage() {
       window.history.replaceState(null, "", window.location.pathname + window.location.search);
     }
     window.scrollTo(0, 0);
-
-    // If client session already played intro, ensure class cleanup and immediate display
-    if (!isIntroRequired()) {
-      document.documentElement.classList.remove("intro-pending");
-      setPortfolioRevealed(true);
-      setIntroActive(false);
-    }
   }, []);
 
   useEffect(() => {
@@ -126,11 +105,7 @@ function PortfolioPage() {
       {/* 2. Existing Portfolio (Completely hidden until intro finishes, then smoothly revealed once) */}
       <div
         id="portfolio-root"
-        style={{
-          opacity: portfolioRevealed ? 1 : 0,
-          visibility: portfolioRevealed ? "visible" : "hidden",
-          transition: "opacity 0.6s cubic-bezier(0.22, 0.8, 0.2, 1)",
-        }}
+        style={{ transition: "opacity 0.6s cubic-bezier(0.22, 0.8, 0.2, 1)" }}
       >
         {/* Top Navbar */}
         <Navbar onOpenCommandPalette={() => setCommandPaletteOpen(true)} />
