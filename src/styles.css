@@ -1,3 +1,4 @@
+/*! Cache-bust: rotate CSS chunk hash to invalidate poisoned 404 cache entry */
 @import "tailwindcss";
 
 @theme {

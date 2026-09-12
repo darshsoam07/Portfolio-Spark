@@ -38,10 +38,56 @@ function NotFoundComponent() {
   );
 }
 
+const CHUNK_RELOAD_STORAGE_KEY = "chunk_load_reload_attempted";
+
+function isChunkLoadError(error: unknown): boolean {
+  if (!error) return false;
+  const extractMessages = (err: unknown): string[] => {
+    const msgs: string[] = [];
+    if (typeof err === "string") {
+      msgs.push(err);
+    } else if (err && typeof err === "object") {
+      if ("message" in err && typeof (err as { message: unknown }).message === "string") {
+        msgs.push((err as { message: string }).message);
+      }
+      if ("cause" in err && err.cause) {
+        msgs.push(...extractMessages(err.cause));
+      }
+    }
+    return msgs;
+  };
+
+  const messages = extractMessages(error);
+  if (messages.length === 0) {
+    messages.push(String(error));
+  }
+
+  return messages.some((msg) => {
+    const lower = msg.toLowerCase();
+    return (
+      lower.includes("failed to fetch dynamically imported module") ||
+      lower.includes("error loading dynamically imported module") ||
+      lower.includes("importing a module script failed")
+    );
+  });
+}
+
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
+    if (typeof window !== "undefined" && isChunkLoadError(error)) {
+      try {
+        const hasAttempted = sessionStorage.getItem(CHUNK_RELOAD_STORAGE_KEY);
+        if (!hasAttempted) {
+          sessionStorage.setItem(CHUNK_RELOAD_STORAGE_KEY, "true");
+          window.location.reload();
+          return;
+        }
+      } catch {
+        // Fall through safely if sessionStorage is inaccessible (e.g. storage disabled)
+      }
+    }
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
