@@ -1,0 +1,400 @@
+From 269cf11e55e6764cbe831e58d6608c4f4724c77a Mon Sep 17 00:00:00 2001
+From: Agent <agent@local>
+Date: Fri, 11 Sep 2026 19:21:07 +0000
+Subject: [PATCH] fix(intro): play arrival intro on every page load,
+ deterministically
+
+Removes the sessionStorage gate entirely so the intro is not suppressed after
+the first view in a tab, and collapses four leaky WebGL probes into one
+memoised probe that releases its context.
+---
+ src/components/portfolio/ArrivalTunnel.tsx | 63 ++-------------
+ src/lib/intro-gate.ts                      | 92 ++++++++++++++++++++++
+ src/routes/__root.tsx                      | 19 +++--
+ src/routes/index.tsx                       | 79 +++++++------------
+ src/styles.css                             |  7 ++
+ 5 files changed, 147 insertions(+), 113 deletions(-)
+ create mode 100644 src/lib/intro-gate.ts
+
+diff --git a/src/components/portfolio/ArrivalTunnel.tsx b/src/components/portfolio/ArrivalTunnel.tsx
+index f5ad8fb..32f3077 100644
+--- a/src/components/portfolio/ArrivalTunnel.tsx
++++ b/src/components/portfolio/ArrivalTunnel.tsx
+@@ -4,8 +4,6 @@ import { motion, AnimatePresence } from "motion/react";
+ import { MOTION } from "@/lib/motion";
+ import darshPortrait from "@/assets/darsh.jpeg";
+ 
+-const SESSION_KEY = "portfolioIntroPlayed";
+-
+ const LOCAL_ASSET_IMAGES = [
+   darshPortrait,
+   "/certificates/openai-agents-workflows.jpg",
+@@ -36,18 +34,6 @@ const CAMERA_CHASE = 0.12;
+ const FADE_IN = 0.8;
+ const FOG_FAR = NUM_SEGMENTS * SEGMENT_DEPTH * 0.95;
+ 
+-function isWebGLAvailable(): boolean {
+-  try {
+-    const canvas = document.createElement("canvas");
+-    return !!(
+-      window.WebGLRenderingContext &&
+-      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
+-    );
+-  } catch {
+-    return false;
+-  }
+-}
+-
+ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
+   const [isActive, setIsActive] = useState<boolean>(true);
+   const [isExiting, setIsExiting] = useState<boolean>(false);
+@@ -58,11 +44,6 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
+   const finishIntro = () => {
+     if (hasFinishedRef.current) return;
+     hasFinishedRef.current = true;
+-    try {
+-      sessionStorage.setItem(SESSION_KEY, "true");
+-    } catch {
+-      // Ignore private browsing storage restrictions
+-    }
+     setIsExiting(true);
+     setTimeout(() => {
+       setIsActive(false);
+@@ -72,43 +53,10 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
+   };
+ 
+   useEffect(() => {
+-    // 1. Check session storage
+-    try {
+-      if (sessionStorage.getItem(SESSION_KEY)) {
+-        setIsActive(false);
+-        onFinish?.();
+-        return;
+-      }
+-    } catch {
+-      // In case of sandbox error
+-    }
+-
+-    // 2. Check prefers-reduced-motion
+-    if (
+-      typeof window !== "undefined" &&
+-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+-    ) {
+-      try {
+-        sessionStorage.setItem(SESSION_KEY, "true");
+-      } catch {
+-        /* ignore */
+-      }
+-      setIsActive(false);
+-      onFinish?.();
+-      return;
+-    }
+-
+-    // 3. Check WebGL support
+-    if (!isWebGLAvailable()) {
+-      try {
+-        sessionStorage.setItem(SESSION_KEY, "true");
+-      } catch {
+-        /* ignore */
+-      }
+-      setIsActive(false);
+-      onFinish?.();
+-      return;
+-    }
++    // Eligibility (prefers-reduced-motion and WebGL support) is decided exactly
++    // once by shouldPlayIntro() in the route, before this component is mounted.
++    // There is deliberately no probing here: duplicating the checks is what made
++    // the old behaviour non-deterministic. See src/lib/intro-gate.ts.
+ 
+     // Lock scrolling
+     const origOverflow = document.body.style.overflow;
+@@ -129,6 +77,7 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
+ 
+     // Hard fail-safe safety timer
+     const safetyTimer = setTimeout(() => {
++      hasFinishedRef.current = true;
+       setIsActive(false);
+       document.body.style.overflow = origOverflow;
+       onFinish?.();
+@@ -438,6 +387,7 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
+       };
+     } catch {
+       // If WebGL runtime fails, bypass immediately
++      hasFinishedRef.current = true;
+       setIsActive(false);
+       onFinish?.();
+     }
+@@ -450,6 +400,7 @@ export function ArrivalTunnel({ onFinish }: { onFinish?: () => void }) {
+       {!isExiting ? (
+         <motion.div
+           key="arrival-tunnel"
++          id="arrival-tunnel"
+           initial={{ opacity: 1 }}
+           exit={{ opacity: 0 }}
+           transition={{ duration: 0.7, ease: [0.65, 0, 0.35, 1] }}
+diff --git a/src/lib/intro-gate.ts b/src/lib/intro-gate.ts
+new file mode 100644
+index 0000000..00b0b43
+--- /dev/null
++++ b/src/lib/intro-gate.ts
+@@ -0,0 +1,92 @@
++/**
++ * Single source of truth for whether the arrival intro should play.
++ *
++ * Policy: the intro plays on EVERY page load. There is deliberately no
++ * sessionStorage or localStorage flag. Persisting an "already played" flag was
++ * the reason the intro appeared once per tab and then never again on refresh,
++ * because sessionStorage survives reloads (including hard refresh) and only
++ * clears when the tab itself is closed.
++ *
++ * Two conditions still suppress it:
++ *   1. prefers-reduced-motion: reduce  (accessibility)
++ *   2. no working WebGL context        (the tunnel is rendered with three.js)
++ *
++ * The decision is computed at most once per page load and then memoised. This
++ * matters: the previous implementation probed WebGL up to four times per load
++ * and never released the contexts it created. Browsers cap the number of live
++ * WebGL contexts and that cap varies by GPU and driver, so a later probe could
++ * return false after an earlier one returned true. That is what produced the
++ * "sometimes it plays, sometimes it doesn't" behaviour, and why it was worse on
++ * other machines than on the development machine.
++ */
++
++declare global {
++  interface Window {
++    __introFailsafeTimer?: ReturnType<typeof setTimeout>;
++  }
++}
++
++const INTRO_PENDING_CLASS = "intro-pending";
++
++let cachedDecision: boolean | null = null;
++
++/**
++ * Probes for a usable WebGL context and immediately releases it again, so that
++ * calling this can never contribute to exhausting the browser's context limit.
++ */
++function hasWorkingWebGL(): boolean {
++  try {
++    if (!window.WebGLRenderingContext) return false;
++    const canvas = document.createElement("canvas");
++    const gl =
++      (canvas.getContext("webgl") as WebGLRenderingContext | null) ??
++      (canvas.getContext("experimental-webgl") as WebGLRenderingContext | null);
++    if (!gl) return false;
++    gl.getExtension("WEBGL_lose_context")?.loseContext();
++    return true;
++  } catch {
++    return false;
++  }
++}
++
++/** Returns the same answer for the entire lifetime of the page load. */
++export function shouldPlayIntro(): boolean {
++  if (typeof window === "undefined") return false;
++  if (cachedDecision !== null) return cachedDecision;
++
++  let decision = false;
++  try {
++    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
++      decision = hasWorkingWebGL();
++    }
++  } catch {
++    decision = false;
++  }
++
++  cachedDecision = decision;
++  return decision;
++}
++
++/**
++ * Drops the CSS gate. Removing this class is all that is required to reveal the
++ * portfolio and hide the overlay, which is why no JavaScript-applied inline
++ * style is used for either any more.
++ */
++export function clearIntroPending(): void {
++  if (typeof document === "undefined") return;
++  document.documentElement.classList.remove(INTRO_PENDING_CLASS);
++}
++
++/**
++ * Cancels the boot fail-safe armed by the inline script in __root.tsx. Called
++ * as soon as React hydrates, because from that moment the application itself
++ * guarantees the portfolio gets revealed, so the fail-safe must not fire and
++ * cut a legitimately slow intro short.
++ */
++export function cancelIntroFailsafe(): void {
++  if (typeof window === "undefined") return;
++  if (window.__introFailsafeTimer !== undefined) {
++    clearTimeout(window.__introFailsafeTimer);
++    window.__introFailsafeTimer = undefined;
++  }
++}
+diff --git a/src/routes/__root.tsx b/src/routes/__root.tsx
+index 4c0d860..ca6b62f 100644
+--- a/src/routes/__root.tsx
++++ b/src/routes/__root.tsx
+@@ -122,11 +122,20 @@ function RootShell({ children }: { children: ReactNode }) {
+         <script
+           dangerouslySetInnerHTML={{
+             __html: `
+-              try {
+-                if (!sessionStorage.getItem('portfolioIntroPlayed') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+-                  document.documentElement.classList.add('intro-pending');
+-                }
+-              } catch (e) {}
++              (function () {
++                try {
++                  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
++                  var root = document.documentElement;
++                  root.classList.add('intro-pending');
++                  // Boot fail-safe. This class hides the portfolio, so if the
++                  // application bundle never runs, nothing would ever remove it
++                  // and the page would stay blank forever. React cancels this
++                  // timer the moment it hydrates.
++                  window.__introFailsafeTimer = setTimeout(function () {
++                    root.classList.remove('intro-pending');
++                  }, 6000);
++                } catch (e) {}
++              })();
+             `,
+           }}
+         />
+diff --git a/src/routes/index.tsx b/src/routes/index.tsx
+index bd91b7e..8223bc8 100644
+--- a/src/routes/index.tsx
++++ b/src/routes/index.tsx
+@@ -1,6 +1,7 @@
+ import { createFileRoute } from "@tanstack/react-router";
+-import { useEffect, useState } from "react";
++import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+ import { ArrivalTunnel } from "@/components/portfolio/ArrivalTunnel";
++import { cancelIntroFailsafe, clearIntroPending, shouldPlayIntro } from "@/lib/intro-gate";
+ import { Navbar } from "@/components/portfolio/Navbar";
+ import { HeroSection } from "@/components/portfolio/HeroSection";
+ import { SystemsTopology } from "@/components/portfolio/SystemsTopology";
+@@ -42,52 +43,37 @@ const MARQUEE_ITEMS = [
+   { label: "SQLite & Oracle DB", icon: Database },
+ ];
+ 
+-function isIntroRequired(): boolean {
+-  if (typeof window === "undefined") return false;
+-  try {
+-    if (sessionStorage.getItem("portfolioIntroPlayed")) return false;
+-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+-    const canvas = document.createElement("canvas");
+-    return !!(
+-      window.WebGLRenderingContext &&
+-      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
+-    );
+-  } catch {
+-    return false;
+-  }
+-}
++// useLayoutEffect logs a warning when run during SSR, so fall back to useEffect
++// on the server. On the client we need the layout-effect timing: the skip
++// decision has to be applied before the browser paints.
++const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+ 
+ function PortfolioPage() {
+   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+ 
+-  // Deterministic state:
+-  // On fresh sessions: intro is active, portfolio is hidden.
+-  // On repeat sessions: intro is skipped, portfolio is immediately visible.
+-  const [introActive, setIntroActive] = useState<boolean>(() => {
+-    if (typeof window !== "undefined") {
+-      return isIntroRequired();
+-    }
+-    return true; // SSR renders with intro active (portfolio protected)
+-  });
++  // The server and the client both start with the intro active, unconditionally.
++  // That makes the first render byte-identical in both environments, so there is
++  // no hydration mismatch and nothing for React to discard and re-render.
++  const [introActive, setIntroActive] = useState<boolean>(true);
+ 
+-  const [portfolioRevealed, setPortfolioRevealed] = useState<boolean>(() => {
+-    if (typeof window !== "undefined") {
+-      return !isIntroRequired();
+-    }
+-    return false; // SSR renders portfolio hidden
+-  });
+-
+-  const handleIntroComplete = () => {
+-    try {
+-      sessionStorage.setItem("portfolioIntroPlayed", "true");
+-      document.documentElement.classList.remove("intro-pending");
+-    } catch {
+-      // Ignore private browsing restrictions
+-    }
+-    setPortfolioRevealed(true);
++  const handleIntroComplete = useCallback(() => {
++    clearIntroPending();
++    cancelIntroFailsafe();
+     setIntroActive(false);
+     window.scrollTo(0, 0);
+-  };
++  }, []);
++
++  // Runs on hydration, before the browser paints. Reaching this proves the
++  // bundle booted, so the application now owns revealing the portfolio and the
++  // boot fail-safe must be cancelled — otherwise it could fire mid-intro on a
++  // slow connection and cut the animation short.
++  useIsomorphicLayoutEffect(() => {
++    cancelIntroFailsafe();
++    if (!shouldPlayIntro()) {
++      clearIntroPending();
++      setIntroActive(false);
++    }
++  }, []);
+ 
+   useEffect(() => {
+     if (typeof window === "undefined") return;
+@@ -98,13 +84,6 @@ function PortfolioPage() {
+       window.history.replaceState(null, "", window.location.pathname + window.location.search);
+     }
+     window.scrollTo(0, 0);
+-
+-    // If client session already played intro, ensure class cleanup and immediate display
+-    if (!isIntroRequired()) {
+-      document.documentElement.classList.remove("intro-pending");
+-      setPortfolioRevealed(true);
+-      setIntroActive(false);
+-    }
+   }, []);
+ 
+   useEffect(() => {
+@@ -126,11 +105,7 @@ function PortfolioPage() {
+       {/* 2. Existing Portfolio (Completely hidden until intro finishes, then smoothly revealed once) */}
+       <div
+         id="portfolio-root"
+-        style={{
+-          opacity: portfolioRevealed ? 1 : 0,
+-          visibility: portfolioRevealed ? "visible" : "hidden",
+-          transition: "opacity 0.6s cubic-bezier(0.22, 0.8, 0.2, 1)",
+-        }}
++        style={{ transition: "opacity 0.6s cubic-bezier(0.22, 0.8, 0.2, 1)" }}
+       >
+         {/* Top Navbar */}
+         <Navbar onOpenCommandPalette={() => setCommandPaletteOpen(true)} />
+diff --git a/src/styles.css b/src/styles.css
+index 8c159cf..47a8106 100644
+--- a/src/styles.css
++++ b/src/styles.css
+@@ -94,6 +94,13 @@ html.intro-pending #portfolio-root {
+   pointer-events: none !important;
+ }
+ 
++/* The overlay is server-rendered on every load. When the gate is not active
++   (reduced motion, or the boot fail-safe fired) it must not be visible at all.
++   The id is set on the outermost overlay element in ArrivalTunnel.tsx. */
++html:not(.intro-pending) #arrival-tunnel {
++  display: none !important;
++}
++
+ /* ─────────────────────────────────────────────────────────────────────────────
+    Background Grid
+    ───────────────────────────────────────────────────────────────────────────── */
+-- 
+2.49.0
+

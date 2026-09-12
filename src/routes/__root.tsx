@@ -122,11 +122,20 @@ function RootShell({ children }: { children: ReactNode }) {
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              try {
-                if (!sessionStorage.getItem('portfolioIntroPlayed') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                  document.documentElement.classList.add('intro-pending');
-                }
-              } catch (e) {}
+              (function () {
+                try {
+                  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                  var root = document.documentElement;
+                  root.classList.add('intro-pending');
+                  // Boot fail-safe. This class hides the portfolio, so if the
+                  // application bundle never runs, nothing would ever remove it
+                  // and the page would stay blank forever. React cancels this
+                  // timer the moment it hydrates.
+                  window.__introFailsafeTimer = setTimeout(function () {
+                    root.classList.remove('intro-pending');
+                  }, 6000);
+                } catch (e) {}
+              })();
             `,
           }}
         />

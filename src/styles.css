@@ -94,6 +94,13 @@ html.intro-pending #portfolio-root {
   pointer-events: none !important;
 }
 
+/* The overlay is server-rendered on every load. When the gate is not active
+   (reduced motion, or the boot fail-safe fired) it must not be visible at all.
+   The id is set on the outermost overlay element in ArrivalTunnel.tsx. */
+html:not(.intro-pending) #arrival-tunnel {
+  display: none !important;
+}
+
 /* ─────────────────────────────────────────────────────────────────────────────
    Background Grid
    ───────────────────────────────────────────────────────────────────────────── */
