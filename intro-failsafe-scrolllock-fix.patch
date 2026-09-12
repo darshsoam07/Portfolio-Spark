@@ -1,0 +1,73 @@
+From 0b71090bf835fe9ab0fc6887086927e9eb8a3c5a Mon Sep 17 00:00:00 2001
+From: Agent <agent@local>
+Date: Fri, 11 Sep 2026 20:48:26 +0000
+Subject: [PATCH] fix(intro): do not start the intro after the boot fail-safe
+ has fired
+
+On a connection slow enough that the 6000ms boot fail-safe fires before React hydrates, the portfolio is already revealed and the overlay is display:none. Mounting ArrivalTunnel at that point locked body scrolling for ~3s while an invisible animation ran. Gate the intro on the CSS class still being present.
+---
+ src/lib/intro-gate.ts | 15 +++++++++++++++
+ src/routes/index.tsx  | 14 ++++++++++++--
+ 2 files changed, 27 insertions(+), 2 deletions(-)
+
+diff --git a/src/lib/intro-gate.ts b/src/lib/intro-gate.ts
+index 00b0b43..48286a2 100644
+--- a/src/lib/intro-gate.ts
++++ b/src/lib/intro-gate.ts
+@@ -67,6 +67,21 @@ export function shouldPlayIntro(): boolean {
+   return decision;
+ }
+ 
++/**
++ * True while the CSS gate applied by the inline head script is still in place.
++ *
++ * If the gate is already gone by the time React hydrates, one of two things
++ * happened: the head script opted out (prefers-reduced-motion), or the boot
++ * fail-safe already fired and revealed the portfolio. In both cases the intro
++ * must not start. Starting it would scroll-lock a visitor who can already see
++ * and read the page, while an overlay that CSS has set to display:none animates
++ * invisibly for several seconds.
++ */
++export function isIntroGateActive(): boolean {
++  if (typeof document === "undefined") return false;
++  return document.documentElement.classList.contains(INTRO_PENDING_CLASS);
++}
++
+ /**
+  * Drops the CSS gate. Removing this class is all that is required to reveal the
+  * portfolio and hide the overlay, which is why no JavaScript-applied inline
+diff --git a/src/routes/index.tsx b/src/routes/index.tsx
+index 8223bc8..c47fc74 100644
+--- a/src/routes/index.tsx
++++ b/src/routes/index.tsx
+@@ -1,7 +1,12 @@
+ import { createFileRoute } from "@tanstack/react-router";
+ import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+ import { ArrivalTunnel } from "@/components/portfolio/ArrivalTunnel";
+-import { cancelIntroFailsafe, clearIntroPending, shouldPlayIntro } from "@/lib/intro-gate";
++import {
++  cancelIntroFailsafe,
++  clearIntroPending,
++  isIntroGateActive,
++  shouldPlayIntro,
++} from "@/lib/intro-gate";
+ import { Navbar } from "@/components/portfolio/Navbar";
+ import { HeroSection } from "@/components/portfolio/HeroSection";
+ import { SystemsTopology } from "@/components/portfolio/SystemsTopology";
+@@ -69,7 +74,12 @@ function PortfolioPage() {
+   // slow connection and cut the animation short.
+   useIsomorphicLayoutEffect(() => {
+     cancelIntroFailsafe();
+-    if (!shouldPlayIntro()) {
++    // If the gate is already gone, either the head script opted out (reduced
++    // motion) or the boot fail-safe already revealed the portfolio. Do not start
++    // the intro in that case: the visitor can already read the page, and
++    // mounting the overlay now would lock scrolling while a display:none
++    // animation runs invisibly.
++    if (!isIntroGateActive() || !shouldPlayIntro()) {
+       clearIntroPending();
+       setIntroActive(false);
+     }
+-- 
+2.49.0
+
