@@ -68,6 +68,21 @@ export function shouldPlayIntro(): boolean {
 }
 
 /**
+ * True while the CSS gate applied by the inline head script is still in place.
+ *
+ * If the gate is already gone by the time React hydrates, one of two things
+ * happened: the head script opted out (prefers-reduced-motion), or the boot
+ * fail-safe already fired and revealed the portfolio. In both cases the intro
+ * must not start. Starting it would scroll-lock a visitor who can already see
+ * and read the page, while an overlay that CSS has set to display:none animates
+ * invisibly for several seconds.
+ */
+export function isIntroGateActive(): boolean {
+  if (typeof document === "undefined") return false;
+  return document.documentElement.classList.contains(INTRO_PENDING_CLASS);
+}
+
+/**
  * Drops the CSS gate. Removing this class is all that is required to reveal the
  * portfolio and hide the overlay, which is why no JavaScript-applied inline
  * style is used for either any more.

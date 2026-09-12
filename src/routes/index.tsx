@@ -1,7 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { ArrivalTunnel } from "@/components/portfolio/ArrivalTunnel";
-import { cancelIntroFailsafe, clearIntroPending, shouldPlayIntro } from "@/lib/intro-gate";
+import {
+  cancelIntroFailsafe,
+  clearIntroPending,
+  isIntroGateActive,
+  shouldPlayIntro,
+} from "@/lib/intro-gate";
 import { Navbar } from "@/components/portfolio/Navbar";
 import { HeroSection } from "@/components/portfolio/HeroSection";
 import { SystemsTopology } from "@/components/portfolio/SystemsTopology";
@@ -69,7 +74,12 @@ function PortfolioPage() {
   // slow connection and cut the animation short.
   useIsomorphicLayoutEffect(() => {
     cancelIntroFailsafe();
-    if (!shouldPlayIntro()) {
+    // If the gate is already gone, either the head script opted out (reduced
+    // motion) or the boot fail-safe already revealed the portfolio. Do not start
+    // the intro in that case: the visitor can already read the page, and
+    // mounting the overlay now would lock scrolling while a display:none
+    // animation runs invisibly.
+    if (!isIntroGateActive() || !shouldPlayIntro()) {
       clearIntroPending();
       setIntroActive(false);
     }
