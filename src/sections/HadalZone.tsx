@@ -10,9 +10,9 @@ interface CommandLog {
   timestamp: string;
 }
 
-const ACCENT = "text-orange-300";
+const ACCENT = "text-signal";
 const DIM = "text-slate-400";
-const CYAN = "text-cyan-300";
+const CYAN = "text-bio-400";
 
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -36,7 +36,7 @@ function useTerminal() {
       id: "boot",
       command: "blackbox --recover",
       output: (
-        <pre className="overflow-x-auto whitespace-pre font-mono text-[10px] leading-tight text-orange-300/90 sm:text-xs">
+        <pre className="overflow-x-auto whitespace-pre font-mono text-[10px] leading-tight text-signal/90 sm:text-xs">
           {BANNER}
         </pre>
       ),
@@ -282,7 +282,7 @@ export function HadalZone() {
           zoneId="hadal"
           title={
             <>
-              The <span className="text-orange-300 text-glow-warm">Black Box</span>
+              The <span className="display-serif italic font-medium text-signal">Black Box</span>
             </>
           }
           blurb="Six thousand meters. If the expedition ever goes dark, this is what survives — every system, credential, and deployment, recoverable from the recorder."

@@ -2,21 +2,35 @@
 
 @theme {
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces", Georgia, "Times New Roman", serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  --color-abyss-950: #010409;
-  --color-abyss-900: #040b16;
-  --color-abyss-800: #071526;
-  --color-abyss-700: #0a2036;
+  /* Abyssal ink scale — near-black blues, never pure #000 except hadal */
+  --color-abyss-950: #04070d;
+  --color-abyss-900: #060b14;
+  --color-abyss-800: #0a1220;
+  --color-abyss-700: #0e1830;
 
-  --color-bio-300: #7df9ff;
-  --color-bio-400: #22d3ee;
-  --color-bio-500: #06b6d4;
-  --color-plankton: #a3e635;
+  /* Warm paper — text with a candlelit cast, not cold slate */
+  --color-paper: #ece7d9;
+  --color-paper-dim: #c9c4b4;
+  --color-fog: #9aa3b2;
+  --color-faint: #5f6878;
 
-  --color-signal: #ffb454;
-  --color-dawn-200: #bae6fd;
-  --color-dawn-300: #7dd3fc;
+  /* Brass — the single confident accent */
+  --color-brass-200: #ecdcb4;
+  --color-brass-300: #dec088;
+  --color-brass-400: #c9a35f;
+  --color-brass-500: #a37f42;
+  --color-brass-600: #7d5f30;
+
+  /* Bioluminescence — reserved for midnight-zone moments only */
+  --color-bio-300: #8fe8f5;
+  --color-bio-400: #4fd2e8;
+  --color-bio-500: #2aa8c4;
+
+  /* Signal warm — hadal black-box ember */
+  --color-signal: #e8a04c;
 
   --animate-marquee: marquee 36s linear infinite;
   --animate-godray: godray 9s ease-in-out infinite alternate;
@@ -32,8 +46,8 @@
 }
 
 @keyframes godray {
-  from { transform: rotate(-8deg) translateX(-4%); opacity: 0.5; }
-  to { transform: rotate(6deg) translateX(4%); opacity: 0.9; }
+  from { transform: rotate(-8deg) translateX(-4%); opacity: 0.4; }
+  to { transform: rotate(6deg) translateX(4%); opacity: 0.75; }
 }
 
 @keyframes floatSlow {
@@ -70,48 +84,68 @@ html {
 }
 
 body {
-  background: #010409;
-  color: #e8f4f8;
+  background: #04070d;
+  color: #ece7d9;
   font-family: var(--font-display);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: #22d3ee;
-  color: #010409;
+  background: #c9a35f;
+  color: #04070d;
 }
 
-/* Slim abyssal scrollbar */
+/* Slim brass scrollbar */
 ::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: #010409; }
+::-webkit-scrollbar-track { background: #04070d; }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #164e63, #0a2036);
+  background: linear-gradient(180deg, #7d5f30, #3a2f1c);
   border-radius: 8px;
-  border: 2px solid #010409;
+  border: 2px solid #04070d;
 }
 
-/* Glass specimen panel */
+/* Film grain — the quiet luxury texture over everything */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* Dark specimen panels — hairlines, not neon */
 .panel-glass {
-  background: linear-gradient(160deg, rgba(10, 32, 54, 0.55), rgba(4, 11, 22, 0.75));
-  border: 1px solid rgba(125, 249, 255, 0.12);
+  background: linear-gradient(160deg, rgba(14, 24, 48, 0.5), rgba(4, 7, 13, 0.78));
+  border: 1px solid rgba(236, 231, 217, 0.09);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
 
 .panel-glass-deep {
-  background: linear-gradient(160deg, rgba(4, 11, 22, 0.72), rgba(1, 4, 9, 0.9));
-  border: 1px solid rgba(125, 249, 255, 0.09);
+  background: linear-gradient(160deg, rgba(8, 14, 26, 0.72), rgba(4, 7, 13, 0.92));
+  border: 1px solid rgba(236, 231, 217, 0.07);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
 
-.text-glow-bio {
-  text-shadow: 0 0 18px rgba(34, 211, 238, 0.55), 0 0 60px rgba(34, 211, 238, 0.25);
+.panel-brass {
+  background: linear-gradient(160deg, rgba(201, 163, 95, 0.07), rgba(4, 7, 13, 0.8));
+  border: 1px solid rgba(201, 163, 95, 0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-.text-glow-warm {
-  text-shadow: 0 0 18px rgba(255, 180, 84, 0.5), 0 0 60px rgba(255, 180, 84, 0.22);
+/* Restrained glows — used sparingly */
+.text-glow-bio {
+  text-shadow: 0 0 22px rgba(79, 210, 232, 0.35);
+}
+
+.text-glow-brass {
+  text-shadow: 0 0 24px rgba(201, 163, 95, 0.35);
 }
 
 .eyebrow {
@@ -119,6 +153,13 @@ body {
   font-size: 10px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
+}
+
+/* Serif display treatment for hero + zone titles */
+.display-serif {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  letter-spacing: -0.015em;
 }
 
 /* Sonar annotation notes — hidden until a ping reveals them */
@@ -134,11 +175,11 @@ body {
   pointer-events: auto;
 }
 
-/* Porthole ring for the portrait */
+/* Porthole ring — aged brass */
 .porthole-ring {
   background: conic-gradient(
     from 200deg,
-    #3b2f23, #6b5a3e, #2c2419, #7a6845, #3b2f23
+    #4a3a22, #8a6f3e, #2e2414, #a5854e, #4a3a22
   );
 }
 

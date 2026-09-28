@@ -3,8 +3,6 @@ import { ArrowDown, ChevronDown, Fish, Radar, Ship } from "lucide-react";
 import { PROFILE } from "@/data/portfolio";
 import portrait from "@/assets-portrait.jpg";
 
-const INK = "text-[#03283f]";
-
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
@@ -24,14 +22,14 @@ export function SurfaceHero() {
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.15 }}
-          className="flex flex-wrap items-center justify-between gap-3 border-b border-[#075985]/20 pb-5 font-mono text-[10px] uppercase tracking-[0.25em] text-[#075985]"
+          className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-5 font-mono text-[10px] uppercase tracking-[0.25em] text-faint"
         >
           <div className="flex items-center gap-2.5">
             <span className="relative flex h-2 w-2">
-              <span className="absolute h-full w-full animate-ping rounded-full bg-[#0e7490] opacity-60" />
-              <span className="h-2 w-2 rounded-full bg-[#0e7490]" />
+              <span className="absolute h-full w-full animate-ping rounded-full bg-brass-400 opacity-60" />
+              <span className="h-2 w-2 rounded-full bg-brass-400" />
             </span>
-            <span className="font-semibold text-[#03283f]">[ Surface — 0 M ]</span>
+            <span className="font-semibold text-brass-300">[ Surface — 0 M ]</span>
             <span className="hidden sm:inline">::</span>
             <span className="hidden sm:inline">AWS · K8S · TERRAFORM · AGENTIC AI</span>
           </div>
@@ -51,7 +49,7 @@ export function SurfaceHero() {
           >
             <motion.div
               variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#075985]/30 bg-white/40 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.25em] text-[#075985] backdrop-blur-sm"
+              className="mb-7 inline-flex items-center gap-2 rounded-full border border-brass-400/25 bg-brass-400/[0.06] px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.25em] text-brass-300 backdrop-blur-sm"
             >
               <Ship className="h-3 w-3" />
               <span>Expedition Log // DS-01</span>
@@ -59,26 +57,28 @@ export function SurfaceHero() {
 
             <motion.h1
               variants={{ hidden: { opacity: 0, y: 26 }, visible: { opacity: 1, y: 0 } }}
-              className={`font-display text-6xl font-bold leading-[0.95] tracking-tight sm:text-7xl md:text-8xl ${INK}`}
+              className="display-serif text-6xl font-light leading-[0.95] sm:text-7xl md:text-8xl text-paper"
             >
-              DARSH
+              Darsh
               <br />
-              <span className="bg-gradient-to-r from-[#0369a1] via-[#0e7490] to-[#155e75] bg-clip-text text-transparent">
-                SOAM
+              <span className="bg-gradient-to-r from-brass-200 via-brass-300 to-brass-500 bg-clip-text font-medium italic text-transparent">
+                Soam
               </span>
             </motion.h1>
 
-            <motion.p
+            <motion.div
               variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } }}
-              className="mt-5 font-mono text-sm font-medium tracking-wide text-[#0e7490] sm:text-base"
+              className="mt-6 flex items-center gap-4"
             >
-              Cloud & DevOps Engineer <span className="text-[#075985]/60">|</span> Infrastructure &
-              Automation Enthusiast
-            </motion.p>
+              <span className="h-px w-10 bg-brass-400/50" />
+              <p className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-paper-dim sm:text-sm">
+                Cloud & DevOps Engineer
+              </p>
+            </motion.div>
 
             <motion.p
               variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } }}
-              className="mt-4 max-w-xl text-base leading-relaxed text-[#0c4a6e] sm:text-lg"
+              className="mt-5 max-w-xl text-base leading-relaxed text-fog sm:text-lg"
             >
               {PROFILE.subheadline} This is the descent — scroll to dive through every layer
               of the stack, down to the black box.
@@ -86,25 +86,25 @@ export function SurfaceHero() {
 
             <motion.div
               variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } }}
-              className="mt-8 flex flex-wrap items-center gap-3"
+              className="mt-9 flex flex-wrap items-center gap-3"
             >
               <button
                 onClick={() => scrollTo("sunlight")}
-                className="group inline-flex items-center gap-2.5 rounded-full bg-[#03283f] px-6 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100 shadow-[0_10px_30px_-8px_rgba(3,40,63,0.6)] transition-all hover:bg-[#0a3a56] hover:shadow-[0_10px_36px_-6px_rgba(14,116,144,0.7)]"
+                className="group inline-flex items-center gap-2.5 rounded-full bg-brass-400 px-7 py-3.5 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[#0a0805] shadow-[0_10px_36px_-10px_rgba(201,163,95,0.55)] transition-all hover:bg-brass-300 hover:shadow-[0_10px_44px_-8px_rgba(201,163,95,0.7)]"
               >
                 <span>Begin descent</span>
                 <ArrowDown className="h-3.5 w-3.5 transition-transform group-hover:translate-y-0.5" />
               </button>
               <button
                 onClick={() => scrollTo("midnight")}
-                className="inline-flex items-center gap-2 rounded-full border border-[#075985]/40 bg-white/30 px-6 py-3.5 font-mono text-xs uppercase tracking-[0.2em] text-[#0c4a6e] backdrop-blur-sm transition-all hover:border-[#0e7490] hover:text-[#03283f]"
+                className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-6 py-3.5 font-mono text-xs uppercase tracking-[0.2em] text-paper-dim backdrop-blur-sm transition-all hover:border-brass-400/50 hover:text-paper"
               >
                 <Fish className="h-3.5 w-3.5" />
                 <span>View discoveries</span>
               </button>
               <button
                 onClick={() => scrollTo("hadal")}
-                className="inline-flex items-center gap-2 rounded-full border border-[#075985]/25 bg-white/20 px-5 py-3.5 font-mono text-xs uppercase tracking-[0.2em] text-[#075985] backdrop-blur-sm transition-all hover:border-[#075985]/60 hover:text-[#03283f]"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-transparent px-5 py-3.5 font-mono text-xs uppercase tracking-[0.2em] text-fog transition-all hover:border-white/25 hover:text-paper"
               >
                 <Radar className="h-3.5 w-3.5" />
                 <span>Black box</span>
@@ -114,27 +114,27 @@ export function SurfaceHero() {
             {/* Dive manifest */}
             <motion.div
               variants={{ hidden: { opacity: 0, y: 18 }, visible: { opacity: 1, y: 0 } }}
-              className="mt-10 grid grid-cols-1 gap-3 border-t border-[#075985]/20 pt-6 sm:grid-cols-3"
+              className="mt-10 grid grid-cols-1 gap-3 border-t border-white/10 pt-6 sm:grid-cols-3"
             >
               {MANIFEST.map((m) => (
                 <div
                   key={m.label}
-                  className="rounded-xl border border-[#075985]/20 bg-white/35 p-3.5 backdrop-blur-sm transition-colors hover:border-[#0e7490]/50"
+                  className="rounded-xl border border-white/10 bg-white/[0.02] p-3.5 backdrop-blur-sm transition-colors hover:border-brass-400/35"
                 >
-                  <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#075985]">
+                  <div className="font-mono text-[9px] uppercase tracking-[0.2em] text-faint">
                     {m.label}
                   </div>
-                  <div className="mt-1 font-mono text-xs font-semibold text-[#03283f]">
+                  <div className="mt-1 font-mono text-xs font-semibold text-paper">
                     {m.value}
                   </div>
-                  <div className="mt-0.5 font-mono text-[10px] text-[#0e7490]">{m.sub}</div>
+                  <div className="mt-0.5 font-mono text-[10px] text-fog">{m.sub}</div>
                 </div>
               ))}
             </motion.div>
 
             <motion.p
               variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
-              className="sonar-note mt-6 inline-block rounded-lg border border-dashed border-[#075985]/40 bg-white/30 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#075985] backdrop-blur-sm"
+              className="sonar-note mt-6 inline-block rounded-lg border border-dashed border-brass-400/30 bg-brass-400/[0.04] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-brass-300/80 backdrop-blur-sm"
             >
               ◈ Sonar note: the water gets darker from here — ping anytime (right rail)
             </motion.p>
@@ -148,21 +148,21 @@ export function SurfaceHero() {
             className="flex flex-col items-center lg:col-span-5"
           >
             <div className="animate-float-slow">
-              <div className="porthole-ring rounded-full p-3 shadow-[0_25px_60px_-15px_rgba(3,40,63,0.55)]">
-                <div className="relative h-64 w-64 overflow-hidden rounded-full border-4 border-[#0a2036] sm:h-80 sm:w-80">
+              <div className="porthole-ring rounded-full p-3 shadow-[0_25px_70px_-15px_rgba(0,0,0,0.8)]">
+                <div className="relative h-64 w-64 overflow-hidden rounded-full border-4 border-[#0a0d14] sm:h-80 sm:w-80">
                   <img
                     src={portrait}
                     alt="Darsh Soam"
                     className="h-full w-full object-cover object-top"
                   />
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-t from-[#03283f]/35 via-transparent to-cyan-100/20" />
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-t from-[#04070d]/45 via-transparent to-white/[0.06]" />
                 </div>
               </div>
             </div>
-            <div className="mt-5 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-[#075985]">
+            <div className="mt-5 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-fog">
               Expedition lead — Darsh Soam
             </div>
-            <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.3em] text-[#0e7490]/70">
+            <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.3em] text-faint">
               Status: submerged
             </div>
           </motion.div>
@@ -174,7 +174,7 @@ export function SurfaceHero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.4, duration: 0.8 }}
-          className="mx-auto flex flex-col items-center gap-1 font-mono text-[10px] uppercase tracking-[0.3em] text-[#075985]"
+          className="mx-auto flex flex-col items-center gap-1 font-mono text-[10px] uppercase tracking-[0.3em] text-faint"
           aria-label="Scroll to descend"
         >
           <span>Scroll to descend</span>

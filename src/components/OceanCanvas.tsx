@@ -33,16 +33,17 @@ export function OceanCanvas() {
     const mouse = { x: -9999, y: -9999 };
     let parts: Particle[] = [];
 
-    // Pre-rendered glow sprite for cheap bioluminescence
+    // Pre-rendered glow sprite for cheap bioluminescence — kept dim and rare,
+    // like actual deep-sea life, not a screensaver.
     const sprite = document.createElement("canvas");
     sprite.width = 64;
     sprite.height = 64;
     const sctx = sprite.getContext("2d")!;
     const grad = sctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-    grad.addColorStop(0, "rgba(125,249,255,1)");
-    grad.addColorStop(0.25, "rgba(34,211,238,0.65)");
-    grad.addColorStop(0.6, "rgba(34,211,238,0.18)");
-    grad.addColorStop(1, "rgba(34,211,238,0)");
+    grad.addColorStop(0, "rgba(143,232,245,0.85)");
+    grad.addColorStop(0.25, "rgba(79,210,232,0.4)");
+    grad.addColorStop(0.6, "rgba(79,210,232,0.1)");
+    grad.addColorStop(1, "rgba(79,210,232,0)");
     sctx.fillStyle = grad;
     sctx.fillRect(0, 0, 64, 64);
 
@@ -119,15 +120,15 @@ export function OceanCanvas() {
 
         if (pt.kind === 0) {
           const tw = 0.5 + 0.5 * Math.sin(t * pt.speed + pt.phase);
-          const a = (0.1 + 0.28 * tw) * (1 - p * 0.55);
-          ctx.fillStyle = `rgba(186,230,253,${a.toFixed(3)})`;
+          const a = (0.06 + 0.16 * tw) * (1 - p * 0.4);
+          ctx.fillStyle = `rgba(216,222,232,${a.toFixed(3)})`;
           ctx.beginPath();
           ctx.arc(pt.x, pt.y, pt.r, 0, 6.2832);
           ctx.fill();
         } else {
           const tw = 0.5 + 0.5 * Math.sin(t * pt.speed * 2 + pt.phase);
-          const a = (0.2 + 0.6 * tw) * (0.3 + 0.7 * p);
-          const s = pt.r * 7;
+          const a = (0.12 + 0.4 * tw) * (0.25 + 0.75 * p);
+          const s = pt.r * 6;
           ctx.globalAlpha = Math.min(1, a);
           ctx.drawImage(sprite, pt.x - s / 2, pt.y - s / 2, s, s);
           ctx.globalAlpha = 1;

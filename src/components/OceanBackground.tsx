@@ -5,15 +5,17 @@ interface Stop {
 }
 
 // One gradient stop per zone, in ZONES order:
-// surface → sunlight → twilight → midnight → abyssal → hadal → ascent
+// surface → sunlight → twilight → midnight → abyssal → hadal → ascent.
+// Deliberately dark throughout: the surface is a moonlit sea, not midday.
+// Light lives in the god-rays and the brass accents, never in the wash.
 const STOPS: Stop[] = [
-  { top: "#8fd4f7", mid: "#0e8ac9", bot: "#075985" },
-  { top: "#0e8ac9", mid: "#075985", bot: "#0c4a6e" },
-  { top: "#0c4a6e", mid: "#0a1e3c", bot: "#0b1030" },
-  { top: "#0b1030", mid: "#060a18", bot: "#02040a" },
-  { top: "#02040a", mid: "#010409", bot: "#000000" },
-  { top: "#000000", mid: "#060302", bot: "#0f0805" },
-  { top: "#0d1b2a", mid: "#0e8ac9", bot: "#8fd4f7" },
+  { top: "#101c33", mid: "#0a1322", bot: "#060d1a" },
+  { top: "#0a1322", mid: "#060d1a", bot: "#040a15" },
+  { top: "#040a15", mid: "#030812", bot: "#02060d" },
+  { top: "#02060d", mid: "#010409", bot: "#010307" },
+  { top: "#010307", mid: "#010204", bot: "#000102" },
+  { top: "#000102", mid: "#0b0603", bot: "#140b04" },
+  { top: "#0a1120", mid: "#101c33", bot: "#16263f" },
 ];
 
 function hexToRgb(hex: string): [number, number, number] {
@@ -43,13 +45,12 @@ export function OceanBackground({ zoneIndex, zoneBlend }: OceanBackgroundProps) 
   const mid = mix(s0.mid, s1.mid, t);
   const bot = mix(s0.bot, s1.bot, t);
 
-  // Sunlight shafts are strong at the surface, faint in sunlight,
-  // and return as dawn light during the ascent.
+  // Pale moonlight shafts — restrained, they carry the "surface" reading now.
   let rays = 0;
-  if (i === 0) rays = 1 - t * 0.85;
-  else if (i === 1) rays = 0.28 * (1 - t);
-  else if (i === 5) rays = 0.12 * t;
-  else if (i === 6) rays = 0.12 + 0.88 * t;
+  if (i === 0) rays = 0.5 - t * 0.42;
+  else if (i === 1) rays = 0.14 * (1 - t);
+  else if (i === 5) rays = 0.06 * t;
+  else if (i === 6) rays = 0.06 + 0.44 * t;
 
   return (
     <div className="fixed inset-0 z-0 overflow-hidden" aria-hidden>
@@ -71,7 +72,7 @@ export function OceanBackground({ zoneIndex, zoneBlend }: OceanBackgroundProps) 
               left: `${18 + n * 20}%`,
               width: `${7 + (n % 2) * 5}%`,
               background:
-                "linear-gradient(180deg, rgba(224,242,254,0.5) 0%, rgba(224,242,254,0.12) 55%, transparent 100%)",
+                "linear-gradient(180deg, rgba(214,226,240,0.32) 0%, rgba(214,226,240,0.08) 55%, transparent 100%)",
               transform: "skewX(-12deg)",
               filter: "blur(6px)",
               animationDelay: `${n * 1.7}s`,
@@ -84,7 +85,7 @@ export function OceanBackground({ zoneIndex, zoneBlend }: OceanBackgroundProps) 
         className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[80%] h-[45%] rounded-full transition-opacity duration-500"
         style={{
           opacity: rays * 0.8,
-          background: "radial-gradient(ellipse, rgba(186,230,253,0.55) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse, rgba(190,205,225,0.28) 0%, transparent 70%)",
           filter: "blur(30px)",
         }}
       />

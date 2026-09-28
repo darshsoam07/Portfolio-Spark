@@ -17,7 +17,7 @@ import { AscentContact } from "@/sections/AscentContact";
 function SonarRipple() {
   return (
     <div className="pointer-events-none fixed inset-0 z-30 flex items-center justify-center">
-      <div className="h-[150vmax] w-[150vmax] animate-sonar-ring rounded-full border-2 border-cyan-200/70" />
+      <div className="h-[150vmax] w-[150vmax] animate-sonar-ring rounded-full border-2 border-brass-300/60" />
     </div>
   );
 }
@@ -70,6 +70,7 @@ export default function App() {
         {!introDone && <SubmersionIntro onDone={() => setIntroDone(true)} />}
         <OceanBackground zoneIndex={depth.zoneIndex} zoneBlend={depth.zoneBlend} />
         <OceanCanvas />
+        <div className="grain-overlay" aria-hidden />
         <Navbar />
         <DepthGauge depth={depth} onPing={() => setPingKey((k) => k + 1)} />
         {pingKey > 0 && <SonarRipple key={pingKey} />}

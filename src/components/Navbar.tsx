@@ -14,20 +14,20 @@ export function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-40 hidden lg:block">
-      <div className="flex items-center justify-between bg-gradient-to-b from-[#010409]/80 to-transparent px-8 py-5">
+      <div className="flex items-center justify-between border-b border-white/[0.06] bg-[#04070d]/70 px-8 py-5 backdrop-blur-md">
         <button
           onClick={() => go("surface")}
-          className="font-mono text-xs font-semibold tracking-[0.25em] text-slate-100"
+          className="font-mono text-xs font-semibold tracking-[0.25em] text-paper"
         >
-          DS <span className="text-cyan-300">◈</span>{" "}
-          <span className="text-slate-400">DESCENT LOG</span>
+          DS <span className="text-brass-400">◈</span>{" "}
+          <span className="text-fog">DESCENT LOG</span>
         </button>
         <nav className="flex items-center gap-7">
           {links.map((l) => (
             <button
               key={l.id}
               onClick={() => go(l.id)}
-              className="font-mono text-[10px] uppercase tracking-[0.25em] text-slate-400 transition-colors hover:text-cyan-200"
+              className="font-mono text-[10px] uppercase tracking-[0.25em] text-fog transition-colors hover:text-brass-300"
             >
               {l.label}
             </button>
@@ -35,7 +35,7 @@ export function Navbar() {
         </nav>
         <button
           onClick={() => go("ascent")}
-          className="group flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-300/10 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.25em] text-cyan-100 transition-all hover:border-cyan-200 hover:shadow-[0_0_18px_rgba(34,211,238,0.35)]"
+          className="group flex items-center gap-2 rounded-full border border-brass-400/30 bg-brass-400/[0.07] px-4 py-2 font-mono text-[10px] uppercase tracking-[0.25em] text-brass-200 transition-all hover:border-brass-300/60 hover:text-brass-200"
         >
           Transmit
           <ArrowUp className="h-3 w-3 transition-transform group-hover:-translate-y-0.5" />
