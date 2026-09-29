@@ -2,6 +2,7 @@ import { Check, ExternalLink, Github, Sparkles } from "lucide-react";
 import { PROJECTS, SKILL_CATEGORIES, type ProjectItem } from "@/data/portfolio";
 import { ZoneHeader } from "@/components/ZoneHeader";
 import { Reveal } from "@/components/Reveal";
+import PipelineTopology from "@/components/PipelineTopology";
 
 function SpecimenCard({ project, index }: { project: ProjectItem; index: number }) {
   return (
@@ -52,17 +53,21 @@ function SpecimenCard({ project, index }: { project: ProjectItem; index: number 
 
           <div className="mt-8">
             <div className="eyebrow mb-4 text-faint">Anatomy — system architecture</div>
-            <ol className="grid gap-2 sm:grid-cols-2">
-              {project.architecture.map((node, i) => (
-                <li
-                  key={node}
-                  className="flex items-center gap-3 rounded-lg border border-white/10 bg-[#060b14]/60 px-3.5 py-2.5 font-mono text-[11px] text-paper-dim"
-                >
-                  <span className="text-bio-400/80">{String(i + 1).padStart(2, "0")}</span>
-                  <span>{node}</span>
-                </li>
-              ))}
-            </ol>
+            {project.number === "01" ? (
+              <PipelineTopology />
+            ) : (
+              <ol className="grid gap-2 sm:grid-cols-2">
+                {project.architecture.map((node, i) => (
+                  <li
+                    key={node}
+                    className="flex items-center gap-3 rounded-lg border border-white/10 bg-[#060b14]/60 px-3.5 py-2.5 font-mono text-[11px] text-paper-dim"
+                  >
+                    <span className="text-bio-400/80">{String(i + 1).padStart(2, "0")}</span>
+                    <span>{node}</span>
+                  </li>
+                ))}
+              </ol>
+            )}
           </div>
 
           <div className="mt-8">

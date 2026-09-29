@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { MotionConfig } from "motion/react";
 import { useDepth } from "@/hooks/useDepth";
+import SmoothScroll from "@/components/SmoothScroll";
+import OceanDepthCanvas from "@/components/OceanDepthCanvas";
+
 import { OceanBackground } from "@/components/OceanBackground";
-import { OceanCanvas } from "@/components/OceanCanvas";
 import { Navbar } from "@/components/Navbar";
 import { DepthGauge } from "@/components/DepthGauge";
 import { SubmersionIntro } from "@/components/SubmersionIntro";
@@ -66,16 +68,19 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="relative min-h-screen overflow-x-clip">
-        {!introDone && <SubmersionIntro onDone={() => setIntroDone(true)} />}
-        <OceanBackground zoneIndex={depth.zoneIndex} zoneBlend={depth.zoneBlend} />
-        <OceanCanvas />
-        <div className="grain-overlay" aria-hidden />
-        <Navbar />
-        <DepthGauge depth={depth} onPing={() => setPingKey((k) => k + 1)} />
-        {pingKey > 0 && <SonarRipple key={pingKey} />}
-        <main className="relative z-10">{sections}</main>
-      </div>
+      <SmoothScroll>
+        <div className="relative min-h-screen overflow-x-clip bg-[#04070d] text-paper">
+          {!introDone && <SubmersionIntro onDone={() => setIntroDone(true)} />}
+          <OceanDepthCanvas />
+          <OceanBackground zoneIndex={depth.zoneIndex} zoneBlend={depth.zoneBlend} />
+          <div className="grain-overlay" aria-hidden />
+          <Navbar />
+
+          <DepthGauge depth={depth} onPing={() => setPingKey((k) => k + 1)} />
+          {pingKey > 0 && <SonarRipple key={pingKey} />}
+          <main className="relative z-10">{sections}</main>
+        </div>
+      </SmoothScroll>
     </MotionConfig>
   );
 }

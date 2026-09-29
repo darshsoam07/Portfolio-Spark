@@ -8,7 +8,11 @@ interface DepthGaugeProps {
 }
 
 function scrollToZone(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (window.__lenis) {
+    window.__lenis.scrollTo(`#${id}`, { duration: 1.5 });
+  } else {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
 }
 
 export function DepthGauge({ depth, onPing }: DepthGaugeProps) {
