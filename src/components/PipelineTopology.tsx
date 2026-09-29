@@ -96,11 +96,14 @@ export default function PipelineTopology() {
   const [activeNode, setActiveNode] = useState<PipelineNode>(NODES[1]);
 
   return (
-    <div className="w-full rounded-2xl border border-white/10 bg-[#06090e]/90 p-6 backdrop-blur-md transition-colors hover:border-brass-400/30">
+    <div
+      style={{ transform: "translate3d(0,0,0)", willChange: "transform" }}
+      className="w-full rounded-2xl border border-white/10 bg-[#06090e]/95 p-6 transition-colors hover:border-brass-400/30 shadow-xl"
+    >
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
         <div>
           <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-brass-300">
-            Specimen 01 // Interactive Telemetry
+            Architecture 01 // Interactive Telemetry
           </span>
           <h3 className="display-serif mt-1 text-xl font-medium text-paper sm:text-2xl">
             Cloud & DevOps Deployment Architecture

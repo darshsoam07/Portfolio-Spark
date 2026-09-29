@@ -5,7 +5,7 @@ import { CERTIFICATIONS, EDUCATION, EXPERIENCE_TRAINING, type Credential } from 
 import { ZoneHeader } from "@/components/ZoneHeader";
 import { Reveal } from "@/components/Reveal";
 
-function ArtifactLightbox({ cert, onClose }: { cert: Credential | null; onClose: () => void }) {
+function CredentialLightbox({ cert, onClose }: { cert: Credential | null; onClose: () => void }) {
   return (
     <AnimatePresence>
       {cert && (
@@ -14,23 +14,23 @@ function ArtifactLightbox({ cert, onClose }: { cert: Credential | null; onClose:
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/90 p-4"
           role="dialog"
           aria-label={`Certificate: ${cert.title}`}
         >
           <motion.div
-            initial={{ scale: 0.92, y: 20 }}
+            initial={{ scale: 0.94, y: 16 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.95, y: 10 }}
             transition={{ type: "spring", damping: 26, stiffness: 300 }}
             onClick={(e) => e.stopPropagation()}
-            className="panel-glass max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl p-6"
+            className="panel-glass max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl p-6 shadow-2xl"
           >
             <div className="flex items-start justify-between gap-4">
-              <div className="eyebrow text-brass-300">Recovered artifact // {cert.year}</div>
+              <div className="eyebrow text-brass-300">Verified Credential // {cert.year}</div>
               <button
                 onClick={onClose}
-                className="rounded-full border border-white/15 p-1.5 text-paper-dim transition-colors hover:border-brass-300/60 hover:text-brass-200"
+                className="rounded-full border border-white/15 p-1.5 text-paper-dim transition-colors hover:border-brass-300/60 hover:text-brass-200 cursor-pointer"
                 aria-label="Close"
               >
                 <X className="h-4 w-4" />
@@ -52,7 +52,7 @@ function ArtifactLightbox({ cert, onClose }: { cert: Credential | null; onClose:
             <p className="mt-3 text-sm leading-relaxed text-paper-dim">{cert.description}</p>
             <div className="mt-4 flex items-center gap-2 font-mono text-[11px] text-emerald-300">
               <BadgeCheck className="h-4 w-4" />
-              Verified credential
+              Verified Industry Credential
             </div>
           </motion.div>
         </motion.div>
@@ -71,25 +71,28 @@ export function AbyssalZone() {
           zoneId="abyssal"
           title={
             <>
-              The Abyssal <span className="display-serif italic font-medium text-brass-300">Plain</span>
+              Security, Governance & <span className="display-serif italic font-medium text-brass-300">Credentials</span>
             </>
           }
-          blurb="Four thousand meters. Crushing pressure, near-freezing water — and the most stable ground on the expedition. Training, education, and verified credentials, recovered intact."
+          blurb="Enterprise security standards, cloud architecture certifications, and rigorous academic engineering verified across distributed environments."
         />
 
         <div className="grid gap-10 lg:grid-cols-2">
-          {/* Descent log — experience */}
+          {/* Engineering Leadership & Experience */}
           <div>
             <Reveal className="mb-6 flex items-center gap-2.5">
               <ScrollText className="h-4 w-4 text-brass-300" />
               <h3 className="font-mono text-xs uppercase tracking-[0.3em] text-brass-200/80">
-                Descent log — applied experience
+                Applied Systems Experience
               </h3>
             </Reveal>
             <div className="flex flex-col gap-5">
               {EXPERIENCE_TRAINING.map((exp) => (
                 <Reveal key={exp.title}>
-                  <div className="panel-glass-deep rounded-2xl p-6 transition-colors hover:border-brass-400/30 md:p-7">
+                  <div
+                    style={{ transform: "translate3d(0,0,0)", willChange: "transform" }}
+                    className="panel-glass-deep rounded-2xl p-6 transition-colors hover:border-brass-400/30 md:p-7 shadow-lg"
+                  >
                     <div className="flex flex-wrap items-center gap-2.5">
                       <span className="rounded bg-brass-400/15 px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.15em] text-brass-200">
                         {exp.year}
@@ -122,13 +125,16 @@ export function AbyssalZone() {
             <Reveal className="mb-6 mt-10 flex items-center gap-2.5">
               <GraduationCap className="h-4 w-4 text-brass-300" />
               <h3 className="font-mono text-xs uppercase tracking-[0.3em] text-brass-200/80">
-                Academic record
+                Academic Foundation
               </h3>
             </Reveal>
             <div className="flex flex-col gap-5">
               {EDUCATION.map((edu) => (
                 <Reveal key={edu.institution}>
-                  <div className="panel-glass-deep rounded-2xl p-6 md:p-7">
+                  <div
+                    style={{ transform: "translate3d(0,0,0)", willChange: "transform" }}
+                    className="panel-glass-deep rounded-2xl p-6 md:p-7 shadow-lg"
+                  >
                     <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-brass-300">
                       {edu.period} · {edu.status}
                     </div>
@@ -152,13 +158,13 @@ export function AbyssalZone() {
             </div>
           </div>
 
-          {/* Recovered artifacts — certifications */}
+          {/* Verified Industry Certifications */}
           <div>
             <Reveal className="mb-6 flex items-center justify-between">
               <h3 className="font-mono text-xs uppercase tracking-[0.3em] text-brass-200/80">
-                Recovered artifacts — certifications
+                Verified Credentials & Certifications
               </h3>
-              <span className="font-mono text-[10px] text-paper0">
+              <span className="font-mono text-[10px] text-fog">
                 click to inspect
               </span>
             </Reveal>
@@ -167,7 +173,8 @@ export function AbyssalZone() {
                 <Reveal key={cert.id} delay={(i % 2) * 0.08} className="h-full">
                   <button
                     onClick={() => setActive(cert)}
-                    className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#04070d]/80 text-left backdrop-blur-sm transition-all duration-300 hover:-translate-y-1.5 hover:border-brass-400/40 hover:shadow-[0_18px_44px_-16px_rgba(201,163,95,0.3)]"
+                    style={{ transform: "translate3d(0,0,0)", willChange: "transform" }}
+                    className="group flex h-full w-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#060910]/95 text-left transition-all duration-300 hover:-translate-y-1.5 hover:border-brass-400/40 hover:shadow-[0_18px_44px_-16px_rgba(201,163,95,0.3)] cursor-pointer"
                   >
                     {cert.certificateImage ? (
                       <div className="relative aspect-[4/3] overflow-hidden">
@@ -177,7 +184,7 @@ export function AbyssalZone() {
                           loading="lazy"
                           className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#04070d] via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#060910] via-transparent to-transparent" />
                       </div>
                     ) : (
                       <div className="flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-[#0a1220] to-[#04070d]">
@@ -192,7 +199,7 @@ export function AbyssalZone() {
                       <div className="mt-2 font-display text-[15px] font-semibold leading-snug text-paper">
                         {cert.title}
                       </div>
-                      <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-paper0">
+                      <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-fog">
                         {cert.issuer}
                       </div>
                     </div>
@@ -204,7 +211,7 @@ export function AbyssalZone() {
         </div>
       </div>
 
-      <ArtifactLightbox cert={active} onClose={() => setActive(null)} />
+      <CredentialLightbox cert={active} onClose={() => setActive(null)} />
     </section>
   );
 }

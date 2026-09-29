@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-interface Particle {
+interface TelemetryPacket {
   x: number;
   y: number;
   size: number;
@@ -31,7 +31,7 @@ export default function OceanDepthCanvas() {
     window.addEventListener("resize", handleResize);
 
     const particleCount = 75;
-    const particles: Particle[] = Array.from({ length: particleCount }, () => ({
+    const particles: TelemetryPacket[] = Array.from({ length: particleCount }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
       size: Math.random() * 1.8 + 0.6,
@@ -52,22 +52,22 @@ export default function OceanDepthCanvas() {
       },
     });
 
-    const zoneColors = [
-      { stop: 0.0, r: 11, g: 15, b: 23 },   // Sunlight / Surface
-      { stop: 0.25, r: 8, g: 12, b: 19 },   // Twilight
-      { stop: 0.55, r: 5, g: 8, b: 14 },    // Midnight
-      { stop: 0.8, r: 3, g: 5, b: 9 },      // Abyssal
-      { stop: 1.0, r: 2, g: 3, b: 5 },      // Hadal (Void)
+    const layerTints = [
+      { stop: 0.0, r: 8, g: 12, b: 22 },   // Layer 00 (Gateway)
+      { stop: 0.25, r: 6, g: 10, b: 18 },  // Layer 01 (Compute)
+      { stop: 0.55, r: 4, g: 7, b: 14 },   // Layer 02 (Orchestration)
+      { stop: 0.8, r: 3, g: 5, b: 10 },    // Layer 03 (Workloads)
+      { stop: 1.0, r: 2, g: 3, b: 6 },     // Layer 04/05 (Security/Kernel)
     ];
 
     const interpolateColor = (progress: number) => {
-      let lower = zoneColors[0];
-      let upper = zoneColors[zoneColors.length - 1];
+      let lower = layerTints[0];
+      let upper = layerTints[layerTints.length - 1];
 
-      for (let i = 0; i < zoneColors.length - 1; i++) {
-        if (progress >= zoneColors[i].stop && progress <= zoneColors[i + 1].stop) {
-          lower = zoneColors[i];
-          upper = zoneColors[i + 1];
+      for (let i = 0; i < layerTints.length - 1; i++) {
+        if (progress >= layerTints[i].stop && progress <= layerTints[i + 1].stop) {
+          lower = layerTints[i];
+          upper = layerTints[i + 1];
           break;
         }
       }
@@ -94,7 +94,7 @@ export default function OceanDepthCanvas() {
       ctx.fillStyle = interpolateColor(scrollProgress);
       ctx.fillRect(0, 0, width, height);
 
-      // Render particulate
+      // Render network telemetry packets
       particles.forEach((p) => {
         p.y += p.baseSpeedY - scrollVelocity * 0.2;
         p.x += p.speedX;
@@ -106,8 +106,8 @@ export default function OceanDepthCanvas() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        // Using brass accent palette rgba(201, 163, 95)
-        ctx.fillStyle = `rgba(201, 163, 95, ${p.alpha * (1 - scrollProgress * 0.5)})`;
+        // Brass / amber telemetry packet styling
+        ctx.fillStyle = `rgba(201, 163, 95, ${p.alpha * (1 - scrollProgress * 0.4)})`;
         ctx.shadowBlur = 4;
         ctx.shadowColor = "rgba(201, 163, 95, 0.4)";
         ctx.fill();
@@ -129,6 +129,7 @@ export default function OceanDepthCanvas() {
   return (
     <canvas
       ref={canvasRef}
+      style={{ transform: "translate3d(0,0,0)", willChange: "transform" }}
       className="fixed inset-0 pointer-events-none -z-10 h-full w-full"
     />
   );

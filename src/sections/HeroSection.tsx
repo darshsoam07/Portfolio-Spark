@@ -24,7 +24,7 @@ export function HeroSection({ isTriggered = true }: HeroSectionProps) {
         defaults: { ease: "power3.out" },
       });
 
-      // Initial state reset
+      // Initial state reset with GPU layer promotion
       gsap.set(
         [
           badgeRef.current,
@@ -106,18 +106,20 @@ export function HeroSection({ isTriggered = true }: HeroSectionProps) {
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         {/* Left Column: Editorial Information */}
         <div className="lg:col-span-7 flex flex-col items-start gap-5">
-          {/* Telemetry Capsule Badge */}
+          {/* Telemetry Capsule Badge - Clean solid compositing */}
           <div
             ref={badgeRef}
-            className="flex items-center gap-2.5 rounded-full border border-amber-900/50 bg-[#0d1017]/80 px-3.5 py-1.5 font-mono text-xs text-amber-400 backdrop-blur-md shadow-[0_0_15px_rgba(245,158,11,0.1)]"
+            style={{ transform: "translate3d(0,0,0)", willChange: "transform, opacity" }}
+            className="flex items-center gap-2.5 rounded-full border border-amber-900/50 bg-[#0d1017] px-3.5 py-1.5 font-mono text-xs text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.12)]"
           >
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="tracking-wider">EXPOSITION LOG // 00-01: THE DESCENT</span>
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="tracking-wider">SYSTEM LOG // 00-01: EDGE INGRESS</span>
           </div>
 
           {/* Name Header with Editorial Serif */}
           <h1
             ref={nameRef}
+            style={{ transform: "translate3d(0,0,0)", willChange: "transform, opacity" }}
             className="display-serif text-6xl sm:text-7xl lg:text-8xl tracking-tight text-[#f4ecd8] leading-[1.05]"
           >
             Darsh{" "}
@@ -129,7 +131,8 @@ export function HeroSection({ isTriggered = true }: HeroSectionProps) {
           {/* Role Monospace Title */}
           <p
             ref={roleRef}
-            className="font-mono text-lg sm:text-xl text-amber-500 tracking-wide font-medium"
+            style={{ transform: "translate3d(0,0,0)", willChange: "transform, opacity" }}
+            className="font-mono text-lg sm:text-xl text-brass-300 tracking-wide font-medium"
           >
             Cloud & DevOps Engineer
           </p>
@@ -137,15 +140,16 @@ export function HeroSection({ isTriggered = true }: HeroSectionProps) {
           {/* Crisp Summary Statement */}
           <p
             ref={summaryRef}
+            style={{ transform: "translate3d(0,0,0)", willChange: "transform, opacity" }}
             className="text-base sm:text-lg text-fog font-light leading-relaxed max-w-xl"
           >
-            {PROFILE.subheadline} This is the descent — scroll to dive through every layer
-            of the stack, down to the black box.
+            {PROFILE.subheadline} Architecting resilient cloud systems, automated deployment pipelines, and intelligent agentic workflows across the stack.
           </p>
 
           {/* Telemetry Strip */}
           <div
             ref={telemetryHudRef}
+            style={{ transform: "translate3d(0,0,0)", willChange: "transform, opacity" }}
             className="mt-4 flex flex-wrap items-center gap-6 border-t border-white/10 pt-6 font-mono text-xs text-fog"
           >
             <div>
@@ -160,30 +164,36 @@ export function HeroSection({ isTriggered = true }: HeroSectionProps) {
               <span className="block text-[10px] uppercase text-faint">OBSERVABILITY</span>
               <span className="text-brass-300">CLOUDWATCH // PROMETHEUS</span>
             </div>
+            <div>
+              <span className="block text-[10px] uppercase text-faint">AUTOMATION</span>
+              <span className="text-paper">GITHUB ACTIONS // CI/CD</span>
+            </div>
           </div>
         </div>
 
-        {/* Right Column: Holographic Specimen Portrait */}
+        {/* Right Column: Holographic Systems Portrait - Permanently Full-Color & Smooth Compositing */}
         <div className="lg:col-span-5 flex justify-center">
           <div
             ref={portraitCardRef}
-            className="relative group w-72 sm:w-80 aspect-[4/5] rounded-2xl p-2 border border-brass-400/25 bg-gradient-to-b from-[#111722]/80 to-[#06080d]/90 shadow-2xl backdrop-blur-md overflow-hidden"
+            style={{ transform: "translate3d(0,0,0)", willChange: "transform, opacity" }}
+            className="relative group w-72 sm:w-80 aspect-[4/5] rounded-2xl p-2 border border-brass-400/25 bg-gradient-to-b from-[#111722] to-[#06080d] shadow-2xl overflow-hidden"
           >
             {/* Subtle Amber Glow Accent */}
             <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-brass-400/20 to-brass-600/0 blur-xl opacity-60 group-hover:opacity-100 transition-opacity duration-700" />
 
-            <div className="relative h-full w-full rounded-xl overflow-hidden grayscale contrast-125 hover:grayscale-0 transition-all duration-700">
+            {/* Permanent Full-Color Visuals: No grayscale/desaturation */}
+            <div className="relative h-full w-full rounded-xl overflow-hidden transition-all duration-700">
               <img
                 src={portrait}
-                alt="Darsh Soam"
-                className="h-full w-full object-cover object-top scale-105 group-hover:scale-100 transition-transform duration-700"
+                alt="Darsh Soam — Cloud & DevOps Engineer"
+                className="h-full w-full object-cover object-top scale-100 group-hover:scale-105 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#030407] via-transparent to-transparent opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#030407] via-transparent to-transparent opacity-75" />
 
-              {/* Technical Reticle Overlay */}
-              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between font-mono text-[10px] text-brass-300/90 bg-black/60 px-3 py-1.5 rounded border border-brass-400/30 backdrop-blur-sm">
-                <span>SPECIMEN // DARSH.SOAM</span>
-                <span className="text-emerald-400">ACTIVE</span>
+              {/* Technical Reticle Overlay - Clean solid styling without backdrop-blur */}
+              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between font-mono text-[10px] text-brass-300/90 bg-[#070a0f]/90 px-3 py-1.5 rounded border border-brass-400/30">
+                <span>OPERATOR // DARSH.SOAM</span>
+                <span className="text-emerald-400">STATUS: ACTIVE</span>
               </div>
             </div>
           </div>

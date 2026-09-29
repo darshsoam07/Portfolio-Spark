@@ -7,9 +7,9 @@ interface TerminalLog {
 
 export default function HadalBlackBox() {
   const [logs, setLogs] = useState<TerminalLog[]>([
-    { type: "system", text: "DS-01 // VOYAGE DATA RECORDER INITIALIZED" },
-    { type: "system", text: "HULL INTEGRITY: NOMINAL // DEPTH: 6,000 METERS" },
-    { type: "system", text: "Type 'help' for recoverable telemetry commands." },
+    { type: "system", text: "SYS-01 // CLUSTER TELEMETRY & ROOT CONSOLE INITIALIZED" },
+    { type: "system", text: "RUNTIME: AWS US-EAST-1 // KUBERNETES CLUSTER ONLINE // 0 ERRORS" },
+    { type: "system", text: "Type 'help' for available infrastructure commands." },
   ]);
   const [inputVal, setInputVal] = useState("");
   const [history, setHistory] = useState<string[]>([]);
@@ -35,21 +35,21 @@ export default function HadalBlackBox() {
       case "help":
         newLogs.push({
           type: "output",
-          text: "COMMANDS:\n  help           Display operational commands\n  status         Query depth telemetry & hull telemetry\n  cat stack      Print verified DevOps/Cloud architecture layers\n  kubectl pods   Check active deployment instances\n  deploy         Simulate full AWS + K8s release pipeline\n  surface        Ascend safely back to 0M surface\n  recover        Decrypt encrypted voyage data records\n  clear          Purge viewport buffer",
+          text: "COMMANDS:\n  help           Display diagnostic & operational commands\n  status         Query cluster health & latency metrics\n  cat stack      Print verified DevOps/Cloud architecture layers\n  kubectl pods   Check active deployment instances\n  deploy         Simulate full AWS + K8s release pipeline\n  credentials    Display verified system credentials and audit logs\n  top            Navigate back to Edge Gateway (top)\n  clear          Purge viewport buffer",
         });
         break;
 
       case "status":
         newLogs.push({
           type: "output",
-          text: "SECTOR: HADAL TRENCH // 6,000M\nPRESSURE: 601.0 ATM\nSYSTEM: ZERO ERRORS // ARTIFACT RECOVERY INTACT",
+          text: "ENVIRONMENT: AWS US-EAST-1 // PRODUCTION CLUSTER\nSTATUS: 100% NOMINAL // LATENCY: 18MS\nUPTIME: 99.99% // PACKET LOSS: 0%\nSECURITY: IAM LEAST-PRIVILEGE // ENCRYPTION AES-256",
         });
         break;
 
       case "cat stack":
         newLogs.push({
           type: "output",
-          text: "CORE STACK MATRIX:\n - Cloud & IaC: AWS (EC2, S3, IAM, CloudWatch), Terraform\n - Delivery: Docker, Kubernetes (EKS), GitHub Actions\n - Core Runtime: Linux Admin, Bash, Python Flask, TypeScript",
+          text: "CORE ARCHITECTURE MATRIX:\n - Cloud & IaC: AWS (EC2, S3, IAM, CloudWatch, VPC), Terraform\n - Delivery: Docker, Kubernetes (EKS), GitHub Actions\n - Core Runtime: Linux Admin, Bash, Python Flask, TypeScript\n - Agentic AI: LangChain, RAG Pipelines, Autonomous Decision Loops",
         });
         break;
 
@@ -63,14 +63,16 @@ export default function HadalBlackBox() {
       case "deploy":
         newLogs.push({
           type: "output",
-          text: "[DEPLOY] Rolling release to AWS cluster…\n[1/5] Terraform state validated … OK\n[2/5] Docker artifact built … OK\n[3/5] Image pushed to registry … OK\n[4/5] K8s pods scheduled (3 replicas) … HEALTHY\n[5/5] CloudWatch health-checks … 100% NOMINAL\n✓ DEPLOYMENT SUCCESSFUL — 0 errors",
+          text: "[DEPLOY] Rolling release to AWS production cluster…\n[1/5] Terraform state validated … OK\n[2/5] Docker artifact built … OK\n[3/5] Image pushed to registry … OK\n[4/5] K8s pods scheduled (3 replicas) … HEALTHY\n[5/5] CloudWatch health-checks … 100% NOMINAL\n✓ DEPLOYMENT SUCCESSFUL — 0 errors",
         });
         break;
 
+      case "top":
+      case "gateway":
       case "surface":
         newLogs.push({
           type: "output",
-          text: "▲ Ascending… see you at the surface.",
+          text: "▲ Navigating to Edge Gateway…",
         });
         setTimeout(() => {
           if (window.__lenis) {
@@ -78,13 +80,14 @@ export default function HadalBlackBox() {
           } else {
             document.getElementById("surface")?.scrollIntoView({ behavior: "smooth" });
           }
-        }, 500);
+        }, 400);
         break;
 
+      case "credentials":
       case "recover":
         newLogs.push({
           type: "output",
-          text: "DECRYPTING RECORD ARCHIVE...\n[SUCCESS] Recovered credentials for Oracle Cloud Certified Associate & Applied AI Foundations.",
+          text: "QUERYING AUDIT ARCHIVE...\n[VERIFIED] Oracle Certified Foundations Associate (Agentic AI) — 2026\n[VERIFIED] AI-Powered Cloud Engineer Virtual Internship (AWS Educate / EduSkills) — 2026\n[VERIFIED] Data Analytics Simulation (Deloitte) — 2025",
         });
         break;
 
@@ -129,7 +132,10 @@ export default function HadalBlackBox() {
   };
 
   return (
-    <div className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-xl border border-brass-600/40 bg-[#040608] shadow-[0_0_50px_rgba(201,163,95,0.08)] font-mono text-xs">
+    <div
+      style={{ transform: "translate3d(0,0,0)", willChange: "transform" }}
+      className="relative mx-auto w-full max-w-4xl overflow-hidden rounded-xl border border-brass-600/40 bg-[#040608] shadow-[0_0_50px_rgba(201,163,95,0.08)] font-mono text-xs"
+    >
       {/* Scanline & Vignette Effect */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(201,163,95,0.04)_0%,rgba(0,0,0,0.75)_100%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.35)_50%)] bg-[length:100%_4px]" />
@@ -138,9 +144,9 @@ export default function HadalBlackBox() {
       <div className="flex items-center justify-between border-b border-brass-600/30 bg-[#090c10] px-4 py-2.5 text-[11px] text-brass-300">
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-brass-400 animate-pulse" />
-          <span className="tracking-widest">DS-01 // VOYAGE DATA RECORDER</span>
+          <span className="tracking-widest">SYS-01 // CLUSTER TELEMETRY & ROOT CONSOLE</span>
         </div>
-        <div className="tracking-widest text-[9px] text-faint">DO NOT TAMPER</div>
+        <div className="tracking-widest text-[9px] text-emerald-400">STATUS: NOMINAL</div>
       </div>
 
       {/* Terminal Display Area */}
@@ -159,7 +165,7 @@ export default function HadalBlackBox() {
           <div key={i} className="leading-relaxed">
             {log.type === "input" && (
               <span className="text-paper">
-                <span className="text-brass-400 mr-2">rec@blackbox:~$</span>
+                <span className="text-brass-400 mr-2">ops@cloud-terminal:~$</span>
                 {log.text}
               </span>
             )}
@@ -177,28 +183,27 @@ export default function HadalBlackBox() {
 
       {/* Interactive Command Prompt */}
       <div className="flex items-center border-t border-brass-600/30 bg-[#06080b] px-4 py-3">
-        <span className="text-brass-400 font-bold mr-2">rec@blackbox:~$</span>
+        <span className="text-brass-400 font-bold mr-2">ops@cloud-terminal:~$</span>
         <input
           type="text"
           value={inputVal}
           onChange={(e) => setInputVal(e.target.value)}
           onKeyDown={onKeyDown}
-          autoFocus
           spellCheck={false}
           className="w-full bg-transparent font-mono text-xs text-paper outline-none placeholder:text-faint"
-          placeholder="enter diagnostic instruction (e.g. 'help')..."
+          placeholder="enter diagnostic instruction (e.g. 'help', 'status', 'kubectl pods')..."
         />
       </div>
 
       {/* Quick Command Chips */}
       <div className="flex flex-wrap items-center gap-2 border-t border-brass-600/20 bg-[#060a0f] px-4 py-2.5">
         <span className="text-[10px] uppercase tracking-wider text-faint">COMMANDS:</span>
-        {["help", "status", "cat stack", "kubectl pods", "deploy", "surface", "clear"].map((cmd) => (
+        {["help", "status", "cat stack", "kubectl pods", "deploy", "credentials", "top", "clear"].map((cmd) => (
           <button
             key={cmd}
             type="button"
             onClick={() => handleCommand(cmd)}
-            className="rounded border border-brass-400/25 bg-brass-400/[0.06] px-2.5 py-1 text-[10px] text-brass-300 transition-colors hover:border-brass-300 hover:text-paper"
+            className="rounded border border-brass-400/25 bg-brass-400/[0.06] px-2.5 py-1 text-[10px] text-brass-300 transition-colors hover:border-brass-300 hover:text-paper cursor-pointer"
           >
             ${cmd}
           </button>

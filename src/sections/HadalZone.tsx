@@ -10,10 +10,10 @@ export function HadalZone() {
           zoneId="hadal"
           title={
             <>
-              The <span className="display-serif italic font-medium text-signal">Black Box</span>
+              Root Diagnostics & <span className="display-serif italic font-medium text-signal">Console</span>
             </>
           }
-          blurb="Six thousand meters. If the expedition ever goes dark, this is what survives — every system, credential, and deployment, recoverable from the recorder."
+          blurb="Live interactive cluster terminal providing real-time infrastructure queries, Kubernetes pod monitoring, and cloud pipeline simulations."
         />
 
         <Reveal>

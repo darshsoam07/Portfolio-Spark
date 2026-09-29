@@ -12,16 +12,19 @@ export function TwilightZone() {
           zoneId="twilight"
           title={
             <>
-              The Twilight <span className="display-serif italic font-medium text-brass-300">Zone</span>
+              Infrastructure & <span className="display-serif italic font-medium text-brass-300">Orchestration</span>
             </>
           }
-          blurb="Five hundred meters down, the light thins — and the foundation layers come into focus. Every layer you pass here is load-bearing."
+          blurb="Multi-tier cloud topology, declarative infrastructure as code, and automated CI/CD release engineering."
         />
 
         <div className="grid gap-6 lg:grid-cols-2">
           {layers.map((cat, ci) => (
             <Reveal key={cat.id} delay={ci * 0.1} className="h-full">
-              <div className="panel-glass-deep flex h-full flex-col rounded-2xl p-6 transition-colors duration-300 hover:border-brass-400/30 md:p-8">
+              <div
+                style={{ transform: "translate3d(0,0,0)", willChange: "transform" }}
+                className="panel-glass-deep flex h-full flex-col rounded-2xl p-6 transition-colors duration-300 hover:border-brass-400/30 md:p-8"
+              >
                 <div className="eyebrow mb-3 text-brass-300/80">{cat.eyebrow}</div>
                 <h3 className="font-display text-2xl font-bold text-paper md:text-3xl">
                   {cat.title}
@@ -55,7 +58,7 @@ export function TwilightZone() {
 
         <Reveal delay={0.15} className="mt-8">
           <p className="sonar-note inline-block rounded-lg border border-dashed border-brass-400/30 bg-brass-400/[0.04] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-brass-200/80">
-            ◈ Sonar note: layers 03–05 wait below — the intelligence deck is next
+            ◈ TELEMETRY NOTE: Distributed workload engines and deep container networks initialized below
           </p>
         </Reveal>
       </div>
