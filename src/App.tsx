@@ -7,8 +7,8 @@ import OceanDepthCanvas from "@/components/OceanDepthCanvas";
 import { OceanBackground } from "@/components/OceanBackground";
 import { Navbar } from "@/components/Navbar";
 import { DepthGauge } from "@/components/DepthGauge";
-import { SubmersionIntro } from "@/components/SubmersionIntro";
-import { SurfaceHero } from "@/sections/SurfaceHero";
+import ArrivalTunnel from "@/components/ArrivalTunnel";
+import { HeroSection } from "@/sections/HeroSection";
 import { SunlightZone } from "@/sections/SunlightZone";
 import { TwilightZone } from "@/sections/TwilightZone";
 import { MidnightZone } from "@/sections/MidnightZone";
@@ -54,7 +54,6 @@ export default function App() {
   const sections = useMemo(
     () => (
       <>
-        <SurfaceHero />
         <SunlightZone />
         <TwilightZone />
         <MidnightZone />
@@ -70,7 +69,7 @@ export default function App() {
     <MotionConfig reducedMotion="user">
       <SmoothScroll>
         <div className="relative min-h-screen overflow-x-clip bg-[#04070d] text-paper">
-          {!introDone && <SubmersionIntro onDone={() => setIntroDone(true)} />}
+          {!introDone && <ArrivalTunnel onComplete={() => setIntroDone(true)} />}
           <OceanDepthCanvas />
           <OceanBackground zoneIndex={depth.zoneIndex} zoneBlend={depth.zoneBlend} />
           <div className="grain-overlay" aria-hidden />
@@ -78,7 +77,10 @@ export default function App() {
 
           <DepthGauge depth={depth} onPing={() => setPingKey((k) => k + 1)} />
           {pingKey > 0 && <SonarRipple key={pingKey} />}
-          <main className="relative z-10">{sections}</main>
+          <main className="relative z-10">
+            <HeroSection isTriggered={introDone} />
+            {sections}
+          </main>
         </div>
       </SmoothScroll>
     </MotionConfig>
