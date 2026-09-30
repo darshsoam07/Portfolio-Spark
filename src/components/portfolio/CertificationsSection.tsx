@@ -32,9 +32,9 @@ export function CertificationsSection() {
         className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16"
       >
         <div>
-          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-[#b7ff3c] mb-3">
-            <Award className="w-3.5 h-3.5" />
-            <span>Verified Industry Accreditations</span>
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-amber-400 mb-3">
+            <Award className="w-3.5 h-3.5 text-amber-400" />
+            <span>LAYER 04 // VERIFIED CREDENTIALS</span>
           </div>
           <h2 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl text-[#f1f6f7] tracking-tight">
             CERTIFIED <span className="text-[#b7ff3c]">CREDENTIALS.</span>

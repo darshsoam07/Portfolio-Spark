@@ -17,6 +17,7 @@ import { CertificationsSection } from "@/components/portfolio/CertificationsSect
 import { InteractiveTerminal } from "@/components/portfolio/InteractiveTerminal";
 import { ContactSection } from "@/components/portfolio/ContactSection";
 import { SiteFooter } from "@/components/portfolio/SiteFooter";
+import { ViewportTelemetryRail } from "@/components/portfolio/ViewportTelemetryRail";
 import { CommandPaletteModal } from "@/components/portfolio/CommandPaletteModal";
 import {
   Boxes,
@@ -119,6 +120,9 @@ function PortfolioPage() {
       >
         {/* Top Navbar */}
         <Navbar onOpenCommandPalette={() => setCommandPaletteOpen(true)} />
+
+        {/* Viewport Telemetry Rail */}
+        <ViewportTelemetryRail />
 
         {/* Main Experience */}
         <main className="relative z-10">

@@ -63,10 +63,10 @@ export function HeroSection() {
           {/* Eyebrow */}
           <motion.div
             variants={STAGGER_ITEM}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#b7ff3c]/10 border border-[#b7ff3c]/30 text-[#b7ff3c] font-mono text-[10px] uppercase tracking-[0.2em] mb-6 w-max"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded bg-amber-400/10 border border-amber-400/30 text-amber-300 font-mono text-[10px] uppercase tracking-[0.2em] mb-6 w-max"
           >
-            <Zap className="w-3 h-3" />
-            <span>Infrastructure · Automation · AI</span>
+            <Zap className="w-3 h-3 text-amber-400" />
+            <span>INFRASTRUCTURE &amp; AUTOMATION // DEV-OPS</span>
           </motion.div>
 
           {/* Name */}
@@ -94,8 +94,7 @@ export function HeroSection() {
             variants={STAGGER_ITEM}
             className="text-[#b3c0c4] text-base sm:text-lg leading-relaxed max-w-2xl mb-8 font-sans font-normal"
           >
-            Building repeatable, automated systems at the convergence of AWS Cloud, Kubernetes
-            orchestration, Terraform Infrastructure as Code, and Agentic AI workflows.
+            Architecting deterministic AWS environments, production GitOps delivery pipelines, and resilient Kubernetes clusters at the intersection of infrastructure and intelligent systems.
           </motion.p>
 
           {/* CTAs */}
@@ -160,7 +159,7 @@ export function HeroSection() {
           </motion.div>
         </motion.div>
 
-        {/* Right Column: Portrait HUD */}
+        {/* Right Column: Engineering Specimen Frame */}
         <motion.div
           className="lg:col-span-5 flex justify-center items-center"
           initial={{ opacity: 0, scale: 0.96 }}
@@ -168,37 +167,43 @@ export function HeroSection() {
           transition={{ duration: MOTION.cinematic.duration, delay: 0.3 }}
         >
           <div
-            className="relative w-full max-w-[420px] aspect-[4/5] rounded-xl border border-[rgba(230,240,245,0.12)] bg-[#0f1216] p-3 shadow-2xl overflow-hidden transition-transform duration-300 ease-out will-change-transform"
+            className="group relative w-full max-w-[420px] aspect-[4/5] rounded-2xl bg-[#080c14]/90 border border-amber-500/20 p-3 shadow-2xl overflow-hidden transition-transform duration-300 ease-out will-change-transform"
             style={{
               transform: `perspective(1000px) rotateY(${mousePos.x}deg) rotateX(${-mousePos.y}deg)`,
+              backgroundImage:
+                "radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.15), transparent 70%)",
             }}
           >
-            {/* Corner HUD */}
-            <div className="absolute top-2 left-2 font-mono text-[8px] text-[#73848b] z-20">
-              + TOP_L // 01
+            {/* Corner Reticle Brackets */}
+            <div className="absolute top-2 left-2 w-3.5 h-3.5 border-t-2 border-l-2 border-amber-500/60 z-20 pointer-events-none" />
+            <div className="absolute top-2 right-2 w-3.5 h-3.5 border-t-2 border-r-2 border-amber-500/60 z-20 pointer-events-none" />
+            <div className="absolute bottom-2 left-2 w-3.5 h-3.5 border-b-2 border-l-2 border-amber-500/60 z-20 pointer-events-none" />
+            <div className="absolute bottom-2 right-2 w-3.5 h-3.5 border-b-2 border-r-2 border-amber-500/60 z-20 pointer-events-none" />
+
+            {/* Specimen HUD Top Labels */}
+            <div className="absolute top-3 left-4 font-mono text-[9px] uppercase tracking-wider text-zinc-500 z-20">
+              SPECIMEN // NODE-01
             </div>
-            <div className="absolute top-2 right-2 font-mono text-[8px] text-[#b7ff3c] z-20">
-              STATUS: ACTIVE
-            </div>
-            <div className="absolute bottom-2 left-2 font-mono text-[8px] text-[#38bdf8] z-20">
-              NODE: DARSH-PROD-01
-            </div>
-            <div className="absolute bottom-2 right-2 font-mono text-[8px] text-[#73848b] z-20">
-              + BOT_R // 02
+            <div className="absolute top-3 right-4 font-mono text-[9px] uppercase tracking-wider text-amber-400 z-20">
+              SYS.STATUS: HEALTHY
             </div>
 
-            {/* Scanline */}
-            <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-[#b7ff3c]/5 to-transparent h-12 animate-scanline z-20" />
-
-            {/* Full-Color Natural Portrait: no filter/contrast/grayscale */}
-            <div className="relative w-full h-full rounded-lg overflow-hidden border border-[rgba(230,240,245,0.08)] bg-[#07080a]">
+            {/* Engineering Specimen Portrait Container */}
+            <div className="relative w-full h-full rounded-xl overflow-hidden bg-[#05070a]">
               <img
                 src={darshPortrait}
                 alt="Darsh Soam"
-                className="w-full h-full object-cover object-top transition-all duration-500"
+                className="h-full w-full object-cover object-center rounded-xl transition-transform duration-700 ease-out group-hover:scale-105"
               />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-[#07080a] via-transparent to-transparent opacity-60" />
+              {/* Bottom Diagnostic Pill */}
+              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between font-mono text-[10px] text-amber-400 bg-black/75 px-3 py-1.5 rounded border border-amber-500/30 backdrop-blur-md z-30">
+                <span className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  DARSH SOAM // B.TECH CSE
+                </span>
+                <span className="text-zinc-400">ACTIVE NODE</span>
+              </div>
             </div>
           </div>
         </motion.div>

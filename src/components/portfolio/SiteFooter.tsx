@@ -39,9 +39,12 @@ export function SiteFooter() {
           </p>
         </div>
 
-        {/* Center: Philosophy */}
+        {/* Center: System Status & Philosophy */}
         <div className="text-center font-mono text-[11px] text-[#b3c0c4]">
-          Built with curiosity. Engineered with intention. <br />
+          <div className="text-amber-400 font-semibold mb-1 flex items-center justify-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            All systems operational // Continuous Deployment Active
+          </div>
           <span className="text-[#73848b] text-[10px]">
             © {new Date().getFullYear()} {PROFILE.name} · MEERUT, IN · UTC+05:30 [{time}]
           </span>
@@ -55,7 +58,7 @@ export function SiteFooter() {
               target="_blank"
               rel="noreferrer"
               aria-label="GitHub Profile"
-              className="p-2 rounded bg-[#0f1216] border border-[rgba(230,240,245,0.08)] text-[#b3c0c4] hover:text-[#b7ff3c] hover:border-[#b7ff3c] transition-colors"
+              className="p-2 rounded bg-[#0f1216] border border-[rgba(230,240,245,0.08)] text-[#b3c0c4] hover:text-amber-400 hover:border-amber-400 transition-colors"
             >
               <Github className="w-4 h-4" />
             </a>
@@ -64,14 +67,14 @@ export function SiteFooter() {
               target="_blank"
               rel="noreferrer"
               aria-label="LinkedIn Profile"
-              className="p-2 rounded bg-[#0f1216] border border-[rgba(230,240,245,0.08)] text-[#b3c0c4] hover:text-[#b7ff3c] hover:border-[#b7ff3c] transition-colors"
+              className="p-2 rounded bg-[#0f1216] border border-[rgba(230,240,245,0.08)] text-[#b3c0c4] hover:text-amber-400 hover:border-amber-400 transition-colors"
             >
               <Linkedin className="w-4 h-4" />
             </a>
             <a
               href={`mailto:${PROFILE.email}`}
               aria-label="Email Contact"
-              className="p-2 rounded bg-[#0f1216] border border-[rgba(230,240,245,0.08)] text-[#b3c0c4] hover:text-[#b7ff3c] hover:border-[#b7ff3c] transition-colors"
+              className="p-2 rounded bg-[#0f1216] border border-[rgba(230,240,245,0.08)] text-[#b3c0c4] hover:text-amber-400 hover:border-amber-400 transition-colors"
             >
               <Mail className="w-4 h-4" />
             </a>
@@ -79,11 +82,10 @@ export function SiteFooter() {
 
           <button
             onClick={scrollToTop}
-            aria-label="Scroll to top"
-            className="flex items-center gap-1.5 px-3 py-2 rounded bg-[#0f1216] border border-[rgba(230,240,245,0.1)] font-mono text-[10px] uppercase text-[#73848b] hover:text-[#f1f6f7] hover:border-[#b7ff3c] transition-colors"
+            aria-label="Return to top"
+            className="flex items-center gap-1.5 px-3 py-2 rounded bg-[#0f1216] border border-[rgba(230,240,245,0.1)] font-mono text-[10px] uppercase text-[#b3c0c4] hover:text-amber-300 hover:border-amber-400 transition-colors"
           >
-            <span>Top</span>
-            <ArrowUp className="w-3 h-3" />
+            <span>RETURN TO TOP ↑</span>
           </button>
         </div>
       </div>

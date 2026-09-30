@@ -340,9 +340,9 @@ export function InteractiveTerminal() {
     >
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
         <div>
-          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-[#b7ff3c] mb-3">
-            <TerminalIcon className="w-3.5 h-3.5" />
-            <span>Interactive System Shell</span>
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.25em] text-amber-400 mb-3">
+            <TerminalIcon className="w-3.5 h-3.5 text-amber-400" />
+            <span>LAYER 05 // SYSTEM TERMINAL</span>
           </div>
           <h2 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl text-[#f1f6f7] tracking-tight">
             SYSTEM <span className="text-[#b7ff3c]">CLI.</span>
