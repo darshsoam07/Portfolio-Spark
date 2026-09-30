@@ -95,7 +95,7 @@ export function SystemsTopology() {
       <div className="grid lg:grid-cols-12 gap-8 items-start">
         {/* Left: Interactive Topology Canvas */}
         <div className="lg:col-span-7 flex flex-col gap-4">
-          <div className="p-4 sm:p-6 rounded-xl border border-[rgba(230,240,245,0.1)] bg-[#0f1216]/80 backdrop-blur-md">
+          <div className="p-4 sm:p-6 rounded-xl border border-[rgba(230,240,245,0.1)] bg-[#0f1216] shadow-xl will-change-transform">
             <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-wider text-[#73848b] pb-4 mb-4 border-b border-[rgba(230,240,245,0.06)]">
               <span>Interactive Pipeline Topology</span>
               <span>Hover or click to inspect</span>
@@ -197,7 +197,7 @@ export function SystemsTopology() {
 
         {/* Right: Inspector Panel with animated content swap */}
         <div className="lg:col-span-5 sticky top-24">
-          <div className="p-6 rounded-xl border border-[#b7ff3c]/30 bg-[#0f1216] backdrop-blur-md shadow-2xl relative overflow-hidden">
+          <div className="p-6 rounded-xl border border-[#b7ff3c]/30 bg-[#0f1216] shadow-2xl relative overflow-hidden will-change-transform">
             {/* Header */}
             <div className="flex items-center justify-between pb-4 mb-5 border-b border-[rgba(230,240,245,0.08)]">
               <div className="flex items-center gap-2">

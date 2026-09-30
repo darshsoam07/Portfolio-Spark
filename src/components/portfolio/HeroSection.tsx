@@ -168,7 +168,7 @@ export function HeroSection() {
           transition={{ duration: MOTION.cinematic.duration, delay: 0.3 }}
         >
           <div
-            className="relative w-full max-w-[420px] aspect-[4/5] rounded-xl border border-[rgba(230,240,245,0.12)] bg-[#0f1216]/90 p-3 shadow-2xl backdrop-blur-md overflow-hidden transition-transform duration-300 ease-out"
+            className="relative w-full max-w-[420px] aspect-[4/5] rounded-xl border border-[rgba(230,240,245,0.12)] bg-[#0f1216] p-3 shadow-2xl overflow-hidden transition-transform duration-300 ease-out will-change-transform"
             style={{
               transform: `perspective(1000px) rotateY(${mousePos.x}deg) rotateX(${-mousePos.y}deg)`,
             }}
@@ -190,15 +190,15 @@ export function HeroSection() {
             {/* Scanline */}
             <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-[#b7ff3c]/5 to-transparent h-12 animate-scanline z-20" />
 
-            {/* Image */}
+            {/* Full-Color Natural Portrait: no filter/contrast/grayscale */}
             <div className="relative w-full h-full rounded-lg overflow-hidden border border-[rgba(230,240,245,0.08)] bg-[#07080a]">
               <img
                 src={darshPortrait}
                 alt="Darsh Soam"
-                className="w-full h-full object-cover object-top filter contrast-125 brightness-95 opacity-90 transition-all duration-500 hover:opacity-100"
+                className="w-full h-full object-cover object-top transition-all duration-500"
               />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-[#07080a] via-transparent to-transparent opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#07080a] via-transparent to-transparent opacity-60" />
             </div>
           </div>
         </motion.div>
