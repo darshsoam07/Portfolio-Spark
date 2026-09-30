@@ -3,7 +3,8 @@ import { motion } from "motion/react";
 import { Terminal as TerminalIcon, CornerDownLeft, Sparkles, X, Maximize2 } from "lucide-react";
 import { PROFILE, PROJECTS, CERTIFICATIONS, EDUCATION } from "@/data/portfolioData";
 import { SECTION_REVEAL, VIEWPORT_REVEAL } from "@/lib/motion";
-import { TiltCard } from "./TiltCard";
+import { MotionCard } from "./MotionCard";
+import { MaskedReveal } from "./MaskedReveal";
 
 interface CommandLog {
   id: string;
@@ -345,7 +346,9 @@ export function InteractiveTerminal() {
             <span>LAYER 05 // SYSTEM TERMINAL</span>
           </div>
           <h2 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl text-[#f1f6f7] tracking-tight">
-            SYSTEM <span className="text-[#b7ff3c]">CLI.</span>
+            <MaskedReveal>
+              SYSTEM <span className="text-[#b7ff3c]">CLI.</span>
+            </MaskedReveal>
           </h2>
           <p className="text-[#b3c0c4] text-sm md:text-base max-w-2xl mt-4 font-sans leading-relaxed">
             Explore the portfolio via an interactive terminal. Type{" "}
@@ -370,8 +373,8 @@ export function InteractiveTerminal() {
         </div>
       </div>
 
-      {/* Terminal Window Frame — wrapped in TiltCard for tactile tilt interaction */}
-      <TiltCard className="rounded-xl shadow-2xl overflow-hidden" intensity={8}>
+      {/* Terminal Window Frame — wrapped in MotionCard with spotlight border */}
+      <MotionCard className="rounded-xl shadow-2xl overflow-hidden" intensity={4}>
         <div className="rounded-xl border border-[rgba(230,240,245,0.12)] bg-[#07080a] overflow-hidden backdrop-blur-md">
           {/* Terminal Title Bar */}
           <div className="flex items-center justify-between px-4 py-3 bg-[#0f1216] border-b border-[rgba(230,240,245,0.08)]">
@@ -425,7 +428,7 @@ export function InteractiveTerminal() {
             <div ref={bottomRef} />
           </div>
         </div>
-      </TiltCard>
+      </MotionCard>
     </motion.section>
   );
 }

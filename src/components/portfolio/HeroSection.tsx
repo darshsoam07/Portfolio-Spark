@@ -1,20 +1,41 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { motion } from "motion/react";
+import gsap from "gsap";
 import { ArrowDown, ArrowUpRight, Terminal, Zap } from "lucide-react";
 import { PROFILE } from "@/data/portfolioData";
 import darshPortrait from "@/assets/darsh.jpeg";
 import { MOTION, STAGGER_CONTAINER, STAGGER_ITEM } from "@/lib/motion";
+import { MagneticButton } from "./MagneticButton";
+import { MaskedReveal } from "./MaskedReveal";
 
 export function HeroSection() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
+  const specimenRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !specimenRef.current) return;
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
     const y = ((e.clientY - rect.top) / rect.height - 0.5) * 12;
-    setMousePos({ x, y });
+    gsap.to(specimenRef.current, {
+      rotateY: x,
+      rotateX: -y,
+      duration: 0.35,
+      ease: "power2.out",
+      transformPerspective: 1000,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    if (specimenRef.current) {
+      gsap.to(specimenRef.current, {
+        rotateY: 0,
+        rotateX: 0,
+        duration: 0.6,
+        ease: "power2.out",
+      });
+    }
   };
 
   const scrollTo = (id: string) => {
@@ -26,7 +47,7 @@ export function HeroSection() {
       id="signal"
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      onMouseLeave={() => setMousePos({ x: 0, y: 0 })}
+      onMouseLeave={handleMouseLeave}
       className="relative min-h-screen w-full pt-28 pb-16 md:pt-36 md:pb-24 px-6 md:px-10 max-w-[1440px] mx-auto flex flex-col justify-between overflow-hidden"
     >
       {/* Background Ambience */}
@@ -74,10 +95,14 @@ export function HeroSection() {
             variants={STAGGER_ITEM}
             className="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-[#f1f6f7] leading-[0.95] mb-6"
           >
-            DARSH <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f1f6f7] via-[#cbd5e1] to-[#b7ff3c]">
-              SOAM
-            </span>
+            <MaskedReveal delay={0.05}>
+              DARSH
+            </MaskedReveal>
+            <MaskedReveal delay={0.15}>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f1f6f7] via-[#cbd5e1] to-[#b7ff3c]">
+                SOAM
+              </span>
+            </MaskedReveal>
           </motion.h1>
 
           {/* Role */}
@@ -85,8 +110,10 @@ export function HeroSection() {
             variants={STAGGER_ITEM}
             className="font-mono text-base sm:text-lg text-[#b7ff3c] font-medium tracking-wide mb-4"
           >
-            Cloud & DevOps Engineer <span className="text-[#73848b]">|</span> Infrastructure &
-            Automation Enthusiast
+            <MaskedReveal delay={0.25}>
+              Cloud & DevOps Engineer <span className="text-[#73848b]">|</span> Infrastructure &
+              Automation Enthusiast
+            </MaskedReveal>
           </motion.h2>
 
           {/* Description */}
@@ -97,31 +124,31 @@ export function HeroSection() {
             Architecting deterministic AWS environments, production GitOps delivery pipelines, and resilient Kubernetes clusters at the intersection of infrastructure and intelligent systems.
           </motion.p>
 
-          {/* CTAs */}
+          {/* CTAs with MagneticButton */}
           <motion.div variants={STAGGER_ITEM} className="flex flex-wrap items-center gap-4 mb-10">
-            <button
+            <MagneticButton
               onClick={() => scrollTo("systems")}
-              className="group inline-flex items-center gap-2.5 px-6 py-3.5 rounded bg-[#b7ff3c] text-[#07080a] font-mono text-xs uppercase tracking-widest font-bold hover:bg-[#b7ff3c]/90 transition-all shadow-[0_0_20px_-5px_rgba(183,255,60,0.4)]"
+              className="group inline-flex items-center gap-2.5 px-6 py-3.5 rounded bg-[#b7ff3c] text-[#07080a] font-mono text-xs uppercase tracking-widest font-bold hover:bg-[#b7ff3c]/90 transition-all shadow-[0_0_20px_-5px_rgba(183,255,60,0.4)] cursor-pointer"
             >
               <span>Explore Systems Map</span>
               <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
-            </button>
+            </MagneticButton>
 
-            <button
+            <MagneticButton
               onClick={() => scrollTo("work")}
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded border border-[rgba(230,240,245,0.15)] bg-[#0f1216] text-[#f1f6f7] font-mono text-xs uppercase tracking-widest hover:border-[#b7ff3c] hover:text-[#b7ff3c] transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded border border-[rgba(230,240,245,0.15)] bg-[#0f1216] text-[#f1f6f7] font-mono text-xs uppercase tracking-widest hover:border-[#b7ff3c] hover:text-[#b7ff3c] transition-all cursor-pointer"
             >
               <span>View Case Studies</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
-            </button>
+            </MagneticButton>
 
-            <button
+            <MagneticButton
               onClick={() => scrollTo("terminal")}
-              className="inline-flex items-center gap-2 px-4 py-3.5 rounded border border-[rgba(230,240,245,0.1)] bg-[#07080a] text-[#73848b] font-mono text-xs uppercase tracking-widest hover:text-[#38bdf8] hover:border-[#38bdf8]/40 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-3.5 rounded border border-[rgba(230,240,245,0.1)] bg-[#07080a] text-[#73848b] font-mono text-xs uppercase tracking-widest hover:text-[#38bdf8] hover:border-[#38bdf8]/40 transition-all cursor-pointer"
             >
               <Terminal className="w-3.5 h-3.5 text-[#38bdf8]" />
               <span>CLI</span>
-            </button>
+            </MagneticButton>
           </motion.div>
 
           {/* Spec Grid */}
@@ -136,7 +163,9 @@ export function HeroSection() {
               <div className="font-mono text-xs text-[#f1f6f7] font-semibold mt-1">
                 B.Tech CSE @ MIET
               </div>
-              <div className="font-mono text-[9px] text-[#38bdf8] mt-0.5">2024 — 2028</div>
+              <MaskedReveal delay={0.35} duration={0.8}>
+                <div className="font-mono text-[9px] text-[#38bdf8] mt-0.5">2024 — 2028</div>
+              </MaskedReveal>
             </div>
             <div className="p-3 rounded border border-[rgba(230,240,245,0.06)] bg-[#0f1216]/50">
               <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">
@@ -145,7 +174,9 @@ export function HeroSection() {
               <div className="font-mono text-xs text-[#f1f6f7] font-semibold mt-1">
                 AWS & Terraform
               </div>
-              <div className="font-mono text-[9px] text-[#b7ff3c] mt-0.5">Docker · K8s · Linux</div>
+              <MaskedReveal delay={0.4} duration={0.8}>
+                <div className="font-mono text-[9px] text-[#b7ff3c] mt-0.5">Docker · K8s · Linux</div>
+              </MaskedReveal>
             </div>
             <div className="col-span-2 sm:col-span-1 p-3 rounded border border-[rgba(230,240,245,0.06)] bg-[#0f1216]/50">
               <div className="font-mono text-[9px] uppercase tracking-wider text-[#73848b]">
@@ -154,7 +185,9 @@ export function HeroSection() {
               <div className="font-mono text-xs text-[#f1f6f7] font-semibold mt-1">
                 Oracle & OpenAI
               </div>
-              <div className="font-mono text-[9px] text-[#38bdf8] mt-0.5">Agentic AI Certified</div>
+              <MaskedReveal delay={0.45} duration={0.8}>
+                <div className="font-mono text-[9px] text-[#38bdf8] mt-0.5">Agentic AI Certified</div>
+              </MaskedReveal>
             </div>
           </motion.div>
         </motion.div>
@@ -167,9 +200,10 @@ export function HeroSection() {
           transition={{ duration: MOTION.cinematic.duration, delay: 0.3 }}
         >
           <div
-            className="group relative w-full max-w-[420px] aspect-[4/5] rounded-2xl bg-[#080c14]/90 border border-amber-500/20 p-3 shadow-2xl overflow-hidden transition-transform duration-300 ease-out will-change-transform"
+            ref={specimenRef}
+            className="group relative w-full max-w-[420px] aspect-[4/5] rounded-2xl bg-[#080c14]/90 border border-amber-500/20 p-3 shadow-2xl overflow-hidden will-change-transform"
             style={{
-              transform: `perspective(1000px) rotateY(${mousePos.x}deg) rotateX(${-mousePos.y}deg)`,
+              transformStyle: "preserve-3d",
               backgroundImage:
                 "radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.15), transparent 70%)",
             }}

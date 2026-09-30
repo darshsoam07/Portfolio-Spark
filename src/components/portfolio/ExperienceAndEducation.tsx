@@ -3,6 +3,7 @@ import { GraduationCap, Briefcase, MapPin, CheckCircle } from "lucide-react";
 import { EDUCATION, EXPERIENCE_TRAINING } from "@/data/portfolioData";
 import { SECTION_REVEAL, STAGGER_CONTAINER, STAGGER_ITEM, VIEWPORT_REVEAL } from "@/lib/motion";
 import { MotionCard } from "./MotionCard";
+import { MaskedReveal } from "./MaskedReveal";
 
 export function ExperienceAndEducation() {
   return (
@@ -21,7 +22,9 @@ export function ExperienceAndEducation() {
           <span>Academic & Applied Trajectory</span>
         </div>
         <h2 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl text-[#f1f6f7] tracking-tight">
-          JOURNEY & <span className="text-[#b7ff3c]">EDUCATION.</span>
+          <MaskedReveal>
+            JOURNEY & <span className="text-[#b7ff3c]">EDUCATION.</span>
+          </MaskedReveal>
         </h2>
         <p className="text-[#b3c0c4] text-sm md:text-base max-w-2xl mt-4 font-sans leading-relaxed">
           Grounding theoretical computer science fundamentals into hands-on cloud systems,

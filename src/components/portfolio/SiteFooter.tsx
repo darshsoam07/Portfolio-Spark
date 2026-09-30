@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ArrowUp, Github, Linkedin, Mail, ShieldCheck, Terminal } from "lucide-react";
 import { PROFILE, SOCIALS } from "@/data/portfolioData";
+import { MagneticButton } from "./MagneticButton";
 
 export function SiteFooter() {
   const [time, setTime] = useState("");
@@ -80,13 +81,13 @@ export function SiteFooter() {
             </a>
           </div>
 
-          <button
+          <MagneticButton
             onClick={scrollToTop}
-            aria-label="Return to top"
-            className="flex items-center gap-1.5 px-3 py-2 rounded bg-[#0f1216] border border-[rgba(230,240,245,0.1)] font-mono text-[10px] uppercase text-[#b3c0c4] hover:text-amber-300 hover:border-amber-400 transition-colors"
+            ariaLabel="Return to top"
+            className="flex items-center gap-1.5 px-3 py-2 rounded bg-[#0f1216] border border-[rgba(230,240,245,0.1)] font-mono text-[10px] uppercase text-[#b3c0c4] hover:text-amber-300 hover:border-amber-400 transition-colors cursor-pointer"
           >
             <span>RETURN TO TOP ↑</span>
-          </button>
+          </MagneticButton>
         </div>
       </div>
     </footer>

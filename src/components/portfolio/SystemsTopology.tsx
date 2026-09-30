@@ -20,6 +20,8 @@ import {
   Zap,
 } from "lucide-react";
 import { MOTION, SECTION_REVEAL, VIEWPORT_REVEAL } from "@/lib/motion";
+import { MagneticButton } from "./MagneticButton";
+import { MaskedReveal } from "./MaskedReveal";
 
 export interface TopologyNode {
   id: string;
@@ -529,7 +531,9 @@ export function SystemsTopology() {
             <span>LAYER 03 // SYSTEMS ARCHITECTURE</span>
           </div>
           <h2 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl text-[#f1f6f7] tracking-tight">
-            CLOUD ARCHITECTURE <span className="text-amber-400">CONSOLE.</span>
+            <MaskedReveal>
+              CLOUD ARCHITECTURE <span className="text-amber-400">CONSOLE.</span>
+            </MaskedReveal>
           </h2>
           <p className="text-[#b3c0c4] text-sm md:text-base max-w-2xl mt-4 font-sans leading-relaxed">
             Deterministic AWS cloud topology, automated GitOps delivery pipelines, and resilient
@@ -544,10 +548,10 @@ export function SystemsTopology() {
             <span>SYS.STATUS: HEALTHY</span>
           </div>
 
-          <button
+          <MagneticButton
             onClick={handleSimulate}
             disabled={isSimulating}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded font-mono text-xs uppercase tracking-wider transition-all ${
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded font-mono text-xs uppercase tracking-wider transition-all cursor-pointer ${
               isSimulating
                 ? "bg-amber-400/20 border border-amber-400 text-amber-300 animate-pulse cursor-not-allowed"
                 : "bg-amber-400 text-[#080c14] font-bold hover:bg-amber-300 shadow-[0_0_15px_-3px_rgba(245,158,11,0.35)]"
@@ -566,7 +570,7 @@ export function SystemsTopology() {
                 <span>Simulate CI/CD Rollout</span>
               </>
             )}
-          </button>
+          </MagneticButton>
         </div>
       </div>
 

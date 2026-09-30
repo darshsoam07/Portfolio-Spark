@@ -3,6 +3,9 @@ import { motion } from "motion/react";
 import { ArrowUpRight, CheckCircle2, MapPin, MessageSquare, Send } from "lucide-react";
 import { PROFILE } from "@/data/portfolioData";
 import { SECTION_REVEAL, STAGGER_CONTAINER, STAGGER_ITEM, VIEWPORT_REVEAL } from "@/lib/motion";
+import { MotionCard } from "./MotionCard";
+import { MaskedReveal } from "./MaskedReveal";
+import { MagneticButton } from "./MagneticButton";
 
 export function ContactSection() {
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
@@ -42,8 +45,12 @@ export function ContactSection() {
             </div>
 
             <h2 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl text-[#f1f6f7] tracking-tight leading-[0.95] mb-6">
-              SYSTEM READY. <br />
-              <span className="text-[#b7ff3c]">LET'S CONNECT.</span>
+              <MaskedReveal>
+                SYSTEM READY.
+              </MaskedReveal>
+              <MaskedReveal delay={0.1}>
+                <span className="text-[#b7ff3c]">LET'S CONNECT.</span>
+              </MaskedReveal>
             </h2>
 
             <p className="text-[#b3c0c4] text-base leading-relaxed font-sans max-w-lg mb-8">
@@ -123,7 +130,7 @@ export function ContactSection() {
 
         {/* Right: Form */}
         <div className="lg:col-span-6">
-          <div className="p-6 sm:p-8 rounded-2xl border border-[rgba(230,240,245,0.12)] bg-[#0f1216]/90 backdrop-blur-md shadow-2xl">
+          <MotionCard className="p-6 sm:p-8 rounded-2xl border border-[rgba(230,240,245,0.12)] bg-[#0f1216]/90 backdrop-blur-md shadow-2xl" intensity={3}>
             <div className="font-mono text-xs uppercase tracking-wider text-[#b7ff3c] mb-6 flex items-center gap-2">
               <Send className="w-3.5 h-3.5" />
               <span>Transmit Secure Message</span>
@@ -189,10 +196,10 @@ export function ContactSection() {
                   />
                 </div>
 
-                <button
+                <MagneticButton
                   type="submit"
                   disabled={loading}
-                  className="w-full mt-2 py-3.5 rounded bg-[#b7ff3c] text-[#07080a] font-mono text-xs uppercase tracking-widest font-bold hover:bg-[#b7ff3c]/90 transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_-4px_rgba(183,255,60,0.3)] disabled:opacity-50"
+                  className="w-full mt-2 py-3.5 rounded bg-[#b7ff3c] text-[#07080a] font-mono text-xs uppercase tracking-widest font-bold hover:bg-[#b7ff3c]/90 transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_-4px_rgba(183,255,60,0.3)] disabled:opacity-50 cursor-pointer"
                 >
                   {loading ? (
                     <span>Transmitting...</span>
@@ -202,10 +209,10 @@ export function ContactSection() {
                       <Send className="w-3.5 h-3.5" />
                     </>
                   )}
-                </button>
+                </MagneticButton>
               </form>
             )}
-          </div>
+          </MotionCard>
         </div>
       </div>
     </motion.section>

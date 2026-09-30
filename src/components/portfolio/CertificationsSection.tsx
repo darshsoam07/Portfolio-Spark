@@ -4,6 +4,8 @@ import { Award, CheckCircle2, ShieldCheck } from "lucide-react";
 import { CERTIFICATIONS, type Credential } from "@/data/portfolioData";
 import { CertificateModal } from "./CertificateModal";
 import { SECTION_REVEAL, STAGGER_CONTAINER, STAGGER_ITEM, VIEWPORT_REVEAL } from "@/lib/motion";
+import { MaskedReveal } from "./MaskedReveal";
+import { MotionCard } from "./MotionCard";
 
 /* Staggered spatial offsets — gives a constellation feel without random chaos */
 const SPATIAL_OFFSETS = [
@@ -37,7 +39,9 @@ export function CertificationsSection() {
             <span>LAYER 04 // VERIFIED CREDENTIALS</span>
           </div>
           <h2 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl text-[#f1f6f7] tracking-tight">
-            CERTIFIED <span className="text-[#b7ff3c]">CREDENTIALS.</span>
+            <MaskedReveal>
+              CERTIFIED <span className="text-[#b7ff3c]">CREDENTIALS.</span>
+            </MaskedReveal>
           </h2>
           <p className="text-[#b3c0c4] text-sm md:text-base max-w-2xl mt-4 font-sans leading-relaxed">
             Formally accredited competencies spanning Agentic AI, cloud engineering, data analytics,
@@ -62,47 +66,51 @@ export function CertificationsSection() {
         {CERTIFICATIONS.map((cert, i) => {
           const offset = SPATIAL_OFFSETS[i % SPATIAL_OFFSETS.length];
           return (
-            <motion.button
+            <motion.div
               key={cert.id}
               variants={STAGGER_ITEM}
-              onClick={() => setSelectedCredential(cert)}
-              className={`${offset.float} text-left p-6 rounded-xl border border-[rgba(230,240,245,0.1)] bg-[#0f1216]/80 backdrop-blur-md flex flex-col justify-between hover:border-[#b7ff3c]/40 transition-all duration-300 hover:shadow-[0_0_24px_-6px_rgba(183,255,60,0.12)] hover:-translate-y-1 group`}
+              className={`${offset.float} h-full`}
               style={{
                 transform: `translate(${offset.x}px, ${offset.y}px)`,
               }}
-              aria-label={`View ${cert.title} certificate from ${cert.issuer}`}
             >
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-4">
-                  <span className="px-2 py-0.5 rounded bg-[#b7ff3c]/10 text-[#b7ff3c] border border-[#b7ff3c]/20 font-mono text-[9px] font-semibold uppercase">
-                    {cert.issuer}
+              <MotionCard
+                onClick={() => setSelectedCredential(cert)}
+                intensity={4}
+                className="text-left p-6 rounded-xl border border-[rgba(230,240,245,0.1)] bg-[#0f1216]/80 backdrop-blur-md flex flex-col justify-between hover:border-[#b7ff3c]/40 transition-all duration-300 hover:shadow-[0_0_24px_-6px_rgba(183,255,60,0.12)] h-full group"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-4">
+                    <span className="px-2 py-0.5 rounded bg-[#b7ff3c]/10 text-[#b7ff3c] border border-[#b7ff3c]/20 font-mono text-[9px] font-semibold uppercase">
+                      {cert.issuer}
+                    </span>
+                    <span className="font-mono text-[10px] text-[#73848b]">{cert.year}</span>
+                  </div>
+
+                  <h3 className="font-display font-bold text-lg text-[#f1f6f7] group-hover:text-[#b7ff3c] transition-colors leading-snug">
+                    {cert.title}
+                  </h3>
+
+                  <div className="font-mono text-[10px] text-[#38bdf8] uppercase tracking-wider mt-1 mb-3">
+                    {cert.category}
+                  </div>
+
+                  <p className="text-xs text-[#b3c0c4] leading-relaxed font-sans">
+                    {cert.description}
+                  </p>
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-[rgba(230,240,245,0.06)] flex items-center justify-between text-[#73848b] font-mono text-[10px]">
+                  <span className="flex items-center gap-1 text-[#b7ff3c]">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>Verified</span>
                   </span>
-                  <span className="font-mono text-[10px] text-[#73848b]">{cert.year}</span>
+                  <span className="uppercase group-hover:text-[#b7ff3c] transition-colors">
+                    {cert.certificateImage ? "View Certificate →" : cert.issuer}
+                  </span>
                 </div>
-
-                <h3 className="font-display font-bold text-lg text-[#f1f6f7] group-hover:text-[#b7ff3c] transition-colors leading-snug">
-                  {cert.title}
-                </h3>
-
-                <div className="font-mono text-[10px] text-[#38bdf8] uppercase tracking-wider mt-1 mb-3">
-                  {cert.category}
-                </div>
-
-                <p className="text-xs text-[#b3c0c4] leading-relaxed font-sans">
-                  {cert.description}
-                </p>
-              </div>
-
-              <div className="mt-6 pt-4 border-t border-[rgba(230,240,245,0.06)] flex items-center justify-between text-[#73848b] font-mono text-[10px]">
-                <span className="flex items-center gap-1 text-[#b7ff3c]">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Verified</span>
-                </span>
-                <span className="uppercase group-hover:text-[#b7ff3c] transition-colors">
-                  {cert.certificateImage ? "View Certificate →" : cert.issuer}
-                </span>
-              </div>
-            </motion.button>
+              </MotionCard>
+            </motion.div>
           );
         })}
       </motion.div>

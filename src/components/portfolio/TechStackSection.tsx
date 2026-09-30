@@ -10,6 +10,7 @@ import {
   VIEWPORT_REVEAL,
 } from "@/lib/motion";
 import { MotionCard } from "./MotionCard";
+import { MaskedReveal } from "./MaskedReveal";
 
 export function TechStackSection() {
   const [activeCategoryId, setActiveCategoryId] = useState<string>(SKILL_CATEGORIES[0].id);
@@ -34,7 +35,9 @@ export function TechStackSection() {
             <span>LAYER 01 // FOUNDATION</span>
           </div>
           <h2 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl text-[#f1f6f7] tracking-tight">
-            ENGINEERING <span className="text-[#b7ff3c]">STACK.</span>
+            <MaskedReveal>
+              ENGINEERING <span className="text-[#b7ff3c]">STACK.</span>
+            </MaskedReveal>
           </h2>
           <p className="text-[#b3c0c4] text-sm md:text-base max-w-2xl mt-4 font-sans leading-relaxed">
             Organized hierarchically across system tiers — from cloud primitives and declarative

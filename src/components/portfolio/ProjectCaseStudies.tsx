@@ -4,6 +4,8 @@ import { ArrowUpRight, CheckCircle2, Github, Layers, Shield, Workflow, Zap } fro
 import { PROJECTS } from "@/data/portfolioData";
 import { MOTION, SECTION_REVEAL, VIEWPORT_REVEAL } from "@/lib/motion";
 import { MotionCard } from "./MotionCard";
+import { MaskedReveal } from "./MaskedReveal";
+import { MagneticButton } from "./MagneticButton";
 
 export function ProjectCaseStudies() {
   const [activeProjectId, setActiveProjectId] = useState<string>(PROJECTS[0].id);
@@ -28,7 +30,9 @@ export function ProjectCaseStudies() {
             <span>LAYER 02 // WORKFLOW AUTOMATION</span>
           </div>
           <h2 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl text-[#f1f6f7] tracking-tight">
-            SELECTED <span className="text-[#b7ff3c]">WORK.</span>
+            <MaskedReveal>
+              SELECTED <span className="text-[#b7ff3c]">WORK.</span>
+            </MaskedReveal>
           </h2>
           <p className="text-[#b3c0c4] text-sm md:text-base max-w-2xl mt-4 font-sans leading-relaxed">
             Detailed engineering deep-dives demonstrating Infrastructure as Code, container
@@ -83,16 +87,16 @@ export function ProjectCaseStudies() {
               </div>
 
               {activeProject.githubUrl && (
-                <a
+                <MagneticButton
                   href={activeProject.githubUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded border border-[rgba(230,240,245,0.15)] bg-[#07080a] font-mono text-xs text-[#f1f6f7] hover:border-[#b7ff3c] hover:text-[#b7ff3c] transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded border border-[rgba(230,240,245,0.15)] bg-[#07080a] font-mono text-xs text-[#f1f6f7] hover:border-[#b7ff3c] hover:text-[#b7ff3c] transition-colors cursor-pointer"
                 >
                   <Github className="w-3.5 h-3.5" />
                   <span>Source Code</span>
                   <ArrowUpRight className="w-3 h-3" />
-                </a>
+                </MagneticButton>
               )}
             </div>
 

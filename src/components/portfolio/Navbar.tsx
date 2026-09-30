@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Command as CommandIcon, Menu, X, ArrowUpRight, ShieldCheck } from "lucide-react";
 import { PROFILE } from "@/data/portfolioData";
+import { MagneticButton } from "./MagneticButton";
 
 interface NavbarProps {
   onOpenCommandPalette: () => void;
@@ -189,17 +190,14 @@ export function Navbar({ onOpenCommandPalette }: NavbarProps) {
               </kbd>
             </button>
 
-            <a
+            <MagneticButton
               href="#connect"
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection("connect");
-              }}
+              onClick={() => scrollToSection("connect")}
               className="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 border border-amber-500/40 bg-amber-500/10 text-amber-300 font-mono text-[11px] uppercase tracking-wider rounded hover:bg-amber-400 hover:text-[#080c14] transition-all shadow-[0_0_15px_-3px_rgba(245,158,11,0.25)]"
             >
               <span>GET IN TOUCH</span>
               <ArrowUpRight className="w-3 h-3" />
-            </a>
+            </MagneticButton>
 
             {/* Mobile Toggle */}
             <button
