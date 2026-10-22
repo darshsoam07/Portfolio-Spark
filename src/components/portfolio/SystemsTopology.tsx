@@ -35,7 +35,17 @@ export interface TopologyNode {
   accentColor: string;
   x: number; // Center X in SVG viewBox 0 0 960 620
   y: number; // Center Y in SVG viewBox 0 0 960 620
-  icon: "globe" | "cloud" | "server" | "boxes" | "cpu" | "git" | "database" | "shield" | "activity";
+  icon:
+    | "globe"
+    | "cloud"
+    | "server"
+    | "boxes"
+    | "cpu"
+    | "git"
+    | "database"
+    | "shield"
+    | "activity"
+    | "layers";
   specs: { label: string; value: string }[];
   metrics: {
     label: string;
@@ -451,8 +461,7 @@ export function SystemsTopology() {
     TOPOLOGY_NODES.find((node) => node.id === selectedNodeId) || TOPOLOGY_NODES[3];
 
   const activeNodeId = hoveredNodeId ?? selectedNodeId;
-  const activeNode =
-    TOPOLOGY_NODES.find((node) => node.id === activeNodeId) || selectedNode;
+  const activeNode = TOPOLOGY_NODES.find((node) => node.id === activeNodeId) || selectedNode;
 
   // Determine active downstream conduits
   const activeConnections = activeNode.connectsTo;
@@ -537,7 +546,8 @@ export function SystemsTopology() {
           </h2>
           <p className="text-[#b3c0c4] text-sm md:text-base max-w-2xl mt-4 font-sans leading-relaxed">
             Deterministic AWS cloud topology, automated GitOps delivery pipelines, and resilient
-            multi-tier cluster orchestration. Click or hover any subsystem to inspect live configuration specs.
+            multi-tier cluster orchestration. Click or hover any subsystem to inspect live
+            configuration specs.
           </p>
         </div>
 
@@ -867,8 +877,7 @@ export function SystemsTopology() {
                   const isSelected = selectedNode.id === node.id;
                   const isHovered = hoveredNodeId === node.id;
                   const isConnected = activeConnections.includes(node.id);
-                  const isSimActive =
-                    isSimulating && SIM_SEQUENCE[simStep] === node.id;
+                  const isSimActive = isSimulating && SIM_SEQUENCE[simStep] === node.id;
 
                   const w = 200;
                   const h = 76;
@@ -915,14 +924,7 @@ export function SystemsTopology() {
 
                       {/* Active Indicator Left Border Bar */}
                       {(isSelected || isSimActive) && (
-                        <rect
-                          x={rx}
-                          y={ry}
-                          width="3.5"
-                          height={h}
-                          rx="2"
-                          fill={node.accentColor}
-                        />
+                        <rect x={rx} y={ry} width="3.5" height={h} rx="2" fill={node.accentColor} />
                       )}
 
                       {/* Corner Reticle Brackets */}
@@ -973,22 +975,14 @@ export function SystemsTopology() {
                         cx={rx + w - 16}
                         cy={ry + 15}
                         r="3.5"
-                        fill={
-                          isSelected || isSimActive
-                            ? node.accentColor
-                            : "#10b981"
-                        }
+                        fill={isSelected || isSimActive ? node.accentColor : "#10b981"}
                       />
 
                       {/* Node Primary Title */}
                       <text
                         x={rx + 12}
                         y={ry + 38}
-                        fill={
-                          isSelected || isHovered
-                            ? "#ffffff"
-                            : "#f1f6f7"
-                        }
+                        fill={isSelected || isHovered ? "#ffffff" : "#f1f6f7"}
                         fontSize="12"
                         fontFamily="Space Grotesk, sans-serif"
                         fontWeight="bold"
@@ -1145,10 +1139,7 @@ export function SystemsTopology() {
                     <div key={i} className="space-y-1">
                       <div className="flex items-center justify-between font-mono text-[10px]">
                         <span className="text-zinc-400">{m.label}</span>
-                        <span
-                          className="font-bold"
-                          style={{ color: m.color }}
-                        >
+                        <span className="font-bold" style={{ color: m.color }}>
                           {m.value}
                         </span>
                       </div>

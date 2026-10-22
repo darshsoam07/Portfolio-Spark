@@ -1,3 +1,5 @@
+import suppliedCredentials from "./credentials.json";
+
 export interface ProjectItem {
   id: string;
   number: string;
@@ -123,35 +125,14 @@ export interface Credential {
   category: string;
   description: string;
   certificateImage?: string;
-  verified: true;
+  verified: boolean;
+  badgeImage?: string;
+  verificationUrl?: string | null;
+  type?: string;
+  evidence?: string;
 }
 
-export const CERTIFICATIONS: Credential[] = [
-  {
-    id: "oracle-agentic-ai",
-    title: "Oracle Certified Foundations Associate — Agentic AI",
-    issuer: "Oracle",
-    year: "2026",
-    issuedDate: "August 9, 2026",
-    category: "AI & Agents",
-    description:
-      "Oracle Certified recognition for Agentic AI concepts, autonomous decision-making agents, and AI agent workflows.",
-    certificateImage: "/certificates/oracle-agentic-ai.jpg",
-    verified: true,
-  },
-  {
-    id: "eduskills-cloud-engineer",
-    title: "AI-Powered Cloud Engineer Virtual Internship",
-    issuer: "EduSkills",
-    provider: "Eduskills / AICTE / AWS Educate",
-    year: "2026",
-    issuedDate: "June – August 2026",
-    category: "Cloud Engineering",
-    description:
-      "8-week virtual internship applying cloud engineering concepts through an AI-focused lens, connecting AWS-based workflows with automated pipelines.",
-    certificateImage: "/certificates/eduskills-cloud-engineer.jpg",
-    verified: true,
-  },
+const additionalCredentials: Credential[] = [
   {
     id: "deloitte-data-analytics",
     title: "Data Analytics Job Simulation",
@@ -162,7 +143,7 @@ export const CERTIFICATIONS: Credential[] = [
     description:
       "Certificate of Completion for practical data analysis and forensic technology tasks within Deloitte's simulation program.",
     certificateImage: "/certificates/deloitte-data-analytics.jpg",
-    verified: true,
+    verified: false,
   },
   {
     id: "openai-applied-ai",
@@ -174,7 +155,7 @@ export const CERTIFICATIONS: Credential[] = [
     description:
       "Core principles of applied foundation models, prompt engineering architectures, and embedding-driven semantic processing.",
     certificateImage: "/certificates/openai-applied-ai.jpg",
-    verified: true,
+    verified: false,
   },
   {
     id: "openai-agents-workflows",
@@ -186,7 +167,7 @@ export const CERTIFICATIONS: Credential[] = [
     description:
       "Multi-step autonomous agent patterns, function calling, tool execution pipelines, and workflow orchestration.",
     certificateImage: "/certificates/openai-agents-workflows.jpg",
-    verified: true,
+    verified: false,
   },
   {
     id: "openai-ai-foundations",
@@ -197,8 +178,27 @@ export const CERTIFICATIONS: Credential[] = [
     category: "AI Fundamentals",
     description:
       "Foundational understanding of AI systems, machine learning paradigms, and practical AI application patterns.",
-    verified: true,
+    verified: false,
   },
+];
+
+// The supplied manifest updates two existing achievements and adds three training records.
+// Keep historic IDs stable for existing consumers; a badge and certificate share one record.
+export const CERTIFICATIONS: Credential[] = [
+  ...suppliedCredentials.map((item) => ({
+    ...item,
+    id:
+      item.id === "oracle-agentic-ai-foundations-associate"
+        ? "oracle-agentic-ai"
+        : item.id === "eduskills-ai-powered-cloud-engineer-internship"
+          ? "eduskills-cloud-engineer"
+          : item.id,
+    issuedDate: item.dateLabel,
+    year: item.issuedDate?.slice(0, 4) ?? "2026",
+    badgeImage: item.badgeImage ?? undefined,
+    verified: false,
+  })),
+  ...additionalCredentials,
 ];
 
 export const SYSTEM_NODES: SystemNode[] = [

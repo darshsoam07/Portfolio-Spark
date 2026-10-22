@@ -57,7 +57,8 @@ export function ArrivalTunnel({ onFinish, onComplete }: ArrivalTunnelProps) {
     };
 
     if (containerRef.current) {
-      gsap.timeline({ onComplete: notifyComplete })
+      gsap
+        .timeline({ onComplete: notifyComplete })
         .to(containerRef.current, {
           backgroundColor: "#f59e0b",
           duration: 0.12,
@@ -136,9 +137,12 @@ export function ArrivalTunnel({ onFinish, onComplete }: ArrivalTunnelProps) {
       ease: "power2.in",
       onUpdate: () => {
         const p = Math.round(tl.progress() * 40);
-        if (percentTextRef.current) percentTextRef.current.textContent = p.toString().padStart(2, "0");
+        if (percentTextRef.current)
+          percentTextRef.current.textContent = p.toString().padStart(2, "0");
         if (progressBarRef.current) progressBarRef.current.style.width = `${p}%`;
-        if (statusTextRef.current) statusTextRef.current.textContent = "INITIALIZING DISTRIBUTED CLUSTER NODES // 60HZ NOMINAL";
+        if (statusTextRef.current)
+          statusTextRef.current.textContent =
+            "INITIALIZING DISTRIBUTED CLUSTER NODES // 60HZ NOMINAL";
       },
     })
       .to(warpState, {
@@ -152,9 +156,12 @@ export function ArrivalTunnel({ onFinish, onComplete }: ArrivalTunnelProps) {
         onUpdate: () => {
           const p = Math.round(40 + (tl.progress() - 0.44) * 95);
           const capped = Math.min(p, 94);
-          if (percentTextRef.current) percentTextRef.current.textContent = capped.toString().padStart(2, "0");
+          if (percentTextRef.current)
+            percentTextRef.current.textContent = capped.toString().padStart(2, "0");
           if (progressBarRef.current) progressBarRef.current.style.width = `${capped}%`;
-          if (statusTextRef.current) statusTextRef.current.textContent = "ORCHESTRATING RUNTIME & TERRAFORM STATE // AWS US-EAST-1";
+          if (statusTextRef.current)
+            statusTextRef.current.textContent =
+              "ORCHESTRATING RUNTIME & TERRAFORM STATE // AWS US-EAST-1";
         },
       })
       .to(warpState, {
@@ -168,7 +175,9 @@ export function ArrivalTunnel({ onFinish, onComplete }: ArrivalTunnelProps) {
         onUpdate: () => {
           if (percentTextRef.current) percentTextRef.current.textContent = "100";
           if (progressBarRef.current) progressBarRef.current.style.width = "100%";
-          if (statusTextRef.current) statusTextRef.current.textContent = "DISTRIBUTED MESH SYNCHRONIZED // ENTERPRISE SYSTEMS ONLINE";
+          if (statusTextRef.current)
+            statusTextRef.current.textContent =
+              "DISTRIBUTED MESH SYNCHRONIZED // ENTERPRISE SYSTEMS ONLINE";
         },
       });
 
@@ -307,7 +316,9 @@ export function ArrivalTunnel({ onFinish, onComplete }: ArrivalTunnelProps) {
 
       {/* Bottom Telemetry & Bypass — Clean solid styling */}
       <div className="relative z-30 flex w-full max-w-6xl items-center justify-between border-t border-amber-950/60 bg-[#030407]/95 px-4 py-2.5 text-[10px] text-zinc-400">
-        <span className="text-zinc-500 font-mono">NODE: US-EAST-1A // COORD: 28.9845° N, 77.7064° E</span>
+        <span className="text-zinc-500 font-mono">
+          NODE: US-EAST-1A // COORD: 28.9845° N, 77.7064° E
+        </span>
         <button
           onClick={finishIntro}
           className="group flex items-center gap-1.5 text-amber-500/80 hover:text-amber-400 transition-colors cursor-pointer"

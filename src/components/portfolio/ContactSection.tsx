@@ -45,9 +45,7 @@ export function ContactSection() {
             </div>
 
             <h2 className="font-display font-extrabold text-4xl sm:text-5xl md:text-6xl text-[#f1f6f7] tracking-tight leading-[0.95] mb-6">
-              <MaskedReveal>
-                SYSTEM READY.
-              </MaskedReveal>
+              <MaskedReveal>SYSTEM READY.</MaskedReveal>
               <MaskedReveal delay={0.1}>
                 <span className="text-[#b7ff3c]">LET'S CONNECT.</span>
               </MaskedReveal>
@@ -130,7 +128,10 @@ export function ContactSection() {
 
         {/* Right: Form */}
         <div className="lg:col-span-6">
-          <MotionCard className="p-6 sm:p-8 rounded-2xl border border-[rgba(230,240,245,0.12)] bg-[#0f1216]/90 backdrop-blur-md shadow-2xl" intensity={3}>
+          <MotionCard
+            className="p-6 sm:p-8 rounded-2xl border border-[rgba(230,240,245,0.12)] bg-[#0f1216]/90 backdrop-blur-md shadow-2xl"
+            intensity={3}
+          >
             <div className="font-mono text-xs uppercase tracking-wider text-[#b7ff3c] mb-6 flex items-center gap-2">
               <Send className="w-3.5 h-3.5" />
               <span>Transmit Secure Message</span>

@@ -56,7 +56,7 @@ export function MaskedReveal({
             start: "top 92%",
             once: true,
           },
-        }
+        },
       );
     }, el);
 

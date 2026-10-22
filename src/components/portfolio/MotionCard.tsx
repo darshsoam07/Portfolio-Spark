@@ -35,7 +35,10 @@ export function MotionCard({
     cardRef.current.style.setProperty("--mouse-y", `${y}px`);
 
     if (disableTilt) return;
-    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
       return;
     }
 
@@ -113,9 +116,7 @@ export function MotionCard({
         }}
       />
 
-      <div className="relative z-[1] w-full h-full">
-        {children}
-      </div>
+      <div className="relative z-[1] w-full h-full">{children}</div>
     </div>
   );
 }

@@ -14,7 +14,11 @@ export function HeroSection() {
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current || !specimenRef.current) return;
-    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
     const y = ((e.clientY - rect.top) / rect.height - 0.5) * 12;
@@ -95,9 +99,7 @@ export function HeroSection() {
             variants={STAGGER_ITEM}
             className="font-display font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-[#f1f6f7] leading-[0.95] mb-6"
           >
-            <MaskedReveal delay={0.05}>
-              DARSH
-            </MaskedReveal>
+            <MaskedReveal delay={0.05}>DARSH</MaskedReveal>
             <MaskedReveal delay={0.15}>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f1f6f7] via-[#cbd5e1] to-[#b7ff3c]">
                 SOAM
@@ -121,7 +123,9 @@ export function HeroSection() {
             variants={STAGGER_ITEM}
             className="text-[#b3c0c4] text-base sm:text-lg leading-relaxed max-w-2xl mb-8 font-sans font-normal"
           >
-            Architecting deterministic AWS environments, production GitOps delivery pipelines, and resilient Kubernetes clusters at the intersection of infrastructure and intelligent systems.
+            Architecting deterministic AWS environments, production GitOps delivery pipelines, and
+            resilient Kubernetes clusters at the intersection of infrastructure and intelligent
+            systems.
           </motion.p>
 
           {/* CTAs with MagneticButton */}
@@ -175,7 +179,9 @@ export function HeroSection() {
                 AWS & Terraform
               </div>
               <MaskedReveal delay={0.4} duration={0.8}>
-                <div className="font-mono text-[9px] text-[#b7ff3c] mt-0.5">Docker · K8s · Linux</div>
+                <div className="font-mono text-[9px] text-[#b7ff3c] mt-0.5">
+                  Docker · K8s · Linux
+                </div>
               </MaskedReveal>
             </div>
             <div className="col-span-2 sm:col-span-1 p-3 rounded border border-[rgba(230,240,245,0.06)] bg-[#0f1216]/50">
@@ -186,7 +192,9 @@ export function HeroSection() {
                 Oracle & OpenAI
               </div>
               <MaskedReveal delay={0.45} duration={0.8}>
-                <div className="font-mono text-[9px] text-[#38bdf8] mt-0.5">Agentic AI Certified</div>
+                <div className="font-mono text-[9px] text-[#38bdf8] mt-0.5">
+                  Agentic AI Certified
+                </div>
               </MaskedReveal>
             </div>
           </motion.div>

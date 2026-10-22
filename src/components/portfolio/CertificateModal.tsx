@@ -60,7 +60,7 @@ export function CertificateModal({ credential, onClose }: CertificateModalProps)
             exit={{ opacity: 0, scale: 0.95, y: 12 }}
             transition={{
               duration: MOTION.component.duration,
-              ease: MOTION.component.ease as unknown as number[],
+              ease: MOTION.component.ease,
             }}
           >
             {/* Header */}

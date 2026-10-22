@@ -30,3 +30,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local verification artifacts and Vercel build output
+artifacts/
+.vercel/

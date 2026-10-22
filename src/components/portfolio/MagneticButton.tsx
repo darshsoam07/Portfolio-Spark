@@ -11,6 +11,7 @@ interface MagneticButtonProps {
   ariaLabel?: string;
   target?: string;
   rel?: string;
+  disabled?: boolean;
 }
 
 /**
@@ -27,11 +28,15 @@ export function MagneticButton({
   ariaLabel,
   target,
   rel,
+  disabled = false,
 }: MagneticButtonProps) {
   const elementRef = useRef<HTMLElement>(null);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
       return;
     }
     const currentTarget = e.currentTarget;
@@ -79,6 +84,7 @@ export function MagneticButton({
     <button
       ref={elementRef as React.RefObject<HTMLButtonElement>}
       type={type}
+      disabled={disabled}
       onClick={onClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}

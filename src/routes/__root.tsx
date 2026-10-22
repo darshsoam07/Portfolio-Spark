@@ -11,7 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { useLenisGsap } from "../hooks/useLenisGsap";
+import { homepageArrivalScript } from "../lib/homepage-arrival";
 
 function NotFoundComponent() {
   return (
@@ -96,15 +96,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Engineering the systems behind the experience. AWS, Kubernetes, Terraform, CI/CD, and AI systems.",
       },
       { property: "og:type", content: "website" },
-      { name: "theme-color", content: "#07080a" },
+      { name: "theme-color", content: "#f1f0ea" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+      { rel: "canonical", href: "https://darshsoam.vercel.app/" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Caveat:wght@400;500&display=swap",
       },
     ],
   }),
@@ -116,31 +118,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark scroll-smooth">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: homepageArrivalScript }} />
         <HeadContent />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function () {
-                try {
-                  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-                  var root = document.documentElement;
-                  root.classList.add('intro-pending');
-                  // Boot fail-safe. This class hides the portfolio, so if the
-                  // application bundle never runs, nothing would ever remove it
-                  // and the page would stay blank forever. React cancels this
-                  // timer the moment it hydrates.
-                  window.__introFailsafeTimer = setTimeout(function () {
-                    root.classList.remove('intro-pending');
-                  }, 6000);
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
       </head>
-      <body className="bg-[#07080a] text-[#f1f6f7] antialiased overflow-x-hidden selection:bg-[#b7ff3c] selection:text-[#07080a]">
+      <body className="antialiased">
         {children}
         <Scripts />
       </body>
@@ -150,8 +133,6 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  // Mount Lenis smooth scroll exactly once at the application shell
-  useLenisGsap();
 
   return (
     <QueryClientProvider client={queryClient}>

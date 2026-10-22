@@ -1,0 +1,11 @@
+import { chromium } from "playwright";
+import assert from "node:assert/strict";
+const b = await chromium.launch();
+const p = await b.newPage({ viewport: { width: 1440, height: 900 }, javaScriptEnabled: false });
+await p.goto("http://127.0.0.1:8082/", { waitUntil: "domcontentloaded" });
+const h = await p.locator("#work-heading").boundingBox();
+assert.ok(h.y > 900, "Unhydrated work label stays below hero");
+assert.equal(await p.locator(".skip-gallery").isVisible(), false);
+assert.ok(await p.locator("h1").isVisible());
+console.log("No-JavaScript hero and gallery label containment passed");
+await b.close();
