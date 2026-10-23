@@ -1,174 +1,204 @@
+@font-face {
+  font-family: "Arrival Sans";
+  src: url("/fonts/dm-sans-600.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
 html[data-arrival="pending"],
 html[data-arrival="pending"] body {
   overflow: hidden;
   overscroll-behavior: none;
 }
-.welcome-wash.arrival-overlay {
+.arrival-overlay {
   display: none;
-  pointer-events: auto;
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  overflow: hidden;
+  background: #e75b35;
+  color: #fffaf2;
+  padding: clamp(24px, 3.3vw, 48px);
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.11em;
+}
+html[data-arrival="pending"] .arrival-overlay {
+  display: block;
 }
 .arrival-overlay::before {
   content: "";
   position: absolute;
-  inset: -10%;
+  inset: 0;
+  opacity: 0.035;
   pointer-events: none;
-  opacity: 0.12;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23000' filter='url(%23grain)' opacity='.65' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
-  animation: arrival-grain 0.6s steps(3) 3;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23000' filter='url(%23grain)' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+.arrival-label {
+  opacity: 0;
+  transform: translateY(5px);
 }
 .arrival-signature,
 .arrival-greeting {
-  position: relative;
+  position: absolute;
+  top: clamp(24px, 3.3vw, 48px);
   line-height: 1.9;
 }
-.arrival-role {
-  position: absolute;
-  bottom: 40px;
-  right: 40px;
+.arrival-signature {
+  left: clamp(24px, 3.3vw, 48px);
 }
-.welcome-wash .arrival-count {
-  font-size: clamp(32px, 4vw, 54px);
-  font-variant-numeric: tabular-nums;
-  line-height: 1;
+.arrival-greeting {
+  right: clamp(24px, 3.3vw, 48px);
+  text-align: right;
 }
-html[data-arrival="pending"] .arrival-overlay {
-  display: flex;
-  animation: arrival-exit 2.4s cubic-bezier(0.76, 0, 0.24, 1) both;
-}
-.arrival-skip {
-  position: absolute;
-  bottom: 68px;
-  right: 40px;
-  min-height: 44px;
-  padding: 12px 0 12px 20px;
-  font-size: 12px;
-  letter-spacing: 0.04em;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-}
-.arrival-skip:hover {
-  text-decoration: underline;
-  text-underline-offset: 5px;
-}
-.arrival-skip:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 6px;
-}
-@keyframes arrival-exit {
-  0%,
-  60% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-101%);
-  }
+.arrival-signature span,
+.arrival-greeting span {
+  display: block;
+  opacity: 0.65;
 }
 .arrival-mark {
   position: absolute;
-  width: min(88%, 900px);
-  height: auto;
-  top: 50%;
+  top: 48%;
   left: 50%;
+  width: min(88vw, 1120px);
+  height: auto;
   transform: translate(-50%, -50%);
   overflow: visible;
 }
-.arrival-outline,
-.arrival-fill {
-  font-family: "DM Sans", sans-serif;
-  font-size: 120px;
+.arrival-routing {
+  opacity: 0.5;
+}
+.arrival-route {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  opacity: 0;
+}
+.arrival-node {
+  opacity: 0;
+  transform: scale(0.7);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.arrival-node-label,
+.arrival-annotation {
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+.arrival-annotation {
+  opacity: 0;
+}
+.arrival-type {
+  font-family: "Arrival Sans", "DM Sans", sans-serif;
+  font-size: 170px;
   font-weight: 600;
-  letter-spacing: -5px;
+  letter-spacing: -9px;
 }
 .arrival-outline {
   fill: none;
   stroke: currentColor;
-  stroke-width: 1;
-  stroke-dasharray: 800;
-  animation: arrival-letter-draw 0.9s 0.15s ease-in-out both;
-}
-.arrival-fill {
-  fill: currentColor;
-  animation: arrival-letter-fill 0.4s 0.8s ease-out both;
-}
-.arrival-guides {
-  opacity: 0.3;
-  stroke-width: 1;
-  stroke-dasharray: 1;
-  animation: arrival-guide-draw 0.8s ease-out both;
-}
-.arrival-specs {
-  font-size: 8px;
-  letter-spacing: 2px;
-  opacity: 0.7;
+  stroke-width: 1.15;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  opacity: 0;
 }
 .arrival-dot {
+  opacity: 0;
+  transform: translateY(-20px) scale(0.5);
   transform-box: fill-box;
   transform-origin: center;
-  animation: arrival-dot-settle 0.45s 0.9s cubic-bezier(0.22, 1.4, 0.5, 1) both;
 }
-@keyframes arrival-guide-draw {
-  from {
-    stroke-dashoffset: 1;
-    opacity: 0;
-  }
-  to {
-    stroke-dashoffset: 0;
-    opacity: 0.3;
-  }
+.arrival-progress {
+  position: absolute;
+  bottom: clamp(24px, 3.3vw, 48px);
+  left: clamp(24px, 3.3vw, 48px);
 }
-@keyframes arrival-letter-draw {
-  from {
-    stroke-dashoffset: 800;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
+.arrival-count {
+  display: block;
+  font-family: "Arrival Sans", "DM Sans", sans-serif;
+  font-size: clamp(52px, 6.5vw, 94px);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: -0.06em;
 }
-@keyframes arrival-letter-fill {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.arrival-progress-note {
+  display: block;
+  font-size: 8px;
+  margin-top: 12px;
+  letter-spacing: 0.16em;
 }
-@keyframes arrival-dot-settle {
-  from {
-    transform: translateY(-60px) scale(0.3);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
+.arrival-role {
+  position: absolute;
+  right: clamp(24px, 3.3vw, 48px);
+  bottom: clamp(24px, 3.3vw, 48px);
 }
-@keyframes arrival-grain {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  33% {
-    transform: translate(-1%, 1%);
-  }
-  66% {
-    transform: translate(1%, -1%);
-  }
+.arrival-skip {
+  position: absolute;
+  right: clamp(24px, 3.3vw, 48px);
+  bottom: calc(clamp(24px, 3.3vw, 48px) + 28px);
+  min-height: 44px;
+  padding: 10px 0 10px 20px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 12px;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+.arrival-skip span {
+  display: inline-block;
+  margin-left: 8px;
+  transition: transform 0.2s ease;
+}
+.arrival-skip:hover span {
+  transform: translate(2px, -2px);
+}
+.arrival-skip:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 5px;
 }
 @media (max-width: 600px) {
-  .arrival-skip {
-    bottom: 20px;
-    right: 25px;
+  .arrival-overlay {
+    font-size: 9px;
   }
-  .arrival-role,
   .arrival-greeting {
+    top: 82px;
+    left: 24px;
+    right: auto;
+    text-align: left;
+  }
+  .arrival-greeting span {
     display: none;
+  }
+  .arrival-mark {
+    width: 116vw;
+    left: 47%;
+    top: 47%;
+  }
+  .arrival-role {
+    display: none;
+  }
+  .arrival-skip {
+    bottom: 28px;
+  }
+  .arrival-node-label {
+    display: none;
+  }
+}
+@media (max-height: 550px) and (min-width: 601px) {
+  .arrival-mark {
+    width: min(65vw, 700px);
+  }
+  .arrival-count {
+    font-size: 52px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
   html[data-arrival="pending"] .arrival-overlay {
     display: none;
-    animation: none;
+  }
+  .arrival-skip span {
+    transition: none;
   }
 }

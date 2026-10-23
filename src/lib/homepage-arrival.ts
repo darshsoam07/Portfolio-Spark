@@ -4,6 +4,7 @@ declare global {
       pending: boolean;
       fresh: boolean;
       finish: () => void;
+      deadline?: number;
       restore?: { x: number; y: number };
     };
   }
@@ -40,19 +41,16 @@ export const homepageArrivalScript = `(() => {
     document.dispatchEvent(new Event('homepage-arrival-done'));
     document.removeEventListener('click', skip, true);
     document.removeEventListener('keydown', escape, true);
-    document.removeEventListener('animationend', ended, true);
     reduced.removeEventListener('change', change);
   };
   const skip = event => { if (event.target.closest?.('[data-skip-arrival]')) finish(); };
   const escape = event => { if (event.key === 'Escape') finish(); };
   const change = event => { if (event.matches) finish(); };
-  const ended = event => { if (event.animationName === 'arrival-exit') finish(); };
-  window.__homepageArrival = { pending: !reduced.matches, fresh: true, finish };
+  window.__homepageArrival = { pending: !reduced.matches, fresh: true, finish, deadline: performance.now() + 4000 };
   root.dataset.arrival = reduced.matches ? 'done' : 'pending';
   if (!reduced.matches) {
     document.addEventListener('click', skip, true);
     document.addEventListener('keydown', escape, true);
-    document.addEventListener('animationend', ended, true);
     reduced.addEventListener('change', change);
     timer = setTimeout(finish, 4000);
   }

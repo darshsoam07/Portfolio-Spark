@@ -34,3 +34,5 @@ dist-ssr
 # Local verification artifacts and Vercel build output
 artifacts/
 .vercel/
+.vercel
+.env*

@@ -139,7 +139,10 @@ export function EditorialPortfolio() {
     const motion = gsap.matchMedia();
     motion.add("(prefers-reduced-motion: no-preference)", () => {
       const context = gsap.context(() => {}, root);
-      const reveal = () =>
+      let revealed = false;
+      const reveal = () => {
+        if (revealed) return;
+        revealed = true;
         context.add(() => {
           gsap.from(".hero-enter", {
             y: 24,
@@ -150,11 +153,14 @@ export function EditorialPortfolio() {
             clearProps: "all",
           });
         });
+      };
       if (window.__homepageArrival?.pending) {
+        document.addEventListener("homepage-arrival-reveal", reveal, { once: true });
         document.addEventListener("homepage-arrival-done", reveal, { once: true });
       } else reveal();
       return () => {
         document.removeEventListener("homepage-arrival-done", reveal);
+        document.removeEventListener("homepage-arrival-reveal", reveal);
         context.revert();
       };
     });
