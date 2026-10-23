@@ -60,3 +60,24 @@ The live website was also opened in the in-app browser and observed transitionin
 - `artifacts/deployment/live-credentials-390.png`
 
 No deployment-blocking issues remain. Non-blocking pre-existing lint/build advisories remain. LinkedIn automated availability could not be verified because of HTTP 999. Browser tests used Chromium and emulated mobile sizes; they do not represent physical-device or all-browser coverage. Email actions were checked without sending email.
+
+## Arrival update deployment — 23 October 2026, 18:53 IST
+
+Status: deployed and verified on https://darshsoam.vercel.app/.
+
+- Existing project: darsh-beac/portfolio-spark, prj_8HPOAlzIO9L56Jaga64PSfEbL7sf.
+- New deployment: dpl_Ag1ZqmsfDzJewD4cBdUuWer3hCLG.
+- Deployment URL: https://portfolio-spark-5tre9xrh2-darsh-beac.vercel.app/.
+- Source: current local working tree on codex/reference-portfolio, base commit f34dde40a756978564b24323e6a65afd71bcfe61 plus the uncommitted SVG node/dot transform corrections. No commit or push was performed.
+- Existing uncommitted documentation and loading-test work was preserved.
+- Previous deployment retained for rollback: dpl_4eAtHAKkodbu3jSFYR1q2DtdAK6F, https://portfolio-spark-781o8i4id-darsh-beac.vercel.app/.
+
+Verified project/domain identity with Vercel inspect, pulled existing production configuration, then ran vercel build --prod --yes --scope darsh-beac and vercel deploy --prebuilt --prod --yes --scope darsh-beac. The build used the local working tree. A subsequent inspect confirmed the public domain aliases the new deployment. No remote environment variables, domain configuration, Git integration or project settings were changed. No deployments were deleted.
+
+Checks: npm run typecheck passed; npm run lint had zero errors and two existing warnings in legacy ArrivalTunnel and SystemsTopology. The Vercel production build (including npm run build) passed.
+
+Production browser verification passed at 1440 and 390 pixels: the new identity-animation phase, completion, Skip, Escape, reduced motion, stale-hash arrival, refresh from Certifications, hero at scrollY zero, full name, three project showcases, nine achievements, and no horizontal overflow. Content checks also verified skills interaction, credential modal, images/fonts, contact links and all nine manifest certificate/badge asset URLs. No page or console errors were reported. The initial phase assertion missed the short phase when waiting for DOMContentLoaded; the test was corrected to observe from navigation commit and tolerate the document's initial parsing state, then passed. No application changes were needed during deployment.
+
+Evidence: artifacts/deployment-arrival/results.json, intro-1440.png, intro-390.png, hero-1440.png, hero-390.png and videos/. Additional content checks: artifacts/deployment/live-results.json. Production was opened in the in-app browser and the full-name hero verified.
+
+Remaining limitations: two pre-existing lint warnings; browser coverage is Chromium with mobile emulation, not physical iOS/Safari. No deployment-blocking issues remain.

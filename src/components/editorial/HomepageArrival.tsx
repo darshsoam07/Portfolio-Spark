@@ -94,7 +94,7 @@ export function HomepageArrival() {
               ".arrival-node",
               {
                 opacity: 1,
-                scale: 1,
+
                 duration: 0.35,
                 stagger: 0.1,
                 ease: "power2.out",
@@ -124,8 +124,7 @@ export function HomepageArrival() {
               ".arrival-dot",
               {
                 opacity: 1,
-                scale: 1,
-                y: 0,
+
                 duration: 0.4,
                 ease: "back.out(1.5)",
                 transformOrigin: "50% 50%",
