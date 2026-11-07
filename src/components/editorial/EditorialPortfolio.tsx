@@ -7,13 +7,13 @@ import {
   ArrowRight,
   Cloud,
   Database,
-  GitBranch,
   LockKeyhole,
   Search,
   Server,
   X,
 } from "lucide-react";
 import portrait from "@/assets/darsh.jpeg";
+import heroPortrait from "@/assets/darsh-studio.jpeg";
 import { PROFILE, EDUCATION, CERTIFICATIONS, SKILL_CATEGORIES } from "@/data/portfolioData";
 import { selectedWork } from "@/data/selectedWork";
 import { HomepageArrival } from "./HomepageArrival";
@@ -128,7 +128,6 @@ export function EditorialPortfolio() {
   const closeButton = useRef<HTMLButtonElement>(null);
   const lastTrigger = useRef<HTMLElement | null>(null);
   const manualAbout = useRef(false);
-  const [activePhoto, setActivePhoto] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState(0);
   const [category, setCategory] = useState(0);
   const [project, setProject] = useState<number | null>(null);
@@ -366,52 +365,13 @@ export function EditorialPortfolio() {
                 </button>
               </div>
             </div>
-            <div className="photo-stack hero-enter" aria-label="A few things about Darsh">
-              {[0, 1, 2].map((n) => (
-                <button
-                  key={n}
-                  className={`polaroid photo-${n} ${activePhoto === n ? "photo-active" : ""}`}
-                  aria-pressed={activePhoto === n}
-                  onClick={() => setActivePhoto(activePhoto === n ? null : n)}
-                  aria-label={`${["Darsh's portrait", "Cloud and infrastructure", "Code and automation"][n]} — bring card forward`}
-                >
-                  {n === 0 ? (
-                    <img src={portrait} alt="Darsh Soam" width="260" height="320" />
-                  ) : n === 1 ? (
-                    <div className="paper-cloud">
-                      <Cloud size={76} strokeWidth={1} />
-                      <span>
-                        design
-                        <br />
-                        deploy
-                        <br />
-                        <em>repeat.</em>
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="paper-code">
-                      <span>~/darsh</span>
-                      <code>
-                        $ build
-                        <br />$ learn
-                        <br />$ automate<span className="code-cursor">_</span>
-                      </code>
-                      <GitBranch size={40} strokeWidth={1} />
-                    </div>
-                  )}
-                  <span className="photo-caption">
-                    {
-                      [
-                        "the person behind the systems.",
-                        "a little closer to the cloud.",
-                        "usually automating something.",
-                      ][n]
-                    }
-                  </span>
-                </button>
-              ))}
-              <span className="handwritten photo-note">↖ that’s me</span>
-            </div>
+            <img
+              className="hero-portrait hero-enter"
+              src={heroPortrait}
+              alt="Darsh Soam"
+              width="1122"
+              height="1402"
+            />
           </div>
           <div className="intro-copy hero-enter">
             <p>

@@ -117,6 +117,13 @@ a:hover {
 .hero .eyebrow {
   margin: 0;
 }
+.hero-portrait {
+  display: block;
+  width: min(100%, 390px, 80vw);
+  height: auto;
+  justify-self: center;
+}
+
 .hero-composition {
   display: grid;
   grid-template-columns: 60% 40%;
